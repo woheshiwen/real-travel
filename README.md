@@ -33,6 +33,15 @@ npm install
 npm run dev
 ```
 
+### 连接私有后台（可选）
+
+```bash
+cp .env.example .env
+# .env 中设置：VITE_API_BASE_URL=http://127.0.0.1:8787
+```
+
+未配置时前端使用内置演示数据，可独立运行；配置后足迹广场与规划会调用私有 API，失败自动回落演示数据。
+
 ## 仓库拆分
 
 | 仓库 | 可见性 | 内容 |

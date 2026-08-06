@@ -1,11 +1,34 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { moments as seedMoments, type Moment } from '../data/community'
+import { api, apiConfigured, type ApiMoment } from '../services/api'
 import { useReveal } from '../hooks/useReveal'
+
+const fallbackImage =
+  'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1400&q=80'
+
+function fromApi(row: ApiMoment): Moment {
+  return {
+    id: row.id,
+    author: row.author,
+    from: '来自后台',
+    place: row.place,
+    when: new Date(row.createdAt).toLocaleDateString('zh-CN'),
+    weatherTruth: row.weatherTruth,
+    joy: row.joy,
+    tip: row.tip,
+    likes: row.likes,
+    replies: 0,
+    image: fallbackImage,
+    imageAlt: '旅途公路与远山',
+    tripLink: '/trip/xian',
+  }
+}
 
 export default function Community() {
   const [items, setItems] = useState(seedMoments)
+  const [source, setSource] = useState<'demo' | 'api'>('demo')
   const rootRef = useReveal([items.length])
   const [liked, setLiked] = useState<Record<string, boolean>>({})
   const [composerOpen, setComposerOpen] = useState(false)
@@ -14,6 +37,26 @@ export default function Community() {
     () => items.reduce((sum, item) => sum + item.likes, 0),
     [items],
   )
+
+  useEffect(() => {
+    if (!apiConfigured) return
+    let cancelled = false
+
+    api
+      .listMoments()
+      .then((rows) => {
+        if (cancelled || !rows.length) return
+        setItems(rows.map(fromApi))
+        setSource('api')
+      })
+      .catch(() => {
+        /* keep bundled demo data when the private API is unavailable */
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   function toggleLike(id: string) {
     setLiked((prev) => {
@@ -29,35 +72,57 @@ export default function Community() {
     })
   }
 
-  function onShare(event: FormEvent<HTMLFormElement>) {
+  async function onShare(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    const data = new FormData(event.currentTarget)
+    const form = event.currentTarget
+    const data = new FormData(form)
     const joy = String(data.get('joy') || '').trim()
     const place = String(data.get('place') || '').trim()
     const weatherTruth = String(data.get('weatherTruth') || '').trim()
+    const tip = String(data.get('tip') || '').trim()
     if (!joy || !place) return
 
-    const fresh: Moment = {
-      id: `local-${Date.now()}`,
-      author: '我',
-      from: '刚刚分享',
-      place,
-      when: '此刻',
-      weatherTruth: weatherTruth || '按自己核对过的实况出发',
-      joy,
-      tip: String(data.get('tip') || '').trim() || '把真实感受留给后来的同行人。',
-      likes: 1,
-      replies: 0,
-      image:
-        'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1400&q=80',
-      imageAlt: '旅途公路与远山',
-      tripLink: '/trip/xian',
+    let published: Moment | null = null
+
+    if (apiConfigured) {
+      try {
+        const row = await api.createMoment({
+          author: '我',
+          place,
+          joy,
+          ...(weatherTruth ? { weatherTruth } : {}),
+          ...(tip ? { tip } : {}),
+        })
+        published = { ...fromApi(row), from: '刚刚分享' }
+        setSource('api')
+      } catch {
+        published = null
+      }
     }
 
+    if (!published) {
+      published = {
+        id: `local-${Date.now()}`,
+        author: '我',
+        from: '刚刚分享',
+        place,
+        when: '此刻',
+        weatherTruth: weatherTruth || '按自己核对过的实况出发',
+        joy,
+        tip: tip || '把真实感受留给后来的同行人。',
+        likes: 1,
+        replies: 0,
+        image: fallbackImage,
+        imageAlt: '旅途公路与远山',
+        tripLink: '/trip/xian',
+      }
+    }
+
+    const fresh = published
     setItems((list) => [fresh, ...list])
     setLiked((prev) => ({ ...prev, [fresh.id]: true }))
     setComposerOpen(false)
-    event.currentTarget.reset()
+    form.reset()
   }
 
   return (
@@ -82,7 +147,12 @@ export default function Community() {
 
       <main className="community">
         <section className="community__intro reveal">
-          <p className="eyebrow">足迹广场</p>
+          <p className="eyebrow">
+            足迹广场
+            <span className="pill" style={{ marginLeft: '0.6rem' }}>
+              {source === 'api' ? '已连接后台' : '演示数据'}
+            </span>
+          </p>
           <h1>把路上的快乐，留给下一个出发的人。</h1>
           <p>
             真程不只生成行程，也希望成为值得信任的交互平台：用实况做决策，用亲历分享传递安心与喜悦。
@@ -119,9 +189,11 @@ export default function Community() {
                   </span>
                   <span>{moment.when}</span>
                 </div>
-                <p className="moment__truth">{moment.weatherTruth}</p>
+                {moment.weatherTruth && (
+                  <p className="moment__truth">{moment.weatherTruth}</p>
+                )}
                 <p className="moment__joy">{moment.joy}</p>
-                <p className="moment__tip">可带走：{moment.tip}</p>
+                {moment.tip && <p className="moment__tip">可带走：{moment.tip}</p>}
                 <div className="moment__bar">
                   <button
                     type="button"
