@@ -1,0 +1,83 @@
+:root {
+  --ink: #14241f;
+  --ink-soft: #3d524a;
+  --sea: #165a4a;
+  --sea-deep: #0d3b31;
+  --foam: #d9e8e2;
+  --mist: #eef3f0;
+  --paper: #f4f7f5;
+  --sand: #d8c39a;
+  --signal: #d9772c;
+  --signal-deep: #b85f1c;
+  --danger: #b42318;
+  --ok: #0f766e;
+  --line: rgba(20, 36, 31, 0.12);
+  --shadow: 0 18px 50px rgba(13, 59, 49, 0.08);
+
+  --font-display: "Bricolage Grotesque", "Noto Sans SC", sans-serif;
+  --font-body: "DM Sans", "Noto Sans SC", sans-serif;
+
+  --max: 72rem;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--ink);
+  font-family: var(--font-body);
+  background:
+    radial-gradient(900px 480px at 0% 0%, rgba(22, 90, 74, 0.1), transparent 55%),
+    radial-gradient(700px 420px at 100% 10%, rgba(217, 119, 44, 0.08), transparent 50%),
+    linear-gradient(180deg, var(--mist), var(--paper) 45%, #e7efe9);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+p {
+  line-height: 1.65;
+}
