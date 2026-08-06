@@ -89,9 +89,9 @@ export default function Community() {
         const row = await api.createMoment({
           author: '我',
           place,
-          weatherTruth,
           joy,
-          tip,
+          ...(weatherTruth ? { weatherTruth } : {}),
+          ...(tip ? { tip } : {}),
         })
         published = { ...fromApi(row), from: '刚刚分享' }
         setSource('api')
@@ -189,9 +189,11 @@ export default function Community() {
                   </span>
                   <span>{moment.when}</span>
                 </div>
-                <p className="moment__truth">{moment.weatherTruth}</p>
+                {moment.weatherTruth && (
+                  <p className="moment__truth">{moment.weatherTruth}</p>
+                )}
                 <p className="moment__joy">{moment.joy}</p>
-                <p className="moment__tip">可带走：{moment.tip}</p>
+                {moment.tip && <p className="moment__tip">可带走：{moment.tip}</p>}
                 <div className="moment__bar">
                   <button
                     type="button"

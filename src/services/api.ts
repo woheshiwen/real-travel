@@ -56,8 +56,8 @@ export const api = {
   async createMoment(input: {
     author?: string
     place: string
-    weatherTruth?: string
     joy: string
+    weatherTruth?: string
     tip?: string
   }) {
     const data = await request<{ moment: ApiMoment }>('/v1/moments', {
