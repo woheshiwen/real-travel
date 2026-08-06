@@ -42,6 +42,8 @@ cp .env.example .env
 
 未配置时前端使用内置演示数据，可独立运行；配置后足迹广场与规划会调用私有 API，失败自动回落演示数据。
 
+前后端字段与路径的**唯一约定**见 [`docs/api-contract.md`](./docs/api-contract.md)。改接口先改契约，再改实现。
+
 ### 在线访问（GitHub Pages）
 
 合并到 `main` 后，Actions 会自动构建并发布：
