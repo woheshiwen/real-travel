@@ -6,8 +6,10 @@ import Trip from './pages/Trip'
 import './App.css'
 
 export default function App() {
+  const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || undefined
+
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/plan" element={<Plan />} />
