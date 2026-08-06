@@ -38,8 +38,8 @@ export default function Trip() {
           <span className="brand__en">Real Travel</span>
         </Link>
         <nav className="topnav__links">
+          <Link to="/community">足迹广场</Link>
           <Link to="/plan">重新规划</Link>
-          <a href="#situations">动态建议</a>
           <a className="btn btn--small btn--primary" href="#days">
             每日行程
           </a>
@@ -260,16 +260,20 @@ export default function Trip() {
 
         <section className="panel panel--replan">
           <div>
-            <p className="eyebrow">下一版能力</p>
-            <h2>情况一变，路书跟着改。</h2>
+            <p className="eyebrow">信任之后，是分享</p>
+            <h2>走完这趟，把快乐留给后来者。</h2>
             <p>
-              接入实时天气、航班/高铁动态与预约余票后，真程会像这次 v8→v9
-              一样自动提出结构调整：挪景点、改交通、重算费用，并写清「为什么改」。
+              真程要做成大家真正用得上的系统：实况可核对、行程可改版；也做成交互平台——把雨中灯火、山顶并肩、当晚到家的安心，分享给下一个出发的人。
             </p>
           </div>
-          <Link className="btn btn--primary" to="/plan">
-            用我的约束再生成一版
-          </Link>
+          <div className="hero-live__actions">
+            <Link className="btn btn--primary" to="/community">
+              分享这段快乐
+            </Link>
+            <Link className="btn btn--ghost-dark" to="/plan" style={{ borderColor: 'rgba(244,247,245,.45)', color: '#f4f7f5' }}>
+              再生成一版
+            </Link>
+          </div>
         </section>
       </main>
     </div>

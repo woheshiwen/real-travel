@@ -30,9 +30,12 @@ export default function Plan() {
           <span className="brand__mark">真程</span>
           <span className="brand__en">Real Travel</span>
         </Link>
-        <Link className="text-link" to="/trip/xian">
-          先看示例
-        </Link>
+        <nav className="topnav__links">
+          <Link to="/community">足迹广场</Link>
+          <Link className="text-link" to="/trip/xian">
+            先看示例
+          </Link>
+        </nav>
       </header>
 
       <main className="plan">

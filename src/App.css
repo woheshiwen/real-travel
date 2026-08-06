@@ -970,6 +970,221 @@
   }
 }
 
+/* Community */
+.community {
+  width: min(100% - 2rem, var(--max));
+  margin: 0 auto;
+  padding: 1.25rem 0 3.5rem;
+}
+
+.community__intro {
+  max-width: 42rem;
+  margin-bottom: 2rem;
+}
+
+.community__intro h1 {
+  margin: 0;
+  font-size: clamp(1.9rem, 4vw, 2.7rem);
+}
+
+.community__intro p {
+  color: var(--ink-soft);
+}
+
+.community__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.moment-feed {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.moment {
+  display: grid;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+@media (min-width: 860px) {
+  .moment {
+    grid-template-columns: 1.05fr 1.15fr;
+    align-items: stretch;
+    gap: 1.5rem;
+  }
+}
+
+.moment__media {
+  overflow: hidden;
+  min-height: 14rem;
+  background: var(--foam);
+}
+
+.moment__media img {
+  width: 100%;
+  height: 100%;
+  min-height: 14rem;
+  max-height: 22rem;
+  object-fit: cover;
+  transition: transform 1s var(--ease);
+}
+
+.moment:hover .moment__media img {
+  transform: scale(1.03);
+}
+
+.moment__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.85rem;
+  margin-bottom: 0.7rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.moment__meta strong {
+  color: var(--ink);
+  font-family: var(--font-display);
+}
+
+.moment__truth {
+  margin: 0 0 0.7rem;
+  padding: 0.65rem 0.8rem;
+  background: rgba(22, 90, 74, 0.08);
+  border-left: 3px solid var(--sea);
+  color: var(--sea-deep);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.moment__joy {
+  margin: 0 0 0.7rem;
+  font-size: 1.05rem;
+}
+
+.moment__tip {
+  margin: 0 0 1rem;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.moment__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem 1.1rem;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.moment__like {
+  font-weight: 700;
+  color: var(--sea);
+}
+
+.moment__like.is-on {
+  color: var(--signal-deep);
+}
+
+.composer {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(13, 59, 49, 0.45);
+}
+
+.composer__panel {
+  width: min(100%, 32rem);
+  max-height: min(90vh, 40rem);
+  overflow: auto;
+  padding: 1.25rem;
+  background: #fff;
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 0.85rem;
+}
+
+.composer__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.composer__head h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.composer__head button {
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.composer__hint {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.field textarea {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  resize: vertical;
+}
+
+.field textarea:focus {
+  outline: 2px solid rgba(22, 90, 74, 0.25);
+  border-color: var(--sea);
+}
+
+.home-moments {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 900px) {
+  .home-moments {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.home-moment {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.home-moment img {
+  width: 100%;
+  height: 12rem;
+  object-fit: cover;
+}
+
+.home-moment__place {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--sea);
+}
+
+.home-moment__joy {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
 @media (max-width: 720px) {
   .topnav__links a:not(.btn) {
     display: none;

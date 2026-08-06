@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
+import { moments, trustPillars } from '../data/community'
 import { useReveal } from '../hooks/useReveal'
 
 export default function Landing() {
   const rootRef = useReveal()
+  const preview = moments.slice(0, 3)
 
   return (
     <div className="page" ref={rootRef}>
@@ -12,8 +14,8 @@ export default function Landing() {
           <span className="brand__en">Real Travel</span>
         </Link>
         <nav className="topnav__links">
-          <a href="#why">为什么</a>
-          <a href="#how">怎么工作</a>
+          <a href="#trust">信任</a>
+          <Link to="/community">足迹广场</Link>
           <Link to="/trip/xian">西安示例</Link>
           <Link className="btn btn--small btn--primary" to="/plan">
             开始规划
@@ -29,17 +31,17 @@ export default function Landing() {
 
         <div className="hero-live__content">
           <p className="hero-live__brand">真程</p>
-          <h1 className="hero-live__title">别让一条短视频，取消你真正查过的行程。</h1>
+          <h1 className="hero-live__title">值得信任的出行建议，和值得分享的快乐。</h1>
           <p className="hero-live__lede">
-            结合出发地交通、目的地实况天气与不断变化的行程约束，给你可执行、可改版的
-            AI 出行建议——像一份一直在更新的路书。
+            真程结合出发地交通、目的地实况天气与持续变化的约束，生成可改版的 AI
+            路书；也让走过的人把真实喜悦留在平台上，帮助下一位出发者。
           </p>
           <div className="hero-live__actions">
             <Link className="btn btn--primary" to="/plan">
               生成我的行程
             </Link>
-            <Link className="btn btn--ghost-dark" to="/trip/xian">
-              看西安家庭游示例
+            <Link className="btn btn--ghost-dark" to="/community">
+              看看大家的足迹
             </Link>
           </div>
         </div>
@@ -64,33 +66,19 @@ export default function Landing() {
         </aside>
       </section>
 
-      <section className="section" id="why">
+      <section className="section" id="trust">
         <div className="section__intro reveal">
-          <p className="eyebrow">问题</p>
-          <h2 className="section__title">行程最怕的不是下雨，是信息失真。</h2>
+          <p className="eyebrow">产品原则</p>
+          <h2 className="section__title">先做成大家用得上、信得过的系统。</h2>
           <p className="section__text">
-            你查过后面几天的天气预报，感觉还可以；刷到短视频却开始犹豫。真程把「天气 /
-            交通 / 预约窗口 / 行李与换乘」放进同一套持续更新的建议里。
+            不是又一个热点旅游站。真程要长期可核对、可改版、可分享——让决策站在实况上，让快乐留在社区里。
           </p>
         </div>
         <div className="reason-grid">
-          {[
-            {
-              t: '真实天气，不是标题党',
-              d: '逐日气温与降水对照行程节点，告诉你该不该改、改哪一段。',
-            },
-            {
-              t: '从出发地算交通',
-              d: '飞机、高铁、换乘缓冲与当晚能否到家，一起进入方案，而不是事后补票。',
-            },
-            {
-              t: '情况变了就改版',
-              d: '像 v9 路书一样：华山挪后、返程改高铁、费用重算——每次变更都说清楚。',
-            },
-          ].map((item) => (
-            <article className="reason reveal" key={item.t}>
-              <h3>{item.t}</h3>
-              <p>{item.d}</p>
+          {trustPillars.map((item) => (
+            <article className="reason reveal" key={item.title}>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
             </article>
           ))}
         </div>
@@ -98,14 +86,14 @@ export default function Landing() {
 
       <section className="section section--band" id="how">
         <div className="section__intro reveal">
-          <p className="eyebrow">工作方式</p>
-          <h2 className="section__title">输入约束，输出可执行路书。</h2>
+          <p className="eyebrow">双引擎</p>
+          <h2 className="section__title">实用系统 + 交互平台。</h2>
         </div>
         <ol className="steps">
           {[
-            '填写出发地、目的地、日期与同行人',
-            '系统拉取天气与主要交通选项，生成按日时间轴',
-            '社媒恐慌、延误、预约余票变化时，给你改版建议而非空泛提醒',
+            '按天气、交通与约束生成可执行路书',
+            '情况变化时提出改版，并写清依据',
+            '行程中的快乐与避坑，沉淀到足迹广场',
           ].map((text, i) => (
             <li className="steps__item reveal" key={text}>
               <span className="steps__num">0{i + 1}</span>
@@ -115,25 +103,49 @@ export default function Landing() {
         </ol>
       </section>
 
-      <section className="section">
-        <div className="demo-cta reveal">
+      <section className="section" id="community-preview">
+        <div className="section__intro reveal">
+          <p className="eyebrow">足迹广场</p>
+          <h2 className="section__title">大家正在分享的快乐。</h2>
+          <p className="section__text">
+            亲历者留下的不是夸张标题，而是可对照的实况判断，和一段想传下去的喜悦。
+          </p>
+        </div>
+        <div className="home-moments">
+          {preview.map((moment) => (
+            <article className="home-moment reveal" key={moment.id}>
+              <img src={moment.image} alt={moment.imageAlt} loading="lazy" />
+              <div>
+                <p className="home-moment__place">
+                  {moment.place} · {moment.author}
+                </p>
+                <p className="home-moment__joy">{moment.joy}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div className="demo-cta reveal" style={{ marginTop: '2rem' }}>
           <div>
-            <p className="eyebrow">示例路书</p>
-            <h2 className="section__title">深圳出发 · 西安家庭游 5 天</h2>
+            <h2 className="section__title">从示例行程，走到真实社区。</h2>
             <p className="section__text">
-              直接打开由真实规划沉淀的示例：天气条、全程交通时刻表、每日预约窗口、费用与动态改版记录。
+              先打开西安家庭游路书，再去足迹广场看看同行人怎么做决定、怎么把快乐留下来。
             </p>
           </div>
-          <Link className="btn btn--primary" to="/trip/xian">
-            打开示例行程
-          </Link>
+          <div className="hero-live__actions">
+            <Link className="btn btn--primary" to="/trip/xian">
+              打开示例行程
+            </Link>
+            <Link className="btn btn--ghost-dark" to="/community">
+              进入足迹广场
+            </Link>
+          </div>
         </div>
       </section>
 
       <footer className="site-footer">
         <div>
           <strong>真程 Real Travel</strong>
-          <span>按实况出行，而不是按热搜出行。</span>
+          <span>按实况出行，把快乐留给后来者。</span>
         </div>
         <p>© {new Date().getFullYear()}</p>
       </footer>
