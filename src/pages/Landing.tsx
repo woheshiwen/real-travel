@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import DestinationMarquee from '../components/DestinationMarquee'
 import { moments, trustPillars } from '../data/community'
 import { api, apiConfigured, type ConditionsCompare } from '../services/api'
 import { useReveal } from '../hooks/useReveal'
+import { useSpotlight } from '../hooks/useSpotlight'
 
 const fallbackCompare: ConditionsCompare = {
   place: '西安',
@@ -20,8 +22,15 @@ const fallbackCompare: ConditionsCompare = {
   },
 }
 
+const steps = [
+  '按天气、交通与约束生成可执行路书',
+  '情况变化时提出改版，并写清依据',
+  '一键导入日历，抢票闹钟自动就位',
+]
+
 export default function Landing() {
   const rootRef = useReveal()
+  const spotlight = useSpotlight()
   const preview = moments.slice(0, 3)
   const [compare, setCompare] = useState(fallbackCompare)
   const [liveSource, setLiveSource] = useState<'demo' | 'api'>('demo')
@@ -37,9 +46,7 @@ export default function Landing() {
         setCompare(data)
         setLiveSource('api')
       })
-      .catch(() => {
-        /* keep fallback board */
-      })
+      .catch(() => {})
 
     return () => {
       cancelled = true
@@ -73,15 +80,15 @@ export default function Landing() {
           <p className="hero-live__brand">真程</p>
           <h1 className="hero-live__title">值得信任的出行建议，和值得分享的快乐。</h1>
           <p className="hero-live__lede">
-            真程结合出发地交通、目的地实况天气与持续变化的约束，生成可改版的 AI
-            路书；也让走过的人把真实喜悦留在平台上，帮助下一位出发者。
+            结合出发地交通、目的地实况天气与持续变化的约束，生成可改版的路书；
+            定好行程后一键导入日历，连抢票闹钟都替你设好。
           </p>
           <div className="hero-live__actions">
             <Link className="btn btn--primary" to="/plan">
               生成我的行程
             </Link>
-            <Link className="btn btn--ghost-dark" to="/community">
-              看看大家的足迹
+            <Link className="btn btn--ghost-dark" to="/trip/xian">
+              看西安示例路书
             </Link>
           </div>
         </div>
@@ -106,6 +113,8 @@ export default function Landing() {
         </aside>
       </section>
 
+      <DestinationMarquee />
+
       <section className="section" id="trust">
         <div className="section__intro reveal">
           <p className="eyebrow">产品原则</p>
@@ -115,8 +124,13 @@ export default function Landing() {
           </p>
         </div>
         <div className="reason-grid">
-          {trustPillars.map((item) => (
-            <article className="reason reveal" key={item.title}>
+          {trustPillars.map((item, index) => (
+            <article
+              className="reason spot reveal"
+              key={item.title}
+              style={{ '--i': index } as React.CSSProperties}
+              {...spotlight}
+            >
               <h3>{item.title}</h3>
               <p>{item.body}</p>
             </article>
@@ -126,16 +140,17 @@ export default function Landing() {
 
       <section className="section section--band" id="how">
         <div className="section__intro reveal">
-          <p className="eyebrow">双引擎</p>
+          <p className="eyebrow">工作方式</p>
           <h2 className="section__title">实用系统 + 交互平台。</h2>
         </div>
         <ol className="steps">
-          {[
-            '按天气、交通与约束生成可执行路书',
-            '情况变化时提出改版，并写清依据',
-            '行程中的快乐与避坑，沉淀到足迹广场',
-          ].map((text, i) => (
-            <li className="steps__item reveal" key={text}>
+          {steps.map((text, i) => (
+            <li
+              className="steps__item spot reveal"
+              key={text}
+              style={{ '--i': i } as React.CSSProperties}
+              {...spotlight}
+            >
               <span className="steps__num">0{i + 1}</span>
               <p>{text}</p>
             </li>
@@ -152,8 +167,12 @@ export default function Landing() {
           </p>
         </div>
         <div className="home-moments">
-          {preview.map((moment) => (
-            <article className="home-moment reveal" key={moment.id}>
+          {preview.map((moment, index) => (
+            <article
+              className="home-moment reveal"
+              key={moment.id}
+              style={{ '--i': index } as React.CSSProperties}
+            >
               <img src={moment.image} alt={moment.imageAlt} loading="lazy" />
               <div>
                 <p className="home-moment__place">
@@ -164,7 +183,8 @@ export default function Landing() {
             </article>
           ))}
         </div>
-        <div className="demo-cta reveal" style={{ marginTop: '2rem' }}>
+
+        <div className="demo-cta reveal">
           <div>
             <h2 className="section__title">从示例行程，走到真实社区。</h2>
             <p className="section__text">
