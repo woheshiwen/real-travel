@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { CSSProperties, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
+import SiteChrome from '../components/SiteChrome'
 import { moments as seedMoments, type Moment } from '../data/community'
 import { api, apiConfigured, type ApiMoment } from '../services/api'
 import { useReveal } from '../hooks/useReveal'
@@ -127,23 +128,7 @@ export default function Community() {
 
   return (
     <div className="page page--plain" ref={rootRef}>
-      <header className="topnav topnav--solid">
-        <Link to="/" className="brand">
-          <span className="brand__mark">真程</span>
-          <span className="brand__en">Real Travel</span>
-        </Link>
-        <nav className="topnav__links">
-          <Link to="/trip/xian">示例行程</Link>
-          <Link to="/plan">规划</Link>
-          <button
-            type="button"
-            className="btn btn--small btn--primary"
-            onClick={() => setComposerOpen(true)}
-          >
-            分享快乐
-          </button>
-        </nav>
-      </header>
+      <SiteChrome cta={{ to: '/plan', label: '规划行程' }} />
 
       <main className="community">
         <section className="community__intro reveal">

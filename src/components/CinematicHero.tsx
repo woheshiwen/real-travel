@@ -6,7 +6,6 @@ type Scene = {
   label: string
   place: string
   image: string
-  imageAlt: string
 }
 
 const scenes: Scene[] = [
@@ -16,7 +15,6 @@ const scenes: Scene[] = [
     place: '西安 · 大雁塔',
     image:
       'https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?auto=format&fit=crop&w=1800&q=80',
-    imageAlt: '西安夜色与古塔轮廓',
   },
   {
     id: 'wall',
@@ -24,7 +22,6 @@ const scenes: Scene[] = [
     place: '西安 · 古城墙',
     image:
       'https://images.unsplash.com/photo-1528164344705-47542687000d?auto=format&fit=crop&w=1800&q=80',
-    imageAlt: '中国古建筑与石径',
   },
   {
     id: 'peak',
@@ -32,7 +29,6 @@ const scenes: Scene[] = [
     place: '华山 · 西峰',
     image:
       'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1800&q=80',
-    imageAlt: '险峻山峰云海',
   },
 ]
 
@@ -40,12 +36,46 @@ const loaderSteps = [
   '读取出发地交通与约束',
   '对照目的地实况天气',
   '走进旅行案例的标志景点',
-  '把漫长路书收进掌心',
+  '景点收进掌心 · 3D 路书',
   '一键生成可改版行程',
 ]
 
-/** Hold the palm finale longer so the metaphor lands. */
-const STEP_MS = [2200, 2200, 2400, 3600, 3200]
+const STEP_MS = [2300, 2300, 2500, 4200, 3400]
+
+/** CSS 3D miniature landmark resting in the palm */
+function LandmarkModel({ place }: { place: string }) {
+  return (
+    <div className="landmark-3d" aria-hidden="true">
+      <div className="landmark-3d__stage">
+        <div className="pagoda3d">
+          <div className="pagoda3d__base" />
+          <div className="pagoda3d__tier pagoda3d__tier--1">
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+          <div className="pagoda3d__tier pagoda3d__tier--2">
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+          <div className="pagoda3d__tier pagoda3d__tier--3">
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+          <div className="pagoda3d__finial" />
+        </div>
+        <div className="landmark-3d__glow" />
+        <div className="landmark-3d__shadow" />
+      </div>
+      <p className="landmark-3d__label">{place}</p>
+    </div>
+  )
+}
 
 export default function CinematicHero() {
   const [step, setStep] = useState(0)
@@ -71,10 +101,10 @@ export default function CinematicHero() {
     return () => window.clearTimeout(id)
   }, [reduced, step])
 
-  /** 0–2 walk scenes, 3–4 palm finale */
   const sceneIndex = Math.min(step, scenes.length - 1)
   const inPalm = step >= 3
   const phase = inPalm ? 'palm' : 'walk'
+  const activePlace = scenes[sceneIndex].place
 
   return (
     <section className="cine-hero" aria-label="真程首页">
@@ -87,15 +117,13 @@ export default function CinematicHero() {
         </div>
 
         <div
-          className={`cine-world${inPalm ? ' cine-world--miniature' : ''}`}
+          className={`cine-world${inPalm ? ' cine-world--exit' : ''}`}
           data-scene={scenes[sceneIndex].id}
         >
           {scenes.map((scene, i) => (
             <figure
               key={scene.id}
-              className={`cine-scene${i === sceneIndex && !inPalm ? ' is-active' : ''}${
-                inPalm && i === scenes.length - 1 ? ' is-active is-miniature' : ''
-              }`}
+              className={`cine-scene${i === sceneIndex && !inPalm ? ' is-active' : ''}`}
             >
               <img src={scene.image} alt="" />
               <figcaption>
@@ -106,44 +134,14 @@ export default function CinematicHero() {
           ))}
         </div>
 
-        <div className={`cine-hand${inPalm ? ' is-visible' : ''}`}>
-          <svg
-            className="cine-hand__svg"
-            viewBox="0 0 640 520"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <linearGradient id="palmGrad" x1="180" y1="40" x2="460" y2="500">
-                <stop stopColor="#f0d2b4" />
-                <stop offset="0.55" stopColor="#c9926a" />
-                <stop offset="1" stopColor="#8a5a3c" />
-              </linearGradient>
-              <filter id="palmSoft" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="2.2" />
-              </filter>
-            </defs>
-            {/* stylized open palm rising from bottom */}
-            <path
-              filter="url(#palmSoft)"
-              fill="url(#palmGrad)"
-              d="M292 508c-58-8-118-46-148-98-22-38-28-78-18-118 8-32 28-54 52-62 18-6 34 2 42 18l18 36V168c0-28 18-48 44-48s44 20 44 48v78c8-22 28-36 52-34 26 2 44 24 44 50v54c10-16 30-24 50-18 28 8 42 36 36 64-10 48-42 96-94 132-46 32-86 44-122 48z"
-            />
-            <path
-              fill="rgba(255,255,255,0.18)"
-              d="M314 170c0-18 10-30 26-30s26 12 26 30v120h-16V170c0-8-4-14-10-14s-10 6-10 14v98h-16V170z"
-            />
-            <ellipse
-              className="cine-hand__glow"
-              cx="340"
-              cy="250"
-              rx="72"
-              ry="48"
-              fill="rgba(255, 214, 140, 0.35)"
-            />
-          </svg>
-          <div className="cine-hand__model">
-            <span className="cine-hand__model-tag">你的路书</span>
+        <div className={`cine-palm${inPalm ? ' is-visible' : ''}`}>
+          <img
+            className="cine-palm__hand"
+            src={`${import.meta.env.BASE_URL}palm-hand.png`}
+            alt=""
+          />
+          <div className="cine-palm__model">
+            <LandmarkModel place={activePlace} />
           </div>
         </div>
 
@@ -156,7 +154,7 @@ export default function CinematicHero() {
         <p className="cine-hero__en">Real Travel</p>
         <h1 className="cine-hero__title">走进景点，再把行程收进掌心。</h1>
         <p className="cine-hero__lede">
-          以人的视角走向旅行案例里的标志风景；真程对照实况，把可变的路书轻轻放进你手里。
+          以人的视角走向旅行案例里的标志风景；真程对照实况，把可变的路书收成掌心里的立体模型。
         </p>
         <div className="cine-hero__actions">
           <Link className="btn btn--primary btn--cine" to="/plan">

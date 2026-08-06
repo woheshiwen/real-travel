@@ -1,35 +1,38 @@
 :root {
-  --ink: #14241f;
-  --ink-soft: #45594f;
-  --sea: #165a4a;
-  --sea-deep: #0d3b31;
-  --foam: #d9e8e2;
-  --mist: #eef3f0;
-  --paper: #f6f8f6;
-  --sand: #d8c39a;
-  --signal: #c9682a;
-  --signal-deep: #a9521c;
-  --danger: #a8332a;
-  --ok: #0f766e;
+  /* Alethia / Awwwards-leaning dusk system — dark canvas, warm metal accent */
+  --void: #070809;
+  --paper: #0c0e10;
+  --surface: #13171c;
+  --surface-2: #1a2028;
+  --ink: #ebe6dc;
+  --ink-soft: #9a958c;
+  --ink-faint: #6e6a63;
+  --line: rgba(235, 230, 220, 0.1);
+  --line-strong: rgba(235, 230, 220, 0.18);
+  --sea: #c9a36a;
+  --sea-deep: #a9844f;
+  --foam: rgba(235, 230, 220, 0.08);
+  --mist: #10141a;
+  --sand: #c9a36a;
+  --signal: #e0a35c;
+  --signal-deep: #c4843a;
+  --danger: #d4675c;
+  --ok: #6faf9a;
+  --tint: rgba(201, 163, 106, 0.08);
 
-  --line: rgba(20, 36, 31, 0.1);
-  --line-strong: rgba(20, 36, 31, 0.18);
-  --tint: rgba(22, 90, 74, 0.06);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow: 0 18px 48px -18px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 28px 64px -20px rgba(0, 0, 0, 0.65);
 
-  --shadow-sm: 0 1px 2px rgba(13, 59, 49, 0.05);
-  --shadow: 0 12px 32px -12px rgba(13, 59, 49, 0.16);
-  --shadow-lg: 0 22px 48px -16px rgba(13, 59, 49, 0.22);
+  --font-display: "Instrument Serif", "Noto Serif SC", serif;
+  --font-body: "Outfit", "Noto Sans SC", sans-serif;
 
-  --font-display: "Fraunces", "Noto Sans SC", serif;
-  --font-body: "Sora", "Noto Sans SC", sans-serif;
-
-  --max: 74rem;
-  --radius: 14px;
-  --radius-sm: 10px;
+  --max: 72rem;
+  --radius: 18px;
+  --radius-sm: 12px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --header-h: 4rem;
+  --header-h: 4.25rem;
 
-  /* paper grain: subtle turbulence so surfaces read as printed, not screen */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
 }
 
@@ -42,6 +45,8 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--header-h) + 1rem);
+  background: var(--void);
+  color-scheme: dark;
 }
 
 body {
@@ -51,15 +56,14 @@ body {
   font-family: var(--font-body);
   background-color: var(--paper);
   background-image:
-    radial-gradient(1100px 520px at -5% -10%, rgba(22, 90, 74, 0.09), transparent 60%),
-    radial-gradient(820px 460px at 105% 4%, rgba(201, 104, 42, 0.07), transparent 55%),
-    linear-gradient(180deg, var(--mist), var(--paper) 42%, #e9f0eb);
+    radial-gradient(900px 520px at 12% -8%, rgba(201, 163, 106, 0.12), transparent 55%),
+    radial-gradient(780px 480px at 92% 0%, rgba(70, 110, 120, 0.14), transparent 50%),
+    linear-gradient(180deg, #0c0e10 0%, #0a0c0e 48%, #090b0d 100%);
   background-attachment: fixed;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
-/* grain sits above the wash, below content */
 body::before {
   content: "";
   position: fixed;
@@ -67,8 +71,8 @@ body::before {
   z-index: 0;
   pointer-events: none;
   background-image: var(--grain);
-  opacity: 0.035;
-  mix-blend-mode: multiply;
+  opacity: 0.045;
+  mix-blend-mode: soft-light;
 }
 
 #root {
@@ -113,25 +117,23 @@ h3,
 h4 {
   margin: 0;
   font-family: var(--font-display);
-  line-height: 1.16;
+  font-weight: 400;
+  line-height: 1.12;
   text-wrap: balance;
+  letter-spacing: -0.02em;
 }
 
-/* Latin display tracking only; CJK glyphs need neutral spacing */
-:lang(en) h1,
-:lang(en) h2,
-:lang(en) h3,
 .brand__mark,
 .cine-hero__brand {
-  letter-spacing: -0.035em;
+  letter-spacing: -0.03em;
 }
 
 p {
-  line-height: 1.68;
+  line-height: 1.7;
   text-wrap: pretty;
+  color: var(--ink-soft);
 }
 
-/* itinerary times, prices and counters read straighter with tabular digits */
 time,
 .data-table td,
 .data-table th,
@@ -141,4 +143,30 @@ time,
 .calendar-export__stats strong,
 .day-tab span {
   font-variant-numeric: tabular-nums;
+}
+
+/* Route transition */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .page {
+    animation: page-in 520ms var(--ease) both;
+  }
+}
+
+@supports (view-transition-name: none) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 420ms;
+    animation-timing-function: var(--ease);
+  }
 }
