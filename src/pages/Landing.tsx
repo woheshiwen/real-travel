@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import CinematicHero from '../components/CinematicHero'
 import DestinationMarquee from '../components/DestinationMarquee'
+import SiteChrome from '../components/SiteChrome'
 import { moments, trustPillars } from '../data/community'
 import { api, apiConfigured, type ConditionsCompare } from '../services/api'
 import { useReveal } from '../hooks/useReveal'
@@ -64,20 +65,7 @@ export default function Landing() {
 
   return (
     <div className="page page--cine" ref={rootRef}>
-      <header className="topnav topnav--cine">
-        <Link to="/" className="brand">
-          <span className="brand__mark">真程</span>
-          <span className="brand__en">Real Travel</span>
-        </Link>
-        <nav className="topnav__links">
-          <a href="#truth">实况</a>
-          <Link to="/community">足迹广场</Link>
-          <Link to="/trip/xian">西安示例</Link>
-          <Link className="btn btn--small btn--primary" to="/plan">
-            开始规划
-          </Link>
-        </nav>
-      </header>
+      <SiteChrome variant="overlay" />
 
       <CinematicHero />
 
@@ -126,7 +114,7 @@ export default function Landing() {
             <article
               className="reason spot reveal"
               key={item.title}
-              style={{ '--i': index } as React.CSSProperties}
+              style={{ '--i': index } as CSSProperties}
               {...spotlight}
             >
               <h3>{item.title}</h3>
@@ -146,7 +134,7 @@ export default function Landing() {
             <li
               className="steps__item spot reveal"
               key={text}
-              style={{ '--i': i } as React.CSSProperties}
+              style={{ '--i': i } as CSSProperties}
               {...spotlight}
             >
               <span className="steps__num">0{i + 1}</span>
@@ -169,7 +157,7 @@ export default function Landing() {
             <article
               className="home-moment reveal"
               key={moment.id}
-              style={{ '--i': index } as React.CSSProperties}
+              style={{ '--i': index } as CSSProperties}
             >
               <img src={moment.image} alt={moment.imageAlt} loading="lazy" />
               <div>

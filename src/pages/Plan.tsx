@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import SiteChrome from '../components/SiteChrome'
 import { api, apiConfigured } from '../services/api'
 
 const interests = ['博物馆', '自然风光', '美食', '亲子友好', '少走路', '夜景'] as const
@@ -45,18 +46,7 @@ export default function Plan() {
 
   return (
     <div className="page page--plain">
-      <header className="topnav topnav--solid">
-        <Link to="/" className="brand">
-          <span className="brand__mark">真程</span>
-          <span className="brand__en">Real Travel</span>
-        </Link>
-        <nav className="topnav__links">
-          <Link to="/community">足迹广场</Link>
-          <Link className="text-link" to="/trip/xian">
-            先看示例
-          </Link>
-        </nav>
-      </header>
+      <SiteChrome cta={{ to: '/trip/xian', label: '先看示例' }} />
 
       <main className="plan">
         <div className="plan__intro">

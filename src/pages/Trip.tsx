@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import CalendarExport from '../components/CalendarExport'
+import SiteChrome from '../components/SiteChrome'
 import WeatherIcon from '../components/WeatherIcon'
 import { staticXianBook } from '../data/staticTripBook'
 import type { SituationUpdate } from '../data/xianTrip'
@@ -63,19 +64,7 @@ export default function Trip() {
 
   return (
     <div className="page page--plain">
-      <header className="topnav topnav--solid">
-        <Link to="/" className="brand">
-          <span className="brand__mark">真程</span>
-          <span className="brand__en">Real Travel</span>
-        </Link>
-        <nav className="topnav__links">
-          <Link to="/community">足迹广场</Link>
-          <Link to="/plan">重新规划</Link>
-          <a className="btn btn--small btn--primary" href="#calendar">
-            加入日历
-          </a>
-        </nav>
-      </header>
+      <SiteChrome cta={{ href: '#calendar', label: '加入日历' }} />
 
       <main className="trip">
         <div className="day-rail" aria-hidden="true">
