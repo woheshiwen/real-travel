@@ -44,7 +44,8 @@ const loaderSteps = [
   '一键生成可改版行程',
 ]
 
-const STEP_MS = 2400
+/** Hold the palm finale longer so the metaphor lands. */
+const STEP_MS = [2200, 2200, 2400, 3600, 3200]
 
 export default function CinematicHero() {
   const [step, setStep] = useState(0)
@@ -63,11 +64,12 @@ export default function CinematicHero() {
       setStep(loaderSteps.length - 1)
       return
     }
-    const id = window.setInterval(() => {
+    const delay = STEP_MS[step] ?? 2400
+    const id = window.setTimeout(() => {
       setStep((s) => (s + 1) % loaderSteps.length)
-    }, STEP_MS)
-    return () => window.clearInterval(id)
-  }, [reduced])
+    }, delay)
+    return () => window.clearTimeout(id)
+  }, [reduced, step])
 
   /** 0–2 walk scenes, 3–4 palm finale */
   const sceneIndex = Math.min(step, scenes.length - 1)
