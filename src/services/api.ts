@@ -72,12 +72,30 @@ export type TripBook = {
   situations: SituationUpdate[]
 }
 
+/** Matches private API GET /v1/conditions/compare (real-travel-api). */
 export type ConditionsCompare = {
   place: string
-  asOf: string
-  social: { headline: string; source: string }
-  live: { summary: string; outlook?: string }
-  advice: { keepTrip: boolean; summary: string }
+  dateRange: string
+  updatedAt: string
+  social: {
+    source: string
+    headline: string
+    summary: string
+    sentiment: 'alarm' | 'neutral' | 'positive'
+  }
+  forecast: {
+    source: string
+    headline: string
+    summary: string
+    sentiment: 'alarm' | 'neutral' | 'positive'
+    days?: WeatherDay[]
+    dataSource: 'demo' | 'live'
+  }
+  recommendation: {
+    title: string
+    summary: string
+    verdict: 'keep' | 'adjust' | 'cancel'
+  }
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -143,10 +161,17 @@ export const api = {
     return asTripBook(data)
   },
 
-  async compareConditions(params?: { tripId?: string; place?: string }) {
+  async compareConditions(params?: {
+    tripId?: string
+    destination?: string
+    startDate?: string
+    endDate?: string
+  }) {
     const q = new URLSearchParams()
     if (params?.tripId) q.set('tripId', params.tripId)
-    if (params?.place) q.set('place', params.place)
+    if (params?.destination) q.set('destination', params.destination)
+    if (params?.startDate) q.set('startDate', params.startDate)
+    if (params?.endDate) q.set('endDate', params.endDate)
     const suffix = q.toString() ? `?${q}` : ''
     return request<ConditionsCompare>(`/v1/conditions/compare${suffix}`)
   },

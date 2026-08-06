@@ -8,17 +8,25 @@ import { useSpotlight } from '../hooks/useSpotlight'
 
 const fallbackCompare: ConditionsCompare = {
   place: '西安',
-  asOf: '',
+  dateRange: '8/11–8/15',
+  updatedAt: '',
   social: {
-    headline: '抖音大量「暴雨别去了」视频',
-    source: '短视频热议',
+    source: '社媒热议',
+    headline: '暴雨别去了',
+    summary: '抖音大量「暴雨别去了」视频',
+    sentiment: 'alarm',
   },
-  live: {
+  forecast: {
+    source: '实况预报',
+    headline: '小雨转阴后转晴',
     summary: '8/11 小雨转阴，其后转晴；比深圳凉快 5–8°C',
+    sentiment: 'positive',
+    dataSource: 'demo',
   },
-  advice: {
-    keepTrip: true,
+  recommendation: {
+    title: 'AI 建议',
     summary: '保留行程。Day1 改室内陕历博，夜景照去；无需取消。',
+    verdict: 'keep',
   },
 }
 
@@ -40,7 +48,7 @@ export default function Landing() {
     let cancelled = false
 
     api
-      .compareConditions({ tripId: 'xian', place: '西安' })
+      .compareConditions({ tripId: 'xian', destination: '西安' })
       .then((data) => {
         if (cancelled) return
         setCompare(data)
@@ -99,16 +107,16 @@ export default function Landing() {
             <span className="pill pill--live">{liveSource === 'api' ? 'API' : 'LIVE'}</span>
           </div>
           <div className="truth-board__row truth-board__row--alert">
-            <strong>社媒热议</strong>
-            <p>{compare.social.headline}</p>
+            <strong>{compare.social.source}</strong>
+            <p>{compare.social.summary || compare.social.headline}</p>
           </div>
           <div className="truth-board__row truth-board__row--ok">
-            <strong>实况预报</strong>
-            <p>{compare.live.summary}</p>
+            <strong>{compare.forecast.source}</strong>
+            <p>{compare.forecast.summary}</p>
           </div>
           <div className="truth-board__row">
-            <strong>AI 建议</strong>
-            <p>{compare.advice.summary}</p>
+            <strong>{compare.recommendation.title}</strong>
+            <p>{compare.recommendation.summary}</p>
           </div>
         </aside>
       </section>
