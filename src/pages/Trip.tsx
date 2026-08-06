@@ -121,16 +121,16 @@ export default function Trip() {
             <p className="bento__note">{meta.homeNote}</p>
           </div>
 
-          <div className="bento__tile bento__tile--wide spot" {...spotlight}>
+          <div className="bento__tile spot" {...spotlight}>
             <span className="bento__label">待办抢票</span>
             <strong className="bento__value">{urgentCount} 项紧急</strong>
-            <p className="bento__note">导入日历后自动带三重闹钟提醒</p>
+            <p className="bento__note">导入日历自动带三重闹钟</p>
           </div>
 
-          <div className="bento__tile bento__tile--wide spot" {...spotlight}>
-            <span className="bento__label">天气判断</span>
+          <div className="bento__tile spot" {...spotlight}>
+            <span className="bento__label">首日天气</span>
             <strong className="bento__value">{book.weatherDays[0]?.condition ?? '—'}</strong>
-            <p className="bento__note">首日 {book.weatherDays[0]?.temp ?? ''}，其后见天气条</p>
+            <p className="bento__note">{book.weatherDays[0]?.temp ?? ''}，其后见天气条</p>
           </div>
         </section>
 

@@ -19,6 +19,15 @@
   gap: 1rem;
   position: relative;
   z-index: 5;
+  color: var(--ink-soft);
+}
+
+.topnav .brand__mark {
+  color: var(--sea);
+}
+
+.topnav .brand__en {
+  color: var(--ink-soft);
 }
 
 .topnav--solid {
@@ -31,15 +40,6 @@
   border-bottom: 1px solid var(--line);
 }
 
-.topnav--solid .brand__mark {
-  color: var(--sea);
-}
-
-.topnav--solid .brand__en,
-.topnav--solid .topnav__links a {
-  color: var(--ink-soft);
-}
-
 .brand {
   display: inline-flex;
   align-items: baseline;
@@ -50,7 +50,6 @@
   font-family: var(--font-display);
   font-weight: 800;
   font-size: 1.3rem;
-  color: #f4f7f5;
 }
 
 .brand__en {
@@ -58,7 +57,6 @@
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(244, 247, 245, 0.7);
 }
 
 .topnav__links {
@@ -67,7 +65,6 @@
   gap: 1.15rem;
   font-size: 0.92rem;
   font-weight: 500;
-  color: rgba(244, 247, 245, 0.9);
 }
 
 .topnav__links a:not(.btn) {
@@ -185,10 +182,10 @@
 .hero-live {
   position: relative;
   width: min(100% - 2rem, var(--max));
-  margin: 0 auto 2rem;
-  min-height: min(88svh, 46rem);
+  margin: 0 auto 2.5rem;
+  min-height: min(72svh, 38rem);
   display: grid;
-  align-items: end;
+  align-items: center;
   gap: 1.5rem;
   padding: 1.5rem 0 2.5rem;
   border-radius: calc(var(--radius) * 1.6);
@@ -244,7 +241,7 @@
 
 @media (min-width: 980px) {
   .hero-live__content {
-    padding: 3.5rem 3rem;
+    padding: 3rem 2.75rem;
   }
 }
 
@@ -745,10 +742,7 @@
 @media (min-width: 760px) {
   .bento {
     grid-template-columns: repeat(4, 1fr);
-  }
-
-  .bento__tile--wide {
-    grid-column: span 2;
+    grid-auto-rows: minmax(9rem, auto);
   }
 
   .bento__tile--tall {
