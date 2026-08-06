@@ -1,0 +1,31 @@
+const destinations = [
+  ['西安', '城墙 · 陕历博'],
+  ['华山', '西上北下'],
+  ['敦煌', '莫高窟'],
+  ['婺源', '油菜花期'],
+  ['泉州', '烟火人间'],
+  ['喀什', '老城清晨'],
+  ['长白山', '天池风口'],
+  ['潮汕', '夜粥摊'],
+] as const
+
+export default function DestinationMarquee() {
+  const items = [...destinations, ...destinations]
+
+  return (
+    <div className="marquee" aria-label="真程正在规划的目的地">
+      <div className="marquee__track">
+        {items.map(([city, note], index) => (
+          <p
+            className="marquee__item"
+            key={`${city}-${index}`}
+            aria-hidden={index >= destinations.length}
+          >
+            <span>{city}</span>
+            {note}
+          </p>
+        ))}
+      </div>
+    </div>
+  )
+}

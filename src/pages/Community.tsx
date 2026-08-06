@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { FormEvent } from 'react'
+import type { CSSProperties, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { moments as seedMoments, type Moment } from '../data/community'
 import { api, apiConfigured, type ApiMoment } from '../services/api'
@@ -177,6 +177,7 @@ export default function Community() {
             <article
               className={`moment${moment.id.startsWith('local-') ? '' : ' reveal'}${index < 2 || moment.id.startsWith('local-') ? ' is-visible' : ''}`}
               key={moment.id}
+              style={{ '--i': Math.min(index, 4) } as CSSProperties}
             >
               <div className="moment__media">
                 <img src={moment.image} alt={moment.imageAlt} loading="lazy" />

@@ -1,24 +1,36 @@
 :root {
   --ink: #14241f;
-  --ink-soft: #3d524a;
+  --ink-soft: #45594f;
   --sea: #165a4a;
   --sea-deep: #0d3b31;
   --foam: #d9e8e2;
   --mist: #eef3f0;
-  --paper: #f4f7f5;
+  --paper: #f6f8f6;
   --sand: #d8c39a;
-  --signal: #d9772c;
-  --signal-deep: #b85f1c;
-  --danger: #b42318;
+  --signal: #c9682a;
+  --signal-deep: #a9521c;
+  --danger: #a8332a;
   --ok: #0f766e;
-  --line: rgba(20, 36, 31, 0.12);
-  --shadow: 0 18px 50px rgba(13, 59, 49, 0.08);
+
+  --line: rgba(20, 36, 31, 0.1);
+  --line-strong: rgba(20, 36, 31, 0.18);
+  --tint: rgba(22, 90, 74, 0.06);
+
+  --shadow-sm: 0 1px 2px rgba(13, 59, 49, 0.05);
+  --shadow: 0 12px 32px -12px rgba(13, 59, 49, 0.16);
+  --shadow-lg: 0 22px 48px -16px rgba(13, 59, 49, 0.22);
 
   --font-display: "Bricolage Grotesque", "Noto Sans SC", sans-serif;
   --font-body: "DM Sans", "Noto Sans SC", sans-serif;
 
-  --max: 72rem;
+  --max: 74rem;
+  --radius: 14px;
+  --radius-sm: 10px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --header-h: 4rem;
+
+  /* paper grain: subtle turbulence so surfaces read as printed, not screen */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
 }
 
 *,
@@ -29,6 +41,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 1rem);
 }
 
 body {
@@ -36,15 +49,31 @@ body {
   min-width: 320px;
   color: var(--ink);
   font-family: var(--font-body);
-  background:
-    radial-gradient(900px 480px at 0% 0%, rgba(22, 90, 74, 0.1), transparent 55%),
-    radial-gradient(700px 420px at 100% 10%, rgba(217, 119, 44, 0.08), transparent 50%),
-    linear-gradient(180deg, var(--mist), var(--paper) 45%, #e7efe9);
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(1100px 520px at -5% -10%, rgba(22, 90, 74, 0.09), transparent 60%),
+    radial-gradient(820px 460px at 105% 4%, rgba(201, 104, 42, 0.07), transparent 55%),
+    linear-gradient(180deg, var(--mist), var(--paper) 42%, #e9f0eb);
+  background-attachment: fixed;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
+/* grain sits above the wash, below content */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--grain);
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+}
+
 #root {
+  position: relative;
+  z-index: 1;
   min-height: 100vh;
 }
 
@@ -54,14 +83,23 @@ a {
 }
 
 button,
-input {
+input,
+textarea,
+select {
   font: inherit;
+  color: inherit;
 }
 
 button {
   cursor: pointer;
   border: none;
   background: none;
+}
+
+:where(a, button, input, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--sea);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 img {
@@ -73,11 +111,34 @@ h1,
 h2,
 h3,
 h4 {
+  margin: 0;
   font-family: var(--font-display);
-  letter-spacing: -0.03em;
-  line-height: 1.15;
+  line-height: 1.16;
+  text-wrap: balance;
+}
+
+/* Latin display tracking only; CJK glyphs need neutral spacing */
+:lang(en) h1,
+:lang(en) h2,
+:lang(en) h3,
+.brand__mark,
+.hero-live__brand {
+  letter-spacing: -0.035em;
 }
 
 p {
-  line-height: 1.65;
+  line-height: 1.68;
+  text-wrap: pretty;
+}
+
+/* itinerary times, prices and counters read straighter with tabular digits */
+time,
+.data-table td,
+.data-table th,
+.timeline time,
+.weather-card span,
+.trip-hero__stat strong,
+.calendar-export__stats strong,
+.day-tab span {
+  font-variant-numeric: tabular-nums;
 }

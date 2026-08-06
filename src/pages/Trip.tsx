@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
+import type { CSSProperties } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import CalendarExport from '../components/CalendarExport'
 import WeatherIcon from '../components/WeatherIcon'
 import { staticXianBook } from '../data/staticTripBook'
 import type { SituationUpdate } from '../data/xianTrip'
 import { api, apiConfigured, type TripBook } from '../services/api'
+import { useSpotlight } from '../hooks/useSpotlight'
 
 const kindLabel: Record<SituationUpdate['kind'], string> = {
   weather: '天气',
@@ -20,6 +22,7 @@ export default function Trip() {
   const [source, setSource] = useState<'demo' | 'api'>('demo')
   const [activeDay, setActiveDay] = useState(book.days[0]?.id ?? 'day1')
   const [showReplan, setShowReplan] = useState(fromPlan)
+  const spotlight = useSpotlight()
 
   useEffect(() => {
     if (!apiConfigured) return
@@ -33,9 +36,7 @@ export default function Trip() {
         setSource('api')
         setActiveDay(trip.days[0]?.id ?? 'day1')
       })
-      .catch(() => {
-        /* keep bundled static book */
-      })
+      .catch(() => {})
 
     return () => {
       cancelled = true
@@ -45,6 +46,15 @@ export default function Trip() {
   const day = useMemo(
     () => book.days.find((d) => d.id === activeDay) ?? book.days[0],
     [book.days, activeDay],
+  )
+
+  const urgentCount = useMemo(
+    () =>
+      book.days.reduce(
+        (sum, d) => sum + d.bookings.filter((b) => b.urgent).length,
+        0,
+      ),
+    [book.days],
   )
 
   if (!day) return null
@@ -68,11 +78,15 @@ export default function Trip() {
       </header>
 
       <main className="trip">
+        <div className="day-rail" aria-hidden="true">
+          <div className="day-rail__fill" />
+        </div>
+
         {showReplan && (
           <div className="banner-toast" role="status">
             <div>
               <strong>已生成可执行路书</strong>
-              <p>以下为深圳出发西安家庭游示例（对应你的 WorkBuddy v9 方案结构）。</p>
+              <p>以下为深圳出发西安家庭游示例，可直接导入日历与抢票闹钟。</p>
             </div>
             <button type="button" onClick={() => setShowReplan(false)}>
               知道了
@@ -80,26 +94,43 @@ export default function Trip() {
           </div>
         )}
 
-        <section className="trip-hero">
-          <div>
+        <section className="bento" aria-label="行程概览">
+          <div className="bento__tile bento__tile--tall">
             <p className="eyebrow">
-              {meta.version} · 更新于 {meta.updatedAt}
-              <span className="pill" style={{ marginLeft: '0.6rem' }}>
-                {source === 'api' ? '已连接后台' : '演示数据'}
-              </span>
+              {meta.version} · {meta.updatedAt}
+              <span className="pill">{source === 'api' ? '已连接后台' : '演示数据'}</span>
             </p>
             <h1>{meta.title}</h1>
-            <p className="trip-hero__meta">
+            <p className="bento__note">
               {meta.origin}出发 · {meta.dates} · {meta.nights}
               <br />
-              {meta.party} · {meta.goMode} · {meta.returnMode} · {meta.homeNote}
+              {meta.party} · {meta.goMode} · {meta.returnMode}
             </p>
-            <p className="trip-hero__change">{meta.changelog}</p>
+            <p className="bento__note">{meta.changelog}</p>
           </div>
-          <div className="trip-hero__stat">
-            <span>3人合计</span>
-            <strong>{book.costTotal}</strong>
-            <span>人均约 {book.costPerPerson}</span>
+
+          <div className="bento__tile spot" {...spotlight}>
+            <span className="bento__label">3人合计</span>
+            <strong className="bento__value">{book.costTotal}</strong>
+            <p className="bento__note">人均约 {book.costPerPerson}</p>
+          </div>
+
+          <div className="bento__tile spot" {...spotlight}>
+            <span className="bento__label">行程天数</span>
+            <strong className="bento__value">{book.days.length} 天</strong>
+            <p className="bento__note">{meta.homeNote}</p>
+          </div>
+
+          <div className="bento__tile bento__tile--wide spot" {...spotlight}>
+            <span className="bento__label">待办抢票</span>
+            <strong className="bento__value">{urgentCount} 项紧急</strong>
+            <p className="bento__note">导入日历后自动带三重闹钟提醒</p>
+          </div>
+
+          <div className="bento__tile bento__tile--wide spot" {...spotlight}>
+            <span className="bento__label">天气判断</span>
+            <strong className="bento__value">{book.weatherDays[0]?.condition ?? '—'}</strong>
+            <p className="bento__note">首日 {book.weatherDays[0]?.temp ?? ''}，其后见天气条</p>
           </div>
         </section>
 
@@ -126,7 +157,7 @@ export default function Trip() {
 
         <section className="panel" id="situations">
           <div className="panel__head">
-            <h2>动态情况与 AI 建议</h2>
+            <h2>动态情况与建议</h2>
             <span className="pill">随实情改版</span>
           </div>
           <div className="situation-list">
@@ -145,6 +176,73 @@ export default function Trip() {
                 )}
               </article>
             ))}
+          </div>
+        </section>
+
+        <section className="panel" id="days">
+          <div className="panel__head">
+            <h2>每日行程</h2>
+          </div>
+
+          <div className="day-layout">
+            <aside className="day-aside">
+              <div className="day-tabs" role="tablist" aria-label="选择日期">
+                {book.days.map((d) => (
+                  <button
+                    key={d.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={d.id === activeDay}
+                    className={`day-tab${d.id === activeDay ? ' is-active' : ''}`}
+                    onClick={() => setActiveDay(d.id)}
+                  >
+                    <WeatherIcon icon={d.weatherIcon} />
+                    <span>
+                      {d.date} {d.weekday}
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="day-context">
+                <strong>
+                  {day.date} {day.weekday}
+                </strong>
+                <span>{day.weather}</span>
+                <span>{day.bookings.length} 项预约 · {day.timeline.length} 段安排</span>
+              </div>
+            </aside>
+
+            <article className="day-detail">
+              <header className="day-detail__head">
+                <p className="eyebrow">{day.weather}</p>
+                <h3>{day.title}</h3>
+              </header>
+
+              {day.callout && <p className="callout">{day.callout}</p>}
+
+              <div className="booking-grid">
+                {day.bookings.map((b) => (
+                  <div className={`booking${b.urgent ? ' booking--urgent' : ''}`} key={b.name}>
+                    <strong>{b.name}</strong>
+                    <p>{b.detail}</p>
+                    <span>抢票 / 购买：{b.deadline}</span>
+                  </div>
+                ))}
+              </div>
+
+              <ol className="timeline">
+                {day.timeline.map((item, index) => (
+                  <li key={`${item.time}-${item.title}`} style={{ '--i': index } as CSSProperties}>
+                    <time>{item.time}</time>
+                    <div>
+                      <h4>{item.title}</h4>
+                      <p>{item.body}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </article>
           </div>
         </section>
 
@@ -185,64 +283,6 @@ export default function Trip() {
               </tbody>
             </table>
           </div>
-        </section>
-
-        <section className="panel" id="days">
-          <div className="panel__head">
-            <h2>每日行程</h2>
-          </div>
-          <div className="day-tabs" role="tablist" aria-label="选择日期">
-            {book.days.map((d) => (
-              <button
-                key={d.id}
-                type="button"
-                role="tab"
-                aria-selected={d.id === activeDay}
-                className={`day-tab${d.id === activeDay ? ' is-active' : ''}`}
-                onClick={() => setActiveDay(d.id)}
-              >
-                <WeatherIcon icon={d.weatherIcon} />
-                <span>
-                  {d.date} {d.weekday}
-                </span>
-              </button>
-            ))}
-          </div>
-
-          <article className="day-detail">
-            <header className="day-detail__head">
-              <div>
-                <p className="eyebrow">
-                  {day.date} · {day.weekday} · {day.weather}
-                </p>
-                <h3>{day.title}</h3>
-              </div>
-            </header>
-
-            {day.callout && <p className="callout">{day.callout}</p>}
-
-            <div className="booking-grid">
-              {day.bookings.map((b) => (
-                <div className={`booking${b.urgent ? ' booking--urgent' : ''}`} key={b.name}>
-                  <strong>{b.name}</strong>
-                  <p>{b.detail}</p>
-                  <span>抢票 / 购买：{b.deadline}</span>
-                </div>
-              ))}
-            </div>
-
-            <ol className="timeline">
-              {day.timeline.map((item) => (
-                <li key={`${item.time}-${item.title}`}>
-                  <time>{item.time}</time>
-                  <div>
-                    <h4>{item.title}</h4>
-                    <p>{item.body}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </article>
         </section>
 
         <CalendarExport book={book} activeDayId={activeDay} />
@@ -289,18 +329,14 @@ export default function Trip() {
             <p className="eyebrow">信任之后，是分享</p>
             <h2>走完这趟，把快乐留给后来者。</h2>
             <p>
-              真程要做成大家真正用得上的系统：实况可核对、行程可改版；也做成交互平台——把雨中灯火、山顶并肩、当晚到家的安心，分享给下一个出发的人。
+              实况可核对、行程可改版、闹钟已就位。走完之后，把雨中灯火与当晚到家的安心，分享给下一个出发的人。
             </p>
           </div>
           <div className="hero-live__actions">
             <Link className="btn btn--primary" to="/community">
               分享这段快乐
             </Link>
-            <Link
-              className="btn btn--ghost-dark"
-              to="/plan"
-              style={{ borderColor: 'rgba(244,247,245,.45)', color: '#f4f7f5' }}
-            >
+            <Link className="btn btn--ghost-dark" to="/plan">
               再生成一版
             </Link>
           </div>
