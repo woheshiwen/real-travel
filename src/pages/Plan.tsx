@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { api, apiConfigured } from '../services/api'
 
 const interests = ['博物馆', '自然风光', '美食', '亲子友好', '少走路', '夜景'] as const
 
@@ -15,9 +16,28 @@ export default function Plan() {
     )
   }
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    const data = new FormData(event.currentTarget)
     setSubmitting(true)
+
+    if (apiConfigured) {
+      try {
+        await api.planTrip({
+          origin: String(data.get('origin') || ''),
+          destination: String(data.get('destination') || ''),
+          startDate: String(data.get('start') || ''),
+          endDate: String(data.get('end') || ''),
+          party: String(data.get('party') || ''),
+          interests: selected,
+        })
+      } catch {
+        /* fall through to the bundled Xi'an demo route */
+      }
+      navigate('/trip/xian', { state: { fromPlan: true } })
+      return
+    }
+
     window.setTimeout(() => {
       navigate('/trip/xian', { state: { fromPlan: true } })
     }, 900)
