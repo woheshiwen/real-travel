@@ -377,14 +377,15 @@
 
 .cine-hand {
   position: absolute;
-  left: 50%;
-  bottom: -4%;
-  width: min(110vw, 48rem);
-  height: min(78vw, 34rem);
-  transform: translate(-50%, 42%) scale(0.88);
+  right: -6%;
+  left: auto;
+  bottom: -2%;
+  width: min(92vw, 40rem);
+  height: min(70vw, 30rem);
+  transform: translate(8%, 38%) scale(0.9);
   opacity: 0;
   pointer-events: none;
-  z-index: 4;
+  z-index: 7;
   transition:
     opacity 800ms var(--ease),
     transform 1.25s var(--ease);
@@ -392,7 +393,26 @@
 
 .cine-hand.is-visible {
   opacity: 1;
-  transform: translate(-50%, 2%) scale(1);
+  transform: translate(0, 0) scale(1);
+}
+
+.cine-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(75% 70% at 50% 40%, transparent 35%, rgba(6, 10, 12, 0.55) 100%),
+    linear-gradient(180deg, rgba(6, 10, 12, 0.35), transparent 28%, rgba(6, 10, 12, 0.55) 92%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.cine-hero__ui {
+  position: relative;
+  z-index: 8;
+  width: min(100% - 2rem, var(--max));
+  margin: 0 auto;
+  padding: calc(var(--header-h) + 1.5rem) 0 2.4rem;
+  max-width: 38rem;
 }
 
 .cine-stage--palm .cine-path {
@@ -432,11 +452,11 @@
 
 .cine-hand__model {
   position: absolute;
-  left: 48%;
-  top: 22%;
-  width: min(42vw, 13rem);
-  height: min(28vw, 8.5rem);
-  transform: translate(-50%, -40%);
+  left: 44%;
+  top: 18%;
+  width: min(46vw, 14rem);
+  height: min(30vw, 9rem);
+  transform: translate(-50%, -30%);
   border-radius: 14px;
   background:
     linear-gradient(145deg, rgba(255, 236, 200, 0.28), rgba(40, 70, 70, 0.15)),
@@ -473,25 +493,7 @@
   opacity: 0.07;
   mix-blend-mode: soft-light;
   pointer-events: none;
-}
-
-.cine-vignette {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(75% 70% at 50% 40%, transparent 35%, rgba(6, 10, 12, 0.55) 100%),
-    linear-gradient(180deg, rgba(6, 10, 12, 0.35), transparent 28%, rgba(6, 10, 12, 0.78) 92%);
-  pointer-events: none;
-  z-index: 5;
-}
-
-.cine-hero__ui {
-  position: relative;
-  z-index: 6;
-  width: min(100% - 2rem, var(--max));
-  margin: 0 auto;
-  padding: calc(var(--header-h) + 1.5rem) 0 2.4rem;
-  max-width: 38rem;
+  z-index: 2;
 }
 
 .cine-hero__brand {
@@ -1959,10 +1961,10 @@
 @keyframes cine-float {
   0%,
   100% {
-    transform: translate(-50%, -40%);
+    transform: translate(-50%, -30%);
   }
   50% {
-    transform: translate(-50%, -48%);
+    transform: translate(-50%, -38%);
   }
 }
 
