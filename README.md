@@ -42,6 +42,14 @@ cp .env.example .env
 
 未配置时前端使用内置演示数据，可独立运行；配置后足迹广场与规划会调用私有 API，失败自动回落演示数据。
 
+### 在线访问（GitHub Pages）
+
+合并到 `main` 后，Actions 会自动构建并发布：
+
+https://woheshiwen.github.io/real-travel/
+
+（首次需在仓库 Settings → Pages 选择 **GitHub Actions** 作为源；本仓库已附带 workflow。）
+
 ## 仓库拆分
 
 | 仓库 | 可见性 | 内容 |
