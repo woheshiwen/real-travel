@@ -137,7 +137,7 @@ export default function CinematicHero() {
         <div className={`cine-palm${inPalm ? ' is-visible' : ''}`}>
           <img
             className="cine-palm__hand"
-            src={`${import.meta.env.BASE_URL}palm-hand.png`}
+            src={`${import.meta.env.BASE_URL}palm-hand.webp`}
             alt=""
           />
           <div className="cine-palm__model">
