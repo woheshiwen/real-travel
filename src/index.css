@@ -20,8 +20,8 @@
   --shadow: 0 12px 32px -12px rgba(13, 59, 49, 0.16);
   --shadow-lg: 0 22px 48px -16px rgba(13, 59, 49, 0.22);
 
-  --font-display: "Bricolage Grotesque", "Noto Sans SC", sans-serif;
-  --font-body: "DM Sans", "Noto Sans SC", sans-serif;
+  --font-display: "Fraunces", "Noto Sans SC", serif;
+  --font-body: "Sora", "Noto Sans SC", sans-serif;
 
   --max: 74rem;
   --radius: 14px;
@@ -122,7 +122,7 @@ h4 {
 :lang(en) h2,
 :lang(en) h3,
 .brand__mark,
-.hero-live__brand {
+.cine-hero__brand {
   letter-spacing: -0.035em;
 }
 

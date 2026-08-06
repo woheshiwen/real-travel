@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import CinematicHero from '../components/CinematicHero'
 import DestinationMarquee from '../components/DestinationMarquee'
 import { moments, trustPillars } from '../data/community'
 import { api, apiConfigured, type ConditionsCompare } from '../services/api'
@@ -62,14 +63,14 @@ export default function Landing() {
   }, [])
 
   return (
-    <div className="page" ref={rootRef}>
-      <header className="topnav">
+    <div className="page page--cine" ref={rootRef}>
+      <header className="topnav topnav--cine">
         <Link to="/" className="brand">
           <span className="brand__mark">真程</span>
           <span className="brand__en">Real Travel</span>
         </Link>
         <nav className="topnav__links">
-          <a href="#trust">信任</a>
+          <a href="#truth">实况</a>
           <Link to="/community">足迹广场</Link>
           <Link to="/trip/xian">西安示例</Link>
           <Link className="btn btn--small btn--primary" to="/plan">
@@ -78,32 +79,21 @@ export default function Landing() {
         </nav>
       </header>
 
-      <section className="hero-live">
-        <div className="hero-live__atmosphere" aria-hidden="true">
-          <div className="hero-live__radar" />
-          <div className="hero-live__grid" />
-        </div>
+      <CinematicHero />
 
-        <div className="hero-live__content">
-          <p className="hero-live__brand">真程</p>
-          <h1 className="hero-live__title">值得信任的出行建议，和值得分享的快乐。</h1>
-          <p className="hero-live__lede">
-            结合出发地交通、目的地实况天气与持续变化的约束，生成可改版的路书；
-            定好行程后一键导入日历，连抢票闹钟都替你设好。
+      <section className="section section--truth" id="truth">
+        <div className="section__intro reveal">
+          <p className="eyebrow">实况对照</p>
+          <h2 className="section__title">社媒恐慌之外，还有可核对的判断。</h2>
+          <p className="section__text">
+            真程把热议与预报放在一起看——保留、微调还是改版，都写得清楚。
           </p>
-          <div className="hero-live__actions">
-            <Link className="btn btn--primary" to="/plan">
-              生成我的行程
-            </Link>
-            <Link className="btn btn--ghost-dark" to="/trip/xian">
-              看西安示例路书
-            </Link>
-          </div>
         </div>
-
-        <aside className="truth-board" aria-label="实况对照">
+        <aside className="truth-board truth-board--solo reveal" aria-label="实况对照">
           <div className="truth-board__head">
-            <span>实况对照 · {compare.place}</span>
+            <span>
+              {compare.place} · {compare.dateRange}
+            </span>
             <span className="pill pill--live">{liveSource === 'api' ? 'API' : 'LIVE'}</span>
           </div>
           <div className="truth-board__row truth-board__row--alert">
@@ -199,7 +189,7 @@ export default function Landing() {
               先打开西安家庭游路书，再去足迹广场看看同行人怎么做决定、怎么把快乐留下来。
             </p>
           </div>
-          <div className="hero-live__actions">
+          <div className="cine-hero__actions">
             <Link className="btn btn--primary" to="/trip/xian">
               打开示例行程
             </Link>
