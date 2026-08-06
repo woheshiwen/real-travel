@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import CalendarExport from '../components/CalendarExport'
 import WeatherIcon from '../components/WeatherIcon'
 import { staticXianBook } from '../data/staticTripBook'
 import type { SituationUpdate } from '../data/xianTrip'
@@ -60,8 +61,8 @@ export default function Trip() {
         <nav className="topnav__links">
           <Link to="/community">足迹广场</Link>
           <Link to="/plan">重新规划</Link>
-          <a className="btn btn--small btn--primary" href="#days">
-            每日行程
+          <a className="btn btn--small btn--primary" href="#calendar">
+            加入日历
           </a>
         </nav>
       </header>
@@ -243,6 +244,8 @@ export default function Trip() {
             </ol>
           </article>
         </section>
+
+        <CalendarExport book={book} activeDayId={activeDay} />
 
         <section className="split-panels">
           <div className="panel">
