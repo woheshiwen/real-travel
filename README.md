@@ -1,23 +1,29 @@
-# Real Travel
+# 真程 Real Travel
 
-A landing site for **Real Travel** — small-group journeys shaped by places as they are, not as brochures sell them.
+结合**实况天气**与**出发地交通**的 AI 动态行程系统。
 
-## Stack
+灵感来自真实出行：短视频说暴雨、预报其实还行——真程对照实况给可执行建议，并在约束变化时改版路书（示例：深圳出发西安家庭游 v9）。
 
-- Vite
-- React 19
-- TypeScript
+## 功能（当前演示）
 
-## Develop
+- 品牌落地页：社媒热议 vs 实况预报对照
+- 规划向导：出发地 / 日期 / 同行人 / 偏好
+- 动态行程页：天气条、交通时刻表、每日预约与时间轴、费用、改版建议
+
+## 开发
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Build
+## 构建
 
 ```bash
 npm run build
 npm run preview
 ```
+
+## 产品方向
+
+下一阶段接入实时天气、航班/高铁动态与预约余票，使行程能随实情自动提出结构调整（挪景点、改交通、重算费用）。

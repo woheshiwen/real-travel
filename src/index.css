@@ -1,27 +1,24 @@
 :root {
-  --ink: #14201c;
-  --sea: #1a4a45;
-  --sea-deep: #0f2f2c;
-  --foam: #dce8e4;
-  --mist: #eef3f1;
-  --paper: #f5f7f6;
-  --amber: #e07a3d;
-  --amber-deep: #c4632a;
-  --muted: #5a6b64;
-  --line: rgba(20, 32, 28, 0.12);
+  --ink: #14241f;
+  --ink-soft: #3d524a;
+  --sea: #165a4a;
+  --sea-deep: #0d3b31;
+  --foam: #d9e8e2;
+  --mist: #eef3f0;
+  --paper: #f4f7f5;
+  --sand: #d8c39a;
+  --signal: #d9772c;
+  --signal-deep: #b85f1c;
+  --danger: #b42318;
+  --ok: #0f766e;
+  --line: rgba(20, 36, 31, 0.12);
+  --shadow: 0 18px 50px rgba(13, 59, 49, 0.08);
 
-  --font-display: "Bricolage Grotesque", Georgia, serif;
-  --font-body: "DM Sans", "Helvetica Neue", sans-serif;
+  --font-display: "Bricolage Grotesque", "Noto Sans SC", sans-serif;
+  --font-body: "DM Sans", "Noto Sans SC", sans-serif;
 
-  --space-xs: 0.5rem;
-  --space-sm: 1rem;
-  --space-md: 1.5rem;
-  --space-lg: 2.5rem;
-  --space-xl: 4rem;
-  --space-2xl: 6.5rem;
-
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --max: 72rem;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 *,
@@ -38,21 +35,17 @@ body {
   margin: 0;
   min-width: 320px;
   color: var(--ink);
-  background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(26, 74, 69, 0.08), transparent 55%),
-    radial-gradient(900px 500px at 100% 20%, rgba(224, 122, 61, 0.06), transparent 50%),
-    linear-gradient(180deg, var(--mist) 0%, var(--paper) 40%, var(--foam) 100%);
   font-family: var(--font-body);
-  font-optical-sizing: auto;
-  font-synthesis: none;
+  background:
+    radial-gradient(900px 480px at 0% 0%, rgba(22, 90, 74, 0.1), transparent 55%),
+    radial-gradient(700px 420px at 100% 10%, rgba(217, 119, 44, 0.08), transparent 50%),
+    linear-gradient(180deg, var(--mist), var(--paper) 45%, #e7efe9);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-img {
-  display: block;
-  max-width: 100%;
+#root {
+  min-height: 100vh;
 }
 
 a {
@@ -60,13 +53,31 @@ a {
   text-decoration: none;
 }
 
-button {
+button,
+input {
   font: inherit;
+}
+
+button {
   cursor: pointer;
   border: none;
   background: none;
 }
 
-#root {
-  min-height: 100vh;
+img {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+p {
+  line-height: 1.65;
 }
