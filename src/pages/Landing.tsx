@@ -1,10 +1,50 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { moments, trustPillars } from '../data/community'
+import { api, apiConfigured, type ConditionsCompare } from '../services/api'
 import { useReveal } from '../hooks/useReveal'
+
+const fallbackCompare: ConditionsCompare = {
+  place: '西安',
+  asOf: '',
+  social: {
+    headline: '抖音大量「暴雨别去了」视频',
+    source: '短视频热议',
+  },
+  live: {
+    summary: '8/11 小雨转阴，其后转晴；比深圳凉快 5–8°C',
+  },
+  advice: {
+    keepTrip: true,
+    summary: '保留行程。Day1 改室内陕历博，夜景照去；无需取消。',
+  },
+}
 
 export default function Landing() {
   const rootRef = useReveal()
   const preview = moments.slice(0, 3)
+  const [compare, setCompare] = useState(fallbackCompare)
+  const [liveSource, setLiveSource] = useState<'demo' | 'api'>('demo')
+
+  useEffect(() => {
+    if (!apiConfigured) return
+    let cancelled = false
+
+    api
+      .compareConditions({ tripId: 'xian', place: '西安' })
+      .then((data) => {
+        if (cancelled) return
+        setCompare(data)
+        setLiveSource('api')
+      })
+      .catch(() => {
+        /* keep fallback board */
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   return (
     <div className="page" ref={rootRef}>
@@ -48,20 +88,20 @@ export default function Landing() {
 
         <aside className="truth-board" aria-label="实况对照">
           <div className="truth-board__head">
-            <span>实况对照 · 西安 8/11–8/15</span>
-            <span className="pill pill--live">LIVE</span>
+            <span>实况对照 · {compare.place}</span>
+            <span className="pill pill--live">{liveSource === 'api' ? 'API' : 'LIVE'}</span>
           </div>
           <div className="truth-board__row truth-board__row--alert">
             <strong>社媒热议</strong>
-            <p>抖音大量「暴雨别去了」视频</p>
+            <p>{compare.social.headline}</p>
           </div>
           <div className="truth-board__row truth-board__row--ok">
             <strong>实况预报</strong>
-            <p>8/11 小雨转阴，其后转晴；比深圳凉快 5–8°C</p>
+            <p>{compare.live.summary}</p>
           </div>
           <div className="truth-board__row">
             <strong>AI 建议</strong>
-            <p>保留行程。Day1 改室内陕历博，夜景照去；无需取消。</p>
+            <p>{compare.advice.summary}</p>
           </div>
         </aside>
       </section>

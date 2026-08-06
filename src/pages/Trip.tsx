@@ -1,20 +1,9 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import WeatherIcon from '../components/WeatherIcon'
-import {
-  costPerPerson,
-  costs,
-  costTotal,
-  days,
-  situations,
-  tips,
-  transportLegs,
-  transportNote,
-  tripMeta,
-  weatherDays,
-  weatherSummary,
-  type SituationUpdate,
-} from '../data/xianTrip'
+import { staticXianBook } from '../data/staticTripBook'
+import type { SituationUpdate } from '../data/xianTrip'
+import { api, apiConfigured, type TripBook } from '../services/api'
 
 const kindLabel: Record<SituationUpdate['kind'], string> = {
   weather: '天气',
@@ -26,9 +15,40 @@ const kindLabel: Record<SituationUpdate['kind'], string> = {
 export default function Trip() {
   const location = useLocation()
   const fromPlan = Boolean((location.state as { fromPlan?: boolean } | null)?.fromPlan)
-  const [activeDay, setActiveDay] = useState(days[0].id)
+  const [book, setBook] = useState<TripBook>(() => staticXianBook())
+  const [source, setSource] = useState<'demo' | 'api'>('demo')
+  const [activeDay, setActiveDay] = useState(book.days[0]?.id ?? 'day1')
   const [showReplan, setShowReplan] = useState(fromPlan)
-  const day = useMemo(() => days.find((d) => d.id === activeDay) ?? days[0], [activeDay])
+
+  useEffect(() => {
+    if (!apiConfigured) return
+    let cancelled = false
+
+    api
+      .getTrip('xian')
+      .then((trip) => {
+        if (cancelled) return
+        setBook(trip)
+        setSource('api')
+        setActiveDay(trip.days[0]?.id ?? 'day1')
+      })
+      .catch(() => {
+        /* keep bundled static book */
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const day = useMemo(
+    () => book.days.find((d) => d.id === activeDay) ?? book.days[0],
+    [book.days, activeDay],
+  )
+
+  if (!day) return null
+
+  const { meta } = book
 
   return (
     <div className="page page--plain">
@@ -62,20 +82,23 @@ export default function Trip() {
         <section className="trip-hero">
           <div>
             <p className="eyebrow">
-              {tripMeta.version} · 更新于 {tripMeta.updatedAt}
+              {meta.version} · 更新于 {meta.updatedAt}
+              <span className="pill" style={{ marginLeft: '0.6rem' }}>
+                {source === 'api' ? '已连接后台' : '演示数据'}
+              </span>
             </p>
-            <h1>{tripMeta.title}</h1>
+            <h1>{meta.title}</h1>
             <p className="trip-hero__meta">
-              {tripMeta.origin}出发 · {tripMeta.dates} · {tripMeta.nights}
+              {meta.origin}出发 · {meta.dates} · {meta.nights}
               <br />
-              {tripMeta.party} · {tripMeta.goMode} · {tripMeta.returnMode} · {tripMeta.homeNote}
+              {meta.party} · {meta.goMode} · {meta.returnMode} · {meta.homeNote}
             </p>
-            <p className="trip-hero__change">{tripMeta.changelog}</p>
+            <p className="trip-hero__change">{meta.changelog}</p>
           </div>
           <div className="trip-hero__stat">
             <span>3人合计</span>
-            <strong>{costTotal}</strong>
-            <span>人均约 {costPerPerson}</span>
+            <strong>{book.costTotal}</strong>
+            <span>人均约 {book.costPerPerson}</span>
           </div>
         </section>
 
@@ -84,9 +107,9 @@ export default function Trip() {
             <h2>天气实况条</h2>
             <span className="pill pill--live">对照社媒</span>
           </div>
-          <p className="panel__lede">{weatherSummary}</p>
+          <p className="panel__lede">{book.weatherSummary}</p>
           <div className="weather-strip">
-            {weatherDays.map((w) => (
+            {book.weatherDays.map((w) => (
               <article className="weather-card" key={w.date}>
                 <WeatherIcon icon={w.icon} />
                 <strong>
@@ -106,7 +129,7 @@ export default function Trip() {
             <span className="pill">随实情改版</span>
           </div>
           <div className="situation-list">
-            {situations.map((item) => (
+            {book.situations.map((item) => (
               <article className={`situation situation--${item.kind}`} key={item.id}>
                 <div className="situation__meta">
                   <span>{kindLabel[item.kind]}</span>
@@ -128,7 +151,7 @@ export default function Trip() {
           <div className="panel__head">
             <h2>全程交通时刻表</h2>
           </div>
-          <p className="panel__lede">{transportNote}</p>
+          <p className="panel__lede">{book.transportNote}</p>
           <div className="table-wrap">
             <table className="data-table">
               <thead>
@@ -143,7 +166,7 @@ export default function Trip() {
                 </tr>
               </thead>
               <tbody>
-                {transportLegs.map((leg) => (
+                {book.transportLegs.map((leg) => (
                   <tr key={`${leg.dayLabel}-${leg.code}`}>
                     <td>
                       {leg.date}
@@ -168,7 +191,7 @@ export default function Trip() {
             <h2>每日行程</h2>
           </div>
           <div className="day-tabs" role="tablist" aria-label="选择日期">
-            {days.map((d) => (
+            {book.days.map((d) => (
               <button
                 key={d.id}
                 type="button"
@@ -229,7 +252,7 @@ export default function Trip() {
             <div className="table-wrap">
               <table className="data-table">
                 <tbody>
-                  {costs.map((row) => (
+                  {book.costs.map((row) => (
                     <tr key={row.item}>
                       <td>{row.item}</td>
                       <td>{row.detail}</td>
@@ -239,7 +262,7 @@ export default function Trip() {
                   <tr className="data-table__total">
                     <td>合计</td>
                     <td>3人总费用</td>
-                    <td>{costTotal}</td>
+                    <td>{book.costTotal}</td>
                   </tr>
                 </tbody>
               </table>
@@ -251,7 +274,7 @@ export default function Trip() {
               <h2>实用提示</h2>
             </div>
             <ul className="tip-list">
-              {tips.map((tip) => (
+              {book.tips.map((tip) => (
                 <li key={tip}>{tip}</li>
               ))}
             </ul>
@@ -270,7 +293,11 @@ export default function Trip() {
             <Link className="btn btn--primary" to="/community">
               分享这段快乐
             </Link>
-            <Link className="btn btn--ghost-dark" to="/plan" style={{ borderColor: 'rgba(244,247,245,.45)', color: '#f4f7f5' }}>
+            <Link
+              className="btn btn--ghost-dark"
+              to="/plan"
+              style={{ borderColor: 'rgba(244,247,245,.45)', color: '#f4f7f5' }}
+            >
               再生成一版
             </Link>
           </div>
