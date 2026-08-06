@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react'
 
-export function useReveal<T extends HTMLElement = HTMLDivElement>() {
+export function useReveal<T extends HTMLElement = HTMLDivElement>(deps: unknown[] = []) {
   const ref = useRef<T>(null)
 
   useEffect(() => {
     const root = ref.current
     if (!root) return
 
-    const nodes = root.querySelectorAll<HTMLElement>('.reveal')
+    const nodes = [...root.querySelectorAll<HTMLElement>('.reveal:not(.is-visible)')]
     if (!nodes.length) return
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -29,7 +29,7 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>() {
 
     nodes.forEach((node) => observer.observe(node))
     return () => observer.disconnect()
-  }, [])
+  }, deps)
 
   return ref
 }

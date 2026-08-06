@@ -5,8 +5,8 @@ import { moments as seedMoments, type Moment } from '../data/community'
 import { useReveal } from '../hooks/useReveal'
 
 export default function Community() {
-  const rootRef = useReveal()
   const [items, setItems] = useState(seedMoments)
+  const rootRef = useReveal([items.length])
   const [liked, setLiked] = useState<Record<string, boolean>>({})
   const [composerOpen, setComposerOpen] = useState(false)
 
@@ -103,8 +103,11 @@ export default function Community() {
         </section>
 
         <section className="moment-feed" aria-label="足迹动态">
-          {items.map((moment) => (
-            <article className="moment reveal" key={moment.id}>
+          {items.map((moment, index) => (
+            <article
+              className={`moment${moment.id.startsWith('local-') ? '' : ' reveal'}${index < 2 || moment.id.startsWith('local-') ? ' is-visible' : ''}`}
+              key={moment.id}
+            >
               <div className="moment__media">
                 <img src={moment.image} alt={moment.imageAlt} loading="lazy" />
               </div>
