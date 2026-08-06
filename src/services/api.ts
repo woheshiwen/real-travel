@@ -173,6 +173,86 @@ export const api = {
     if (params?.startDate) q.set('startDate', params.startDate)
     if (params?.endDate) q.set('endDate', params.endDate)
     const suffix = q.toString() ? `?${q}` : ''
-    return request<ConditionsCompare>(`/v1/conditions/compare${suffix}`)
+    const raw = await request<unknown>(`/v1/conditions/compare${suffix}`)
+    return normalizeConditionsCompare(raw)
   },
+}
+
+/** Accepts current contract + transitional backend shapes. */
+function normalizeConditionsCompare(raw: unknown): ConditionsCompare {
+  const data = (raw && typeof raw === 'object' ? raw : {}) as Record<string, unknown>
+  const socialIn = (data.social && typeof data.social === 'object' ? data.social : {}) as Record<
+    string,
+    unknown
+  >
+  const forecastIn = (
+    data.forecast && typeof data.forecast === 'object'
+      ? data.forecast
+      : data.live && typeof data.live === 'object'
+        ? data.live
+        : {}
+  ) as Record<string, unknown>
+  const recIn = (
+    data.recommendation && typeof data.recommendation === 'object'
+      ? data.recommendation
+      : data.advice && typeof data.advice === 'object'
+        ? data.advice
+        : {}
+  ) as Record<string, unknown>
+
+  const verdictRaw = recIn.verdict
+  const verdict =
+    verdictRaw === 'keep' || verdictRaw === 'adjust' || verdictRaw === 'cancel'
+      ? verdictRaw
+      : recIn.keepTrip === false
+        ? 'adjust'
+        : 'keep'
+
+  const sentiment = (value: unknown, fallback: ConditionsCompare['social']['sentiment']) =>
+    value === 'alarm' || value === 'neutral' || value === 'positive' ? value : fallback
+
+  return {
+    place: typeof data.place === 'string' ? data.place : '西安',
+    dateRange:
+      typeof data.dateRange === 'string'
+        ? data.dateRange
+        : typeof data.asOf === 'string'
+          ? data.asOf
+          : '',
+    updatedAt:
+      typeof data.updatedAt === 'string'
+        ? data.updatedAt
+        : typeof data.asOf === 'string'
+          ? data.asOf
+          : '',
+    social: {
+      source: typeof socialIn.source === 'string' ? socialIn.source : '社媒热议',
+      headline: typeof socialIn.headline === 'string' ? socialIn.headline : '',
+      summary:
+        typeof socialIn.summary === 'string'
+          ? socialIn.summary
+          : typeof socialIn.headline === 'string'
+            ? socialIn.headline
+            : '',
+      sentiment: sentiment(socialIn.sentiment, 'alarm'),
+    },
+    forecast: {
+      source: typeof forecastIn.source === 'string' ? forecastIn.source : '实况预报',
+      headline: typeof forecastIn.headline === 'string' ? forecastIn.headline : '',
+      summary:
+        typeof forecastIn.summary === 'string'
+          ? forecastIn.summary
+          : typeof forecastIn.outlook === 'string'
+            ? forecastIn.outlook
+            : '',
+      sentiment: sentiment(forecastIn.sentiment, 'positive'),
+      days: Array.isArray(forecastIn.days) ? (forecastIn.days as ConditionsCompare['forecast']['days']) : undefined,
+      dataSource: forecastIn.dataSource === 'live' ? 'live' : 'demo',
+    },
+    recommendation: {
+      title: typeof recIn.title === 'string' ? recIn.title : 'AI 建议',
+      summary: typeof recIn.summary === 'string' ? recIn.summary : '',
+      verdict,
+    },
+  }
 }
