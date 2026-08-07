@@ -64,6 +64,19 @@
 
 ---
 
+## 2026-08-07 — 放大导航 Logo + Hero 补「真程」字标
+
+- **Agent**: Cursor
+- **类型**: `style` / `fix`
+- **描述**: 顶栏 Logo 过小看不清；放大并加磨砂衬底提升对比。Hero 主品牌旁固定加「真程」（篆体感衬线），与 Real Travel 并排。
+- **文件**: `src/App.css`, `src/components/SiteChrome.tsx`, `src/components/CinematicHero.tsx`, `public/brand/logo-nav.png`
+- **Commit**: `d6c8c6e` — enlarge nav logo + hero 真程
+- **详情**:
+  - Logo 高度约 4.25rem + 深色磨砂底托，避免淹没在视频背景里
+  - Hero：`Real Travel` + `真程`（Noto Serif SC 展示体，字距接近印章字）
+
+---
+
 ## 模板（新记录复制此块）
 
 <!--
