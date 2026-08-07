@@ -19,7 +19,7 @@ const catalogs: Record<Locale, Messages> = {
   ko,
 }
 
-const STORAGE_KEY = 'real-travel-locale'
+const STORAGE_KEY = 'real-travel-locale-v2'
 
 type I18nValue = {
   locale: Locale
