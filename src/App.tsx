@@ -7,6 +7,7 @@ import {
   useLocation,
   useNavigationType,
 } from 'react-router-dom'
+import { I18nProvider } from './i18n'
 import Community from './pages/Community'
 import Landing from './pages/Landing'
 import Plan from './pages/Plan'
@@ -44,16 +45,18 @@ export default function App() {
   const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || undefined
 
   return (
-    <BrowserRouter basename={basename}>
-      <RouteFade>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/plan" element={<Plan />} />
-          <Route path="/trip/xian" element={<Trip />} />
-          <Route path="/community" element={<Community />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </RouteFade>
-    </BrowserRouter>
+    <I18nProvider>
+      <BrowserRouter basename={basename}>
+        <RouteFade>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/plan" element={<Plan />} />
+            <Route path="/trip/xian" element={<Trip />} />
+            <Route path="/community" element={<Community />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </RouteFade>
+      </BrowserRouter>
+    </I18nProvider>
   )
 }

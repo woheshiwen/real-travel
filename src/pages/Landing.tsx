@@ -4,6 +4,7 @@ import CinematicHero from '../components/CinematicHero'
 import DestinationMarquee from '../components/DestinationMarquee'
 import SiteChrome from '../components/SiteChrome'
 import { moments, trustPillars } from '../data/community'
+import { useI18n } from '../i18n'
 import { api, apiConfigured, type ConditionsCompare } from '../services/api'
 import { useReveal } from '../hooks/useReveal'
 import { useSpotlight } from '../hooks/useSpotlight'
@@ -32,18 +33,14 @@ const fallbackCompare: ConditionsCompare = {
   },
 }
 
-const steps = [
-  '按天气、交通与约束生成可执行路书',
-  '情况变化时提出改版，并写清依据',
-  '一键导入日历，抢票闹钟自动就位',
-]
-
 export default function Landing() {
+  const { t } = useI18n()
   const rootRef = useReveal()
   const spotlight = useSpotlight()
   const preview = moments.slice(0, 3)
   const [compare, setCompare] = useState(fallbackCompare)
   const [liveSource, setLiveSource] = useState<'demo' | 'api'>('demo')
+  const howSteps = [t.how1, t.how2, t.how3]
 
   useEffect(() => {
     if (!apiConfigured) return
@@ -71,13 +68,11 @@ export default function Landing() {
 
       <section className="section section--truth" id="truth">
         <div className="section__intro reveal">
-          <p className="eyebrow">实况对照</p>
-          <h2 className="section__title">社媒恐慌之外，还有可核对的判断。</h2>
-          <p className="section__text">
-            真程把热议与预报放在一起看——保留、微调还是改版，都写得清楚。
-          </p>
+          <p className="eyebrow">{t.truthEyebrow}</p>
+          <h2 className="section__title">{t.truthTitle}</h2>
+          <p className="section__text">{t.truthText}</p>
         </div>
-        <aside className="truth-board truth-board--solo reveal" aria-label="实况对照">
+        <aside className="truth-board truth-board--solo reveal" aria-label={t.truthEyebrow}>
           <div className="truth-board__head">
             <span>
               {compare.place} · {compare.dateRange}
@@ -103,11 +98,9 @@ export default function Landing() {
 
       <section className="section" id="trust">
         <div className="section__intro reveal">
-          <p className="eyebrow">产品原则</p>
-          <h2 className="section__title">先做成大家用得上、信得过的系统。</h2>
-          <p className="section__text">
-            不是又一个热点旅游站。真程要长期可核对、可改版、可分享——让决策站在实况上，让快乐留在社区里。
-          </p>
+          <p className="eyebrow">{t.trustEyebrow}</p>
+          <h2 className="section__title">{t.trustTitle}</h2>
+          <p className="section__text">{t.trustText}</p>
         </div>
         <div className="reason-grid">
           {trustPillars.map((item, index) => (
@@ -126,11 +119,11 @@ export default function Landing() {
 
       <section className="section section--band" id="how">
         <div className="section__intro reveal">
-          <p className="eyebrow">工作方式</p>
-          <h2 className="section__title">实用系统 + 交互平台。</h2>
+          <p className="eyebrow">{t.howEyebrow}</p>
+          <h2 className="section__title">{t.howTitle}</h2>
         </div>
         <ol className="steps">
-          {steps.map((text, i) => (
+          {howSteps.map((text, i) => (
             <li
               className="steps__item spot reveal"
               key={text}
@@ -146,11 +139,9 @@ export default function Landing() {
 
       <section className="section" id="community-preview">
         <div className="section__intro reveal">
-          <p className="eyebrow">足迹广场</p>
-          <h2 className="section__title">大家正在分享的快乐。</h2>
-          <p className="section__text">
-            亲历者留下的不是夸张标题，而是可对照的实况判断，和一段想传下去的喜悦。
-          </p>
+          <p className="eyebrow">{t.momentsEyebrow}</p>
+          <h2 className="section__title">{t.momentsTitle}</h2>
+          <p className="section__text">{t.momentsText}</p>
         </div>
         <div className="home-moments">
           {preview.map((moment, index) => (
@@ -172,17 +163,15 @@ export default function Landing() {
 
         <div className="demo-cta reveal">
           <div>
-            <h2 className="section__title">从示例行程，走到真实社区。</h2>
-            <p className="section__text">
-              先打开西安家庭游路书，再去足迹广场看看同行人怎么做决定、怎么把快乐留下来。
-            </p>
+            <h2 className="section__title">{t.demoTitle}</h2>
+            <p className="section__text">{t.demoText}</p>
           </div>
           <div className="cine-hero__actions">
             <Link className="btn btn--primary" to="/trip/xian">
-              打开示例行程
+              {t.demoTrip}
             </Link>
             <Link className="btn btn--ghost-dark" to="/community">
-              进入足迹广场
+              {t.demoCommunity}
             </Link>
           </div>
         </div>
@@ -190,8 +179,10 @@ export default function Landing() {
 
       <footer className="site-footer">
         <div>
-          <strong>真程 Real Travel</strong>
-          <span>按实况出行，把快乐留给后来者。</span>
+          <strong>
+            {t.brandMark} {t.brandEn}
+          </strong>
+          <span>{t.footerTag}</span>
         </div>
         <p>© {new Date().getFullYear()}</p>
       </footer>
