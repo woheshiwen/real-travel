@@ -43,14 +43,33 @@
 
 .brand {
   display: inline-flex;
-  align-items: baseline;
-  gap: 0.45rem;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.brand__logo {
+  display: block;
+  height: 2.75rem;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .brand__mark {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: 1.55rem;
+  font-size: 1.35rem;
   color: var(--ink);
 }
 
