@@ -47,11 +47,35 @@
   gap: 0.55rem;
 }
 
+.brand__logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.45rem;
+  border-radius: 14px;
+  background: rgba(8, 10, 12, 0.55);
+  border: 1px solid rgba(255, 236, 210, 0.14);
+  backdrop-filter: blur(10px) saturate(140%);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+
+.topnav--solid .brand__logo-wrap {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--line-strong);
+  box-shadow: none;
+}
+
 .brand__logo {
   display: block;
-  height: 2.75rem;
+  height: 4.25rem;
   width: auto;
   flex-shrink: 0;
+}
+
+@media (max-width: 760px) {
+  .brand__logo {
+    height: 3.35rem;
+  }
 }
 
 .visually-hidden {
@@ -503,12 +527,32 @@
 
 .cine-hero__brand {
   margin: 0 0 1.1rem;
-  font-family: var(--font-display);
-  font-size: clamp(3.4rem, 10vw, 5.6rem);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.55rem 0.85rem;
   font-weight: 400;
   line-height: 0.92;
   letter-spacing: -0.03em;
   color: #fff6ea;
+}
+
+.cine-hero__brand-en {
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 9.5vw, 5.4rem);
+  letter-spacing: -0.03em;
+}
+
+.cine-hero__brand-zh {
+  font-family: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  font-size: clamp(2.05rem, 5.6vw, 3.15rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1;
+  color: #fff6ea;
+  /* Seal-script-adjacent display: square rhythm like the logo 篆体 */
+  font-feature-settings: "halt" 0;
+  transform: translateY(-0.08em);
 }
 
 .cine-hero__title {

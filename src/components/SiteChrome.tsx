@@ -15,8 +15,17 @@ export default function SiteChrome({ variant = 'solid', cta }: Props) {
 
   return (
     <header className={`topnav topnav--${variant === 'overlay' ? 'cine' : 'solid'}`}>
-      <Link to="/" className="brand" aria-label={t.brand}>
-        <img className="brand__logo" src={logoSrc} alt="" width={60} height={72} />
+      <Link to="/" className="brand" aria-label={`${t.brand} Real Travel`}>
+        <span className="brand__logo-wrap">
+          <img
+            className="brand__logo"
+            src={logoSrc}
+            alt=""
+            width={120}
+            height={142}
+            decoding="async"
+          />
+        </span>
         <span className="visually-hidden">{t.brand}</span>
       </Link>
       <div className="topnav__end">
