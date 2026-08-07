@@ -17,10 +17,10 @@ export default function SiteChrome({
       </Link>
       <nav className="topnav__links">
         <NavLink to="/" end>
-          首页
+          首页 · Home
         </NavLink>
-        <NavLink to="/trip/xian">路书</NavLink>
-        <NavLink to="/community">足迹</NavLink>
+        <NavLink to="/trip/xian">路书 · Trip</NavLink>
+        <NavLink to="/community">足迹 · Moments</NavLink>
         {'href' in cta ? (
           <a className="btn btn--small btn--primary" href={cta.href}>
             {cta.label}
