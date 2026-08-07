@@ -1,15 +1,49 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SiteChrome from '../components/SiteChrome'
+import { useI18n } from '../i18n'
 import { api, apiConfigured } from '../services/api'
 
-const interests = ['博物馆', '自然风光', '美食', '亲子友好', '少走路', '夜景'] as const
-
 export default function Plan() {
+  const { t, locale } = useI18n()
   const navigate = useNavigate()
-  const [selected, setSelected] = useState<string[]>(['博物馆', '亲子友好', '美食'])
+  const interests = useMemo(
+    () => [
+      t.interestMuseum,
+      t.interestNature,
+      t.interestFood,
+      t.interestFamily,
+      t.interestWalk,
+      t.interestNight,
+    ],
+    [t],
+  )
+  const [selected, setSelected] = useState<string[]>([
+    t.interestMuseum,
+    t.interestFamily,
+    t.interestFood,
+  ])
   const [submitting, setSubmitting] = useState(false)
+
+  useEffect(() => {
+    setSelected([t.interestMuseum, t.interestFamily, t.interestFood])
+  }, [locale, t.interestMuseum, t.interestFamily, t.interestFood])
+
+  const defaults =
+    locale === 'zh-CN'
+      ? {
+          origin: '深圳',
+          destination: '西安',
+          party: '两大一小（12岁）',
+          home: '宿松东 / 当晚到家',
+        }
+      : {
+          origin: 'Shenzhen',
+          destination: 'Xi’an',
+          party: '2 adults + 1 child (12)',
+          home: 'Susong East / home same night',
+        }
 
   function toggleInterest(item: string) {
     setSelected((prev) =>
@@ -46,48 +80,45 @@ export default function Plan() {
 
   return (
     <div className="page page--plain">
-      <SiteChrome cta={{ to: '/trip/xian', label: '先看示例' }} />
+      <SiteChrome cta={{ to: '/trip/xian', label: t.heroCtaSample }} />
 
       <main className="plan">
         <div className="plan__intro">
-          <p className="eyebrow">新建行程</p>
-          <h1>告诉我们约束，剩下的交给实况与 AI。</h1>
-          <p>
-            先收集出发地、日期和同行人。演示阶段会生成「深圳 → 西安家庭游」完整路书，并展示天气 /
-            交通如何影响建议。
-          </p>
+          <p className="eyebrow">{t.planEyebrow}</p>
+          <h1>{t.planTitle}</h1>
+          <p>{t.planText}</p>
         </div>
 
-        <form className="plan-form" onSubmit={onSubmit}>
+        <form className="plan-form" onSubmit={onSubmit} key={locale}>
           <label className="field">
-            <span>出发地</span>
-            <input name="origin" defaultValue="深圳" required />
+            <span>{t.planOrigin}</span>
+            <input name="origin" defaultValue={defaults.origin} required />
           </label>
           <label className="field">
-            <span>目的地</span>
-            <input name="destination" defaultValue="西安" required />
+            <span>{t.planDest}</span>
+            <input name="destination" defaultValue={defaults.destination} required />
           </label>
           <div className="field-row">
             <label className="field">
-              <span>出发日期</span>
+              <span>{t.planStart}</span>
               <input name="start" type="date" defaultValue="2026-08-11" required />
             </label>
             <label className="field">
-              <span>返回日期</span>
+              <span>{t.planEnd}</span>
               <input name="end" type="date" defaultValue="2026-08-15" required />
             </label>
           </div>
           <label className="field">
-            <span>同行人</span>
-            <input name="party" defaultValue="两大一小（12岁）" required />
+            <span>{t.planParty}</span>
+            <input name="party" defaultValue={defaults.party} required />
           </label>
           <label className="field">
-            <span>返程落脚点（可选）</span>
-            <input name="home" defaultValue="宿松东 / 当晚到家" />
+            <span>{t.planHome}</span>
+            <input name="home" defaultValue={defaults.home} />
           </label>
 
           <fieldset className="field">
-            <legend>偏好</legend>
+            <legend>{t.planPrefs}</legend>
             <div className="chip-row">
               {interests.map((item) => {
                 const active = selected.includes(item)
@@ -107,7 +138,7 @@ export default function Plan() {
           </fieldset>
 
           <button className="btn btn--primary btn--block" type="submit" disabled={submitting}>
-            {submitting ? '正在结合天气与交通生成…' : '生成动态行程'}
+            {submitting ? t.planSubmitting : t.planSubmit}
           </button>
         </form>
       </main>

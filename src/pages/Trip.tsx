@@ -6,6 +6,7 @@ import SiteChrome from '../components/SiteChrome'
 import WeatherIcon from '../components/WeatherIcon'
 import { staticXianBook } from '../data/staticTripBook'
 import type { SituationUpdate } from '../data/xianTrip'
+import { useI18n } from '../i18n'
 import { api, apiConfigured, type TripBook } from '../services/api'
 import { useSpotlight } from '../hooks/useSpotlight'
 
@@ -17,6 +18,7 @@ const kindLabel: Record<SituationUpdate['kind'], string> = {
 }
 
 export default function Trip() {
+  const { t } = useI18n()
   const location = useLocation()
   const fromPlan = Boolean((location.state as { fromPlan?: boolean } | null)?.fromPlan)
   const [book, setBook] = useState<TripBook>(() => staticXianBook())
@@ -64,7 +66,7 @@ export default function Trip() {
 
   return (
     <div className="page page--plain">
-      <SiteChrome cta={{ href: '#calendar', label: '加入日历' }} />
+      <SiteChrome cta={{ href: '#calendar', label: t.tripCalendar }} />
 
       <main className="trip">
         <div className="day-rail" aria-hidden="true">

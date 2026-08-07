@@ -1,4 +1,17 @@
-const destinations = [
+import { useI18n } from '../i18n'
+
+const destinationsEn = [
+  ['Xi’an', 'City Wall · History Museum'],
+  ['Mount Hua', 'West up, north down'],
+  ['Dunhuang', 'Mogao Caves'],
+  ['Wuyuan', 'Rapeseed season'],
+  ['Quanzhou', 'Harbor nights'],
+  ['Kashgar', 'Old town dawn'],
+  ['Changbai', 'Heaven Lake wind'],
+  ['Chaoshan', 'Night porridge stalls'],
+] as const
+
+const destinationsZh = [
   ['西安', '城墙 · 陕历博'],
   ['华山', '西上北下'],
   ['敦煌', '莫高窟'],
@@ -10,10 +23,12 @@ const destinations = [
 ] as const
 
 export default function DestinationMarquee() {
+  const { locale, t } = useI18n()
+  const destinations = locale === 'zh-CN' ? destinationsZh : destinationsEn
   const items = [...destinations, ...destinations]
 
   return (
-    <div className="marquee" aria-label="真程正在规划的目的地">
+    <div className="marquee" aria-label={t.marqueeLabel}>
       <div className="marquee__track">
         {items.map(([city, note], index) => (
           <p

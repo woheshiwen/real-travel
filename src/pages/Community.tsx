@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import type { CSSProperties, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import SiteChrome from '../components/SiteChrome'
-import { moments as seedMoments, type Moment } from '../data/community'
+import { moments as seedMomentsZh, type Moment } from '../data/community'
+import { momentsForLocale } from '../data/momentsLocalized'
+import { useI18n } from '../i18n'
 import { api, apiConfigured, type ApiMoment } from '../services/api'
 import { useReveal } from '../hooks/useReveal'
 
@@ -28,11 +30,17 @@ function fromApi(row: ApiMoment): Moment {
 }
 
 export default function Community() {
-  const [items, setItems] = useState(seedMoments)
+  const { t, locale } = useI18n()
+  const [items, setItems] = useState(() => momentsForLocale(locale, seedMomentsZh))
   const [source, setSource] = useState<'demo' | 'api'>('demo')
   const rootRef = useReveal([items.length])
   const [liked, setLiked] = useState<Record<string, boolean>>({})
   const [composerOpen, setComposerOpen] = useState(false)
+
+  useEffect(() => {
+    if (source === 'api') return
+    setItems(momentsForLocale(locale, seedMomentsZh))
+  }, [locale, source])
 
   const totalJoy = useMemo(
     () => items.reduce((sum, item) => sum + item.likes, 0),
@@ -128,20 +136,19 @@ export default function Community() {
 
   return (
     <div className="page page--plain" ref={rootRef}>
-      <SiteChrome cta={{ to: '/plan', label: '规划行程' }} />
+      <SiteChrome cta={{ to: '/plan', label: t.navPlan }} />
 
       <main className="community">
         <section className="community__intro reveal">
           <p className="eyebrow">
-            足迹广场
+            {t.communityEyebrow}
             <span className="pill" style={{ marginLeft: '0.6rem' }}>
-              {source === 'api' ? '已连接后台' : '演示数据'}
+              {source === 'api' ? 'API' : 'DEMO'}
             </span>
           </p>
-          <h1>把路上的快乐，留给下一个出发的人。</h1>
+          <h1>{t.communityTitle}</h1>
           <p>
-            真程不只生成行程，也希望成为值得信任的交互平台：用实况做决策，用亲历分享传递安心与喜悦。
-            目前已有 {items.length} 段足迹，累计 {totalJoy} 次共鸣。
+            {t.communityText} {items.length} · {totalJoy}
           </p>
           <div className="community__actions">
             <button
@@ -149,10 +156,10 @@ export default function Community() {
               className="btn btn--primary"
               onClick={() => setComposerOpen(true)}
             >
-              写下我的快乐
+              {t.communityShare}
             </button>
             <Link className="btn btn--ghost-dark" to="/plan">
-              先生成一趟行程
+              {t.navPlan}
             </Link>
           </div>
         </section>

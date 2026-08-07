@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:pages": "VITE_BASE_PATH=/real-travel/ VITE_API_BASE_URL= npm run build",
     "lint": "oxlint",
     "preview": "vite preview"
   },

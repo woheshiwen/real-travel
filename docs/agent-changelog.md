@@ -21,6 +21,35 @@
 
 ---
 
+## 2026-08-07 — Bloom 全屏循环视频 Hero + 五语 i18n（英文为主）
+
+- **Agent**: Cursor
+- **类型**: `feat`
+- **描述**: 按 bloom3d.studio 思路把 Hero 改成全屏循环视频（不再依赖缺失的 ken-burns 单图动画）；并落地真正的多语言系统，默认英文、单语显示（禁止中英混排）。
+- **文件**: `src/components/CinematicHero.tsx`, `src/components/LanguageSwitcher.tsx`, `src/components/SiteChrome.tsx`, `src/i18n/**`, `src/pages/{Landing,Plan,Community,Trip}.tsx`, `src/App.css`, `public/hero/*`, `package.json`, `index.html`
+- **Commit**: `87d9326` … `8420af4`（分支 `cursor/i18n-bloom-hero-c145`，PR #11）
+- **详情**:
+  - Hero：三段海岸视频始终 `play()` + ~6.5s 交叉淡入淡出 + `bloom-drift*` 持续推拉 + 鼠标视差（UI `pointer-events: none`，避免挡 pointer）
+  - 根因修复：此前 ken-burns 引用不存在的 `@keyframes`；白屏因手动部署漏了 `VITE_BASE_PATH=/real-travel/`（已加 `npm run build:pages`）
+  - i18n：`en` / `zh-CN` / `fr` / `ja` / `ko`，右上角切换，`localStorage` key `real-travel-locale-v2`，默认 `en`
+  - 品牌单字段 `t.brand`（EN=Real Travel，中文=真程），导航/落地页/规划表单/足迹预览跟当前语言走
+  - `gh-pages` 需用 `VITE_BASE_PATH=/real-travel/` 构建后再 force-push，否则会再次白屏
+
+---
+
+## 2026-08-07 — 合并 main changelog，保留 drift + kenburns keyframes
+
+- **Agent**: Cursor
+- **类型**: `docs` / `merge`
+- **描述**: 采纳 WorkBuddy 的 `docs/agent-changelog.md` 协同约定；合并 `1fd7645` 的 kenburns keyframes，同时保留当前视频 Hero 使用的 `bloom-drift*`。
+- **文件**: `docs/agent-changelog.md`, `src/App.css`
+- **Commit**: `92db2f6` — merge main + agent-changelog Cursor entries
+- **详情**:
+  - 确认后续每次改动必须在本文件追加记录
+  - CSS：当前 Hero 用 `bloom-drift`；WorkBuddy 的 `bloom-kenburns*` 保留备用
+
+---
+
 ## 模板（新记录复制此块）
 
 <!--
