@@ -83,7 +83,7 @@
 - **类型**: `style`
 - **描述**: 去掉导航 Logo 深色底托；按站点暗色+暖金属氛围重绘透明 Logo 线条色。Hero「真程」改用开源篆体子集（敬峰中山王篆 OFL），颜色用暖金 `#e0c295` 与白色 Real Travel 区分。
 - **文件**: `public/brand/real-travel-logo*.png`, `public/brand/logo-nav*.png`, `public/fonts/*`, `src/assets/fonts/*`, `src/index.css`, `src/App.css`, `src/components/SiteChrome.tsx`
-- **Commit**: （本条随此次 commit）
+- **Commit**: `da075be` — seal 真程 + recolored logo
 - **详情**:
   - Logo：奶油描边 + 桃色太阳/飞机 + 沙色路，透明底，仅靠 drop-shadow 提可读性
   - `@font-face "ZhenCheng Seal"` 仅含「真程」两字（~1.5KB woff2）
