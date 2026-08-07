@@ -1774,6 +1774,13 @@
     animation-name: bloom-kenburns-br;
   }
 
+  /* Keep the outgoing plate drifting while it fades, instead of
+     snapping back to the base scale when .is-active is removed */
+  .cine-plate.is-prev .cine-plate__media {
+    transform: scale(1.19);
+    transition: transform 1.35s ease-out;
+  }
+
   .topnav__links a:not(.btn)::after {
     transition: transform 240ms var(--ease);
   }
@@ -1877,6 +1884,55 @@
   }
   to {
     transform: scale(1.05);
+  }
+}
+
+/* ---------- Bloom Ken Burns (hero plates) ---------- */
+/* Slow push-in toward the named corner; 6.5s matches SCENE_MS.
+   Offsets stay well inside the plate's -4% inset bleed + scale margin,
+   so the mouse parallax (max ±3.2%/±2.4%) can never expose an edge. */
+@keyframes bloom-kenburns {
+  from {
+    transform: scale(1.1) translate3d(0, 0.8%, 0);
+  }
+  to {
+    transform: scale(1.22) translate3d(0, -1%, 0);
+  }
+}
+
+@keyframes bloom-kenburns-tl {
+  from {
+    transform: scale(1.1) translate3d(2%, 1.8%, 0);
+  }
+  to {
+    transform: scale(1.22) translate3d(-2%, -1.8%, 0);
+  }
+}
+
+@keyframes bloom-kenburns-tr {
+  from {
+    transform: scale(1.1) translate3d(-2%, 1.8%, 0);
+  }
+  to {
+    transform: scale(1.22) translate3d(2%, -1.8%, 0);
+  }
+}
+
+@keyframes bloom-kenburns-bl {
+  from {
+    transform: scale(1.1) translate3d(2%, -1.8%, 0);
+  }
+  to {
+    transform: scale(1.22) translate3d(-2%, 1.8%, 0);
+  }
+}
+
+@keyframes bloom-kenburns-br {
+  from {
+    transform: scale(1.1) translate3d(-2%, -1.8%, 0);
+  }
+  to {
+    transform: scale(1.22) translate3d(2%, 1.8%, 0);
   }
 }
 
