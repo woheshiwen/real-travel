@@ -29,7 +29,7 @@
 - **文件**:
   - 新增: `src/i18n/translations.ts`, `src/i18n/LanguageContext.tsx`, `src/i18n/index.ts`
   - 修改: `src/App.tsx`, `src/components/SiteChrome.tsx`, `src/pages/Landing.tsx`, `src/pages/CinematicHero.tsx`, `src/pages/Plan.tsx`, `src/pages/Trip.tsx`, `src/pages/Community.tsx`
-- **Commit**: _(待提交)_
+- **Commit**: `84c5bb6` — `feat: complete 5-language i18n for Trip and Community pages`
 - **详情**:
   - 使用 Lingui 风格 `t(key)` 辅助函数，类型安全的键名
   - `useLang()` hook 返回 `{ lang, setLang, t, tp }`，其中 `tp(key, params)` 支持模板参数
