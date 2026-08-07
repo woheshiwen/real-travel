@@ -1,42 +1,47 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 type Scene = {
   id: string
-  labelZh: string
-  labelEn: string
   placeZh: string
   placeEn: string
   image: string
+  /** Ken Burns direction for variety */
+  drift: 'in-tl' | 'in-tr' | 'in-bl' | 'in-br'
 }
 
 const scenes: Scene[] = [
   {
     id: 'pagoda',
-    labelZh: '走近标志性景点',
-    labelEn: 'Approach the landmark',
     placeZh: '西安 · 大雁塔',
     placeEn: 'Xi’an · Giant Wild Goose Pagoda',
     image:
-      'https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?auto=format&fit=crop&w=2000&q=80',
+      'https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?auto=format&fit=crop&w=2400&q=80',
+    drift: 'in-tr',
   },
   {
     id: 'wall',
-    labelZh: '以人的视角继续向前',
-    labelEn: 'Keep walking forward',
     placeZh: '西安 · 古城墙',
     placeEn: 'Xi’an · City Wall',
     image:
-      'https://images.unsplash.com/photo-1528164344705-47542687000d?auto=format&fit=crop&w=2000&q=80',
+      'https://images.unsplash.com/photo-1528164344705-47542687000d?auto=format&fit=crop&w=2400&q=80',
+    drift: 'in-bl',
   },
   {
     id: 'peak',
-    labelZh: '抵达云海边缘',
-    labelEn: 'Arrive at the cloud edge',
     placeZh: '华山 · 西峰',
     placeEn: 'Mount Hua · West Peak',
     image:
-      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=80',
+      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2400&q=80',
+    drift: 'in-tl',
+  },
+  {
+    id: 'night',
+    placeZh: '西安 · 大唐不夜城',
+    placeEn: 'Xi’an · Great Tang Everbright City',
+    image:
+      'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&w=2400&q=80',
+    drift: 'in-br',
   },
 ]
 
@@ -44,57 +49,20 @@ const loaderSteps = [
   { zh: '读取出发地交通与约束', en: 'Read origin transport & constraints' },
   { zh: '对照目的地实况天气', en: 'Compare live destination weather' },
   { zh: '走进旅行案例的标志景点', en: 'Walk into case-study landmarks' },
-  { zh: '把眼前风景收进掌心', en: 'Draw the view into your palm' },
-  { zh: '一键生成可改版行程', en: 'Generate an editable itinerary' },
+  { zh: '按实况生成可改版路书', en: 'Build a revisable itinerary from truth' },
+  { zh: '一键导入日历与提醒', en: 'Export to calendar with reminders' },
 ]
 
-/** Slow Bloom-like dwell per background plate */
-const SCENE_MS = 7000
-/** Palm phase starts after this many scene cycles (0-indexed scene index) — independent of images staying visible */
-const PALM_AFTER_MS = 16000
-
-/** Glass souvenir: the same landmark photo, with thickness — not a toy pagoda */
-function PalmSouvenir({
-  image,
-  placeZh,
-  placeEn,
-  visible,
-}: {
-  image: string
-  placeZh: string
-  placeEn: string
-  visible: boolean
-}) {
-  return (
-    <div className={`souvenir${visible ? ' is-visible' : ''}`} aria-hidden="true">
-      <div className="souvenir__orbit">
-        <div className="souvenir__card">
-          <div className="souvenir__face souvenir__face--front">
-            <img src={image} alt="" />
-            <div className="souvenir__sheen" />
-          </div>
-          <div className="souvenir__face souvenir__face--back" />
-          <div className="souvenir__edge souvenir__edge--left" />
-          <div className="souvenir__edge souvenir__edge--right" />
-          <div className="souvenir__edge souvenir__edge--top" />
-          <div className="souvenir__edge souvenir__edge--bottom" />
-        </div>
-        <div className="souvenir__glow" />
-        <div className="souvenir__shadow" />
-      </div>
-      <p className="souvenir__caption">
-        <strong>{placeZh}</strong>
-        <span>{placeEn}</span>
-      </p>
-    </div>
-  )
-}
+/** Bloom-like dwell: slow enough to feel cinematic */
+const SCENE_MS = 6500
 
 export default function CinematicHero() {
   const [sceneIndex, setSceneIndex] = useState(0)
   const [loaderStep, setLoaderStep] = useState(0)
-  const [palm, setPalm] = useState(false)
   const [reduced, setReduced] = useState(false)
+  const stageRef = useRef<HTMLDivElement>(null)
+  const parallaxRef = useRef({ x: 0, y: 0 })
+  const rafRef = useRef(0)
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -104,7 +72,6 @@ export default function CinematicHero() {
     return () => mq.removeEventListener('change', sync)
   }, [])
 
-  /* Background plates: slow loop, never stop / never exit */
   useEffect(() => {
     if (reduced) return
     const id = window.setInterval(() => {
@@ -113,43 +80,68 @@ export default function CinematicHero() {
     return () => window.clearInterval(id)
   }, [reduced])
 
-  /* Loader ticks slower than scenes */
   useEffect(() => {
     if (reduced) {
       setLoaderStep(loaderSteps.length - 1)
-      setPalm(true)
       return
     }
     const id = window.setInterval(() => {
       setLoaderStep((s) => (s + 1) % loaderSteps.length)
-    }, 3200)
+    }, 3400)
     return () => window.clearInterval(id)
   }, [reduced])
 
-  /* Palm arrives once, then stays — background keeps cycling behind it */
+  /* Bloom-style inverse mouse parallax on the active plate */
   useEffect(() => {
     if (reduced) return
-    const id = window.setTimeout(() => setPalm(true), PALM_AFTER_MS)
-    return () => window.clearTimeout(id)
+    const stage = stageRef.current
+    if (!stage) return
+
+    let targetX = 0
+    let targetY = 0
+
+    const onMove = (event: PointerEvent) => {
+      const rect = stage.getBoundingClientRect()
+      const nx = (event.clientX - rect.left) / rect.width - 0.5
+      const ny = (event.clientY - rect.top) / rect.height - 0.5
+      targetX = nx * -3.2
+      targetY = ny * -2.4
+    }
+
+    const tick = () => {
+      parallaxRef.current.x += (targetX - parallaxRef.current.x) * 0.08
+      parallaxRef.current.y += (targetY - parallaxRef.current.y) * 0.08
+      stage.style.setProperty('--px', `${parallaxRef.current.x.toFixed(3)}%`)
+      stage.style.setProperty('--py', `${parallaxRef.current.y.toFixed(3)}%`)
+      rafRef.current = requestAnimationFrame(tick)
+    }
+
+    stage.addEventListener('pointermove', onMove)
+    rafRef.current = requestAnimationFrame(tick)
+    return () => {
+      stage.removeEventListener('pointermove', onMove)
+      cancelAnimationFrame(rafRef.current)
+    }
   }, [reduced])
 
   const scene = scenes[sceneIndex]
 
   return (
     <section className="cine-hero" aria-label="真程 Real Travel">
-      <div className={`cine-stage${palm ? ' cine-stage--palm' : ''}`} aria-hidden="true">
-        <div className="cine-sky" />
-
-        {/* Persistent Bloom-style gallery — never removed */}
+      <div className="cine-stage" ref={stageRef} aria-hidden="true">
         <div className="cine-gallery">
           {scenes.map((item, i) => (
             <figure
               key={item.id}
-              className={`cine-plate${i === sceneIndex ? ' is-active' : ''}${
-                i === (sceneIndex + scenes.length - 1) % scenes.length ? ' is-prev' : ''
-              }`}
+              className={`cine-plate cine-plate--${item.drift}${
+                i === sceneIndex ? ' is-active' : ''
+              }${i === (sceneIndex + scenes.length - 1) % scenes.length ? ' is-prev' : ''}`}
             >
-              <img src={item.image} alt="" />
+              <div className="cine-plate__parallax">
+                <div className="cine-plate__media">
+                  <img src={item.image} alt="" draggable={false} />
+                </div>
+              </div>
             </figure>
           ))}
           <div className="cine-gallery__veil" />
@@ -158,22 +150,6 @@ export default function CinematicHero() {
         <div className="cine-place-chip">
           <span className="cine-place-chip__zh">{scene.placeZh}</span>
           <span className="cine-place-chip__en">{scene.placeEn}</span>
-        </div>
-
-        <div className={`cine-palm${palm ? ' is-visible' : ''}`}>
-          <img
-            className="cine-palm__hand"
-            src={`${import.meta.env.BASE_URL}palm-hand.webp`}
-            alt=""
-          />
-          <div className="cine-palm__model">
-            <PalmSouvenir
-              image={scene.image}
-              placeZh={scene.placeZh}
-              placeEn={scene.placeEn}
-              visible={palm}
-            />
-          </div>
         </div>
 
         <div className="cine-grain" />
@@ -185,18 +161,18 @@ export default function CinematicHero() {
           真程 <span className="cine-hero__brand-en">Real Travel</span>
         </p>
         <h1 className="cine-hero__title">
-          <span className="cine-hero__title-zh">走进景点，再把行程收进掌心。</span>
+          <span className="cine-hero__title-zh">值得信任的出行，值得分享的风景。</span>
           <span className="cine-hero__title-en">
-            Walk into the landmark — then hold the journey in your palm.
+            Travel you can trust — places you can feel.
           </span>
         </h1>
         <p className="cine-hero__lede">
           <span className="cine-hero__lede-zh">
-            以人的视角走向旅行案例里的标志风景；真程对照实况，把可变的路书轻轻收进手里。
+            结合出发地交通与目的地实况天气，生成可改版的路书；定好后一键导入日历。
           </span>
           <span className="cine-hero__lede-en">
-            First-person toward real places. Live weather and transport shape an itinerary you can
-            revise — and keep.
+            Live weather and departure transport shape an itinerary you can revise — then drop into
+            your calendar.
           </span>
         </p>
         <div className="cine-hero__actions">
