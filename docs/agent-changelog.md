@@ -21,6 +21,25 @@
 
 ---
 
+## 2026-08-07 — 5 语言 i18n 国际化（默认英文）
+
+- **Agent**: WorkBuddy
+- **类型**: `feat`（新功能）
+- **描述**: 实现 en/zh/fr/ja/ko 五语言国际化。新增 `src/i18n/` 模块（translations.ts + LanguageContext.tsx），Landing、CinematicHero、Plan、Trip、Community 全部页面均已翻译。默认语言为英文，语言偏好存储在 localStorage key `rt-lang`。SiteChrome 导航栏增加语言下拉切换器（flag emoji + 语言名）。
+- **文件**:
+  - 新增: `src/i18n/translations.ts`, `src/i18n/LanguageContext.tsx`, `src/i18n/index.ts`
+  - 修改: `src/App.tsx`, `src/components/SiteChrome.tsx`, `src/pages/Landing.tsx`, `src/pages/CinematicHero.tsx`, `src/pages/Plan.tsx`, `src/pages/Trip.tsx`, `src/pages/Community.tsx`
+- **Commit**: _(待提交)_
+- **详情**:
+  - 使用 Lingui 风格 `t(key)` 辅助函数，类型安全的键名
+  - `useLang()` hook 返回 `{ lang, setLang, t, tp }`，其中 `tp(key, params)` 支持模板参数
+  - 社区页面 demo 数据的 `from`/`when`/`imageAlt` 等字段通过 `t()` 的 fallback 机制（找不到 key 时返回原字符串）实现兼容
+  - 社区 composer 表单完整翻译，分享发布流程的默认值使用翻译 key
+  - 修复 Trip.tsx 中 `kindLabel` 未定义 bug，改为翻译 key `kindKeys`
+  - 构建验证通过，TypeScript 零错误
+
+---
+
 ## 模板（新记录复制此块）
 
 <!--

@@ -7,6 +7,7 @@ import { moments, trustPillars } from '../data/community'
 import { api, apiConfigured, type ConditionsCompare } from '../services/api'
 import { useReveal } from '../hooks/useReveal'
 import { useSpotlight } from '../hooks/useSpotlight'
+import { useLang } from '../i18n'
 
 const fallbackCompare: ConditionsCompare = {
   place: '西安',
@@ -32,15 +33,12 @@ const fallbackCompare: ConditionsCompare = {
   },
 }
 
-const steps = [
-  '按天气、交通与约束生成可执行路书',
-  '情况变化时提出改版，并写清依据',
-  '一键导入日历，抢票闹钟自动就位',
-]
+const stepKeys = ['step.1', 'step.2', 'step.3'] as const
 
 export default function Landing() {
   const rootRef = useReveal()
   const spotlight = useSpotlight()
+  const { t } = useLang()
   const preview = moments.slice(0, 3)
   const [compare, setCompare] = useState(fallbackCompare)
   const [liveSource, setLiveSource] = useState<'demo' | 'api'>('demo')
@@ -65,24 +63,24 @@ export default function Landing() {
 
   return (
     <div className="page page--cine" ref={rootRef}>
-      <SiteChrome variant="overlay" />
+      <SiteChrome variant="overlay" cta={{ to: '/plan', label: 'nav.plan' }} />
 
       <CinematicHero />
 
       <section className="section section--truth" id="truth">
         <div className="section__intro reveal">
-          <p className="eyebrow">实况对照</p>
-          <h2 className="section__title">社媒恐慌之外，还有可核对的判断。</h2>
-          <p className="section__text">
-            真程把热议与预报放在一起看——保留、微调还是改版，都写得清楚。
-          </p>
+          <p className="eyebrow">{t('landing.truth.eyebrow')}</p>
+          <h2 className="section__title">{t('landing.truth.title')}</h2>
+          <p className="section__text">{t('landing.truth.text')}</p>
         </div>
-        <aside className="truth-board truth-board--solo reveal" aria-label="实况对照">
+        <aside className="truth-board truth-board--solo reveal" aria-label={t('landing.truth.eyebrow')}>
           <div className="truth-board__head">
             <span>
               {compare.place} · {compare.dateRange}
             </span>
-            <span className="pill pill--live">{liveSource === 'api' ? 'API' : 'LIVE'}</span>
+            <span className="pill pill--live">
+              {liveSource === 'api' ? t('landing.truth.api') : t('landing.truth.live')}
+            </span>
           </div>
           <div className="truth-board__row truth-board__row--alert">
             <strong>{compare.social.source}</strong>
@@ -103,11 +101,9 @@ export default function Landing() {
 
       <section className="section" id="trust">
         <div className="section__intro reveal">
-          <p className="eyebrow">产品原则</p>
-          <h2 className="section__title">先做成大家用得上、信得过的系统。</h2>
-          <p className="section__text">
-            不是又一个热点旅游站。真程要长期可核对、可改版、可分享——让决策站在实况上，让快乐留在社区里。
-          </p>
+          <p className="eyebrow">{t('landing.principles.eyebrow')}</p>
+          <h2 className="section__title">{t('landing.principles.title')}</h2>
+          <p className="section__text">{t('landing.principles.text')}</p>
         </div>
         <div className="reason-grid">
           {trustPillars.map((item, index) => (
@@ -126,19 +122,19 @@ export default function Landing() {
 
       <section className="section section--band" id="how">
         <div className="section__intro reveal">
-          <p className="eyebrow">工作方式</p>
-          <h2 className="section__title">实用系统 + 交互平台。</h2>
+          <p className="eyebrow">{t('landing.how.eyebrow')}</p>
+          <h2 className="section__title">{t('landing.how.title')}</h2>
         </div>
         <ol className="steps">
-          {steps.map((text, i) => (
+          {stepKeys.map((key, i) => (
             <li
               className="steps__item spot reveal"
-              key={text}
+              key={key}
               style={{ '--i': i } as CSSProperties}
               {...spotlight}
             >
               <span className="steps__num">0{i + 1}</span>
-              <p>{text}</p>
+              <p>{t(key)}</p>
             </li>
           ))}
         </ol>
@@ -146,11 +142,9 @@ export default function Landing() {
 
       <section className="section" id="community-preview">
         <div className="section__intro reveal">
-          <p className="eyebrow">足迹广场</p>
-          <h2 className="section__title">大家正在分享的快乐。</h2>
-          <p className="section__text">
-            亲历者留下的不是夸张标题，而是可对照的实况判断，和一段想传下去的喜悦。
-          </p>
+          <p className="eyebrow">{t('landing.moments.eyebrow')}</p>
+          <h2 className="section__title">{t('landing.moments.title')}</h2>
+          <p className="section__text">{t('landing.moments.text')}</p>
         </div>
         <div className="home-moments">
           {preview.map((moment, index) => (
@@ -172,17 +166,15 @@ export default function Landing() {
 
         <div className="demo-cta reveal">
           <div>
-            <h2 className="section__title">从示例行程，走到真实社区。</h2>
-            <p className="section__text">
-              先打开西安家庭游路书，再去足迹广场看看同行人怎么做决定、怎么把快乐留下来。
-            </p>
+            <h2 className="section__title">{t('landing.cta.title')}</h2>
+            <p className="section__text">{t('landing.cta.text')}</p>
           </div>
           <div className="cine-hero__actions">
             <Link className="btn btn--primary" to="/trip/xian">
-              打开示例行程
+              {t('landing.cta.open')}
             </Link>
             <Link className="btn btn--ghost-dark" to="/community">
-              进入足迹广场
+              {t('landing.cta.community')}
             </Link>
           </div>
         </div>
@@ -190,8 +182,8 @@ export default function Landing() {
 
       <footer className="site-footer">
         <div>
-          <strong>真程 Real Travel</strong>
-          <span>按实况出行，把快乐留给后来者。</span>
+          <strong>{t('brand.zh')} {t('brand.en')}</strong>
+          <span>{t('landing.footer.tagline')}</span>
         </div>
         <p>© {new Date().getFullYear()}</p>
       </footer>

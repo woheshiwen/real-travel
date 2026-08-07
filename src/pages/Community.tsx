@@ -5,6 +5,7 @@ import SiteChrome from '../components/SiteChrome'
 import { moments as seedMoments, type Moment } from '../data/community'
 import { api, apiConfigured, type ApiMoment } from '../services/api'
 import { useReveal } from '../hooks/useReveal'
+import { useLang } from '../i18n'
 
 const fallbackImage =
   'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1400&q=80'
@@ -13,7 +14,7 @@ function fromApi(row: ApiMoment): Moment {
   return {
     id: row.id,
     author: row.author,
-    from: '来自后台',
+    from: 'community.fromApi',
     place: row.place,
     when: new Date(row.createdAt).toLocaleDateString('zh-CN'),
     weatherTruth: row.weatherTruth,
@@ -22,12 +23,13 @@ function fromApi(row: ApiMoment): Moment {
     likes: row.likes,
     replies: 0,
     image: fallbackImage,
-    imageAlt: '旅途公路与远山',
+    imageAlt: 'community.imageAlt',
     tripLink: '/trip/xian',
   }
 }
 
 export default function Community() {
+  const { t } = useLang()
   const [items, setItems] = useState(seedMoments)
   const [source, setSource] = useState<'demo' | 'api'>('demo')
   const rootRef = useReveal([items.length])
@@ -88,13 +90,13 @@ export default function Community() {
     if (apiConfigured) {
       try {
         const row = await api.createMoment({
-          author: '我',
+          author: 'community.me',
           place,
           joy,
           ...(weatherTruth ? { weatherTruth } : {}),
           ...(tip ? { tip } : {}),
         })
-        published = { ...fromApi(row), from: '刚刚分享' }
+        published = { ...fromApi(row), from: 'community.justShared' }
         setSource('api')
       } catch {
         published = null
@@ -104,17 +106,17 @@ export default function Community() {
     if (!published) {
       published = {
         id: `local-${Date.now()}`,
-        author: '我',
-        from: '刚刚分享',
+        author: 'community.me',
+        from: 'community.justShared',
         place,
-        when: '此刻',
-        weatherTruth: weatherTruth || '按自己核对过的实况出发',
+        when: 'community.nowLabel',
+        weatherTruth: weatherTruth || 'community.defaultTruth',
         joy,
-        tip: tip || '把真实感受留给后来的同行人。',
+        tip: tip || 'community.defaultTip',
         likes: 1,
         replies: 0,
         image: fallbackImage,
-        imageAlt: '旅途公路与远山',
+        imageAlt: 'community.imageAlt',
         tripLink: '/trip/xian',
       }
     }
@@ -128,20 +130,21 @@ export default function Community() {
 
   return (
     <div className="page page--plain" ref={rootRef}>
-      <SiteChrome cta={{ to: '/plan', label: '规划行程' }} />
+      <SiteChrome cta={{ to: '/plan', label: 'nav.plan' }} />
 
       <main className="community">
         <section className="community__intro reveal">
           <p className="eyebrow">
-            足迹广场
+            {t('community.eyebrow')}
             <span className="pill" style={{ marginLeft: '0.6rem' }}>
-              {source === 'api' ? '已连接后台' : '演示数据'}
+              {source === 'api' ? t('trip.source.api') : t('trip.source.demo')}
             </span>
           </p>
-          <h1>把路上的快乐，留给下一个出发的人。</h1>
+          <h1>{t('community.title')}</h1>
           <p>
-            真程不只生成行程，也希望成为值得信任的交互平台：用实况做决策，用亲历分享传递安心与喜悦。
-            目前已有 {items.length} 段足迹，累计 {totalJoy} 次共鸣。
+            {t('community.intro')
+              .replace('{count}', String(items.length))
+              .replace('{total}', String(totalJoy))}
           </p>
           <div className="community__actions">
             <button
@@ -149,15 +152,15 @@ export default function Community() {
               className="btn btn--primary"
               onClick={() => setComposerOpen(true)}
             >
-              写下我的快乐
+              {t('community.share')}
             </button>
             <Link className="btn btn--ghost-dark" to="/plan">
-              先生成一趟行程
+              {t('community.planFirst')}
             </Link>
           </div>
         </section>
 
-        <section className="moment-feed" aria-label="足迹动态">
+        <section className="moment-feed" aria-label={t('community.feedLabel')}>
           {items.map((moment, index) => (
             <article
               className={`moment${moment.id.startsWith('local-') ? '' : ' reveal'}${index < 2 || moment.id.startsWith('local-') ? ' is-visible' : ''}`}
@@ -165,21 +168,21 @@ export default function Community() {
               style={{ '--i': Math.min(index, 4) } as CSSProperties}
             >
               <div className="moment__media">
-                <img src={moment.image} alt={moment.imageAlt} loading="lazy" />
+                <img src={moment.image} alt={t(moment.imageAlt)} loading="lazy" />
               </div>
               <div className="moment__body">
                 <div className="moment__meta">
-                  <strong>{moment.author}</strong>
+                  <strong>{t(moment.author)}</strong>
                   <span>
-                    {moment.from} · {moment.place}
+                    {t(moment.from)} · {moment.place}
                   </span>
-                  <span>{moment.when}</span>
+                  <span>{t(moment.when)}</span>
                 </div>
                 {moment.weatherTruth && (
-                  <p className="moment__truth">{moment.weatherTruth}</p>
+                  <p className="moment__truth">{t('community.moment.truth')}{t(moment.weatherTruth)}</p>
                 )}
                 <p className="moment__joy">{moment.joy}</p>
-                {moment.tip && <p className="moment__tip">可带走：{moment.tip}</p>}
+                {moment.tip && <p className="moment__tip">{t('community.moment.label')}{t(moment.tip)}</p>}
                 <div className="moment__bar">
                   <button
                     type="button"
@@ -187,12 +190,12 @@ export default function Community() {
                     onClick={() => toggleLike(moment.id)}
                     aria-pressed={Boolean(liked[moment.id])}
                   >
-                    共鸣 {moment.likes}
+                    {t('community.resonate')} {moment.likes}
                   </button>
-                  <span>回应 {moment.replies}</span>
+                  <span>{t('community.reply')} {moment.replies}</span>
                   {moment.tripLink && (
                     <Link className="text-link" to={moment.tripLink}>
-                      查看关联行程
+                      {t('community.seeTrip')}
                     </Link>
                   )}
                 </div>
@@ -206,37 +209,37 @@ export default function Community() {
         <div className="composer" role="dialog" aria-modal="true" aria-labelledby="composer-title">
           <form className="composer__panel" onSubmit={onShare}>
             <div className="composer__head">
-              <h2 id="composer-title">分享一段真实的快乐</h2>
-              <button type="button" onClick={() => setComposerOpen(false)} aria-label="关闭">
-                关闭
+              <h2 id="composer-title">{t('composer.title')}</h2>
+              <button type="button" onClick={() => setComposerOpen(false)} aria-label={t('composer.close')}>
+                {t('composer.close')}
               </button>
             </div>
             <p className="composer__hint">
-              欢迎分享亲历感受。请尽量附上你核对过的天气/交通判断，帮助后来者建立信任。
+              {t('composer.hint')}
             </p>
             <label className="field">
-              <span>地点</span>
-              <input name="place" placeholder="例如：西安 · 大唐不夜城" required />
+              <span>{t('composer.place')}</span>
+              <input name="place" placeholder={t('composer.placeHint')} required />
             </label>
             <label className="field">
-              <span>实况判断（可选）</span>
-              <input name="weatherTruth" placeholder="例如：预报小雨，夜景仍值得去" />
+              <span>{t('composer.truth')}</span>
+              <input name="weatherTruth" placeholder={t('composer.truthHint')} />
             </label>
             <label className="field">
-              <span>我想分享的快乐</span>
+              <span>{t('composer.joy')}</span>
               <textarea
                 name="joy"
                 rows={4}
-                placeholder="那一刻发生了什么？为什么值得留下？"
+                placeholder={t('composer.joyHint')}
                 required
               />
             </label>
             <label className="field">
-              <span>给后来者的一句提示（可选）</span>
-              <input name="tip" placeholder="例如：天黑后再去，雨中灯光更美" />
+              <span>{t('composer.tip')}</span>
+              <input name="tip" placeholder={t('composer.tipHint')} />
             </label>
             <button className="btn btn--primary btn--block" type="submit">
-              发布到足迹广场
+              {t('composer.submit')}
             </button>
           </form>
         </div>

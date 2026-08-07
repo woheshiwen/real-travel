@@ -8,15 +8,17 @@ import { staticXianBook } from '../data/staticTripBook'
 import type { SituationUpdate } from '../data/xianTrip'
 import { api, apiConfigured, type TripBook } from '../services/api'
 import { useSpotlight } from '../hooks/useSpotlight'
+import { useLang } from '../i18n'
 
-const kindLabel: Record<SituationUpdate['kind'], string> = {
-  weather: '天气',
-  transport: '交通',
-  booking: '预约',
-  social: '社媒',
+const kindKeys: Record<SituationUpdate['kind'], string> = {
+  weather: 'kind.weather',
+  transport: 'kind.transport',
+  booking: 'kind.booking',
+  social: 'kind.social',
 }
 
 export default function Trip() {
+  const { t } = useLang()
   const location = useLocation()
   const fromPlan = Boolean((location.state as { fromPlan?: boolean } | null)?.fromPlan)
   const [book, setBook] = useState<TripBook>(() => staticXianBook())
@@ -64,7 +66,7 @@ export default function Trip() {
 
   return (
     <div className="page page--plain">
-      <SiteChrome cta={{ href: '#calendar', label: '加入日历' }} />
+      <SiteChrome cta={{ href: '#calendar', label: 'trip.cta.calendar' }} />
 
       <main className="trip">
         <div className="day-rail" aria-hidden="true">
@@ -74,20 +76,20 @@ export default function Trip() {
         {showReplan && (
           <div className="banner-toast" role="status">
             <div>
-              <strong>已生成可执行路书</strong>
-              <p>以下为深圳出发西安家庭游示例，可直接导入日历与抢票闹钟。</p>
+              <strong>{t('trip.banner.title')}</strong>
+              <p>{t('trip.banner.text')}</p>
             </div>
             <button type="button" onClick={() => setShowReplan(false)}>
-              知道了
+              {t('trip.banner.dismiss')}
             </button>
           </div>
         )}
 
-        <section className="bento" aria-label="行程概览">
+        <section className="bento" aria-label={t('trip.aria.overview')}>
           <div className="bento__tile bento__tile--tall">
             <p className="eyebrow">
               {meta.version} · {meta.updatedAt}
-              <span className="pill">{source === 'api' ? '已连接后台' : '演示数据'}</span>
+              <span className="pill">{source === 'api' ? t('trip.source.api') : t('trip.source.demo')}</span>
             </p>
             <h1>{meta.title}</h1>
             <p className="bento__note">
@@ -99,34 +101,34 @@ export default function Trip() {
           </div>
 
           <div className="bento__tile spot" {...spotlight}>
-            <span className="bento__label">3人合计</span>
+            <span className="bento__label">{t('trip.cost.total')}</span>
             <strong className="bento__value">{book.costTotal}</strong>
-            <p className="bento__note">人均约 {book.costPerPerson}</p>
+            <p className="bento__note">{t('trip.cost.perPerson')} {book.costPerPerson}</p>
           </div>
 
           <div className="bento__tile spot" {...spotlight}>
-            <span className="bento__label">行程天数</span>
-            <strong className="bento__value">{book.days.length} 天</strong>
+            <span className="bento__label">{t('trip.days.label')}</span>
+            <strong className="bento__value">{book.days.length} {t('trip.days.count')}</strong>
             <p className="bento__note">{meta.homeNote}</p>
           </div>
 
           <div className="bento__tile spot" {...spotlight}>
-            <span className="bento__label">待办抢票</span>
-            <strong className="bento__value">{urgentCount} 项紧急</strong>
-            <p className="bento__note">导入日历自动带三重闹钟</p>
+            <span className="bento__label">{t('trip.urgent.label')}</span>
+            <strong className="bento__value">{urgentCount} {t('trip.urgent.count')}</strong>
+            <p className="bento__note">{t('trip.urgent.note')}</p>
           </div>
 
           <div className="bento__tile spot" {...spotlight}>
-            <span className="bento__label">首日天气</span>
+            <span className="bento__label">{t('trip.weather.label')}</span>
             <strong className="bento__value">{book.weatherDays[0]?.condition ?? '—'}</strong>
-            <p className="bento__note">{book.weatherDays[0]?.temp ?? ''}，其后见天气条</p>
+            <p className="bento__note">{book.weatherDays[0]?.temp ?? ''}{t('trip.weather.note')}</p>
           </div>
         </section>
 
         <section className="panel" id="weather">
           <div className="panel__head">
-            <h2>天气实况条</h2>
-            <span className="pill pill--live">对照社媒</span>
+            <h2>{t('trip.weather.title')}</h2>
+            <span className="pill pill--live">{t('trip.weather.pill')}</span>
           </div>
           <p className="panel__lede">{book.weatherSummary}</p>
           <div className="weather-strip">
@@ -146,14 +148,14 @@ export default function Trip() {
 
         <section className="panel" id="situations">
           <div className="panel__head">
-            <h2>动态情况与建议</h2>
-            <span className="pill">随实情改版</span>
+            <h2>{t('trip.situations.title')}</h2>
+            <span className="pill">{t('trip.situations.pill')}</span>
           </div>
           <div className="situation-list">
             {book.situations.map((item) => (
               <article className={`situation situation--${item.kind}`} key={item.id}>
                 <div className="situation__meta">
-                  <span>{kindLabel[item.kind]}</span>
+                  <span>{t(kindKeys[item.kind])}</span>
                   <time>{item.time}</time>
                 </div>
                 <h3>{item.title}</h3>
@@ -170,12 +172,12 @@ export default function Trip() {
 
         <section className="panel" id="days">
           <div className="panel__head">
-            <h2>每日行程</h2>
+            <h2>{t('trip.days.title')}</h2>
           </div>
 
           <div className="day-layout">
             <aside className="day-aside">
-              <div className="day-tabs" role="tablist" aria-label="选择日期">
+              <div className="day-tabs" role="tablist" aria-label={t('trip.aria.dateSelect')}>
                 {book.days.map((d) => (
                   <button
                     key={d.id}
@@ -198,7 +200,7 @@ export default function Trip() {
                   {day.date} {day.weekday}
                 </strong>
                 <span>{day.weather}</span>
-                <span>{day.bookings.length} 项预约 · {day.timeline.length} 段安排</span>
+                <span>{day.bookings.length} {t('trip.days.countLabel')} · {day.timeline.length} {t('trip.days.segments')}</span>
               </div>
             </aside>
 
@@ -215,7 +217,7 @@ export default function Trip() {
                   <div className={`booking${b.urgent ? ' booking--urgent' : ''}`} key={b.name}>
                     <strong>{b.name}</strong>
                     <p>{b.detail}</p>
-                    <span>抢票 / 购买：{b.deadline}</span>
+                    <span>{t('trip.booking.deadline')}{b.deadline}</span>
                   </div>
                 ))}
               </div>
@@ -237,20 +239,20 @@ export default function Trip() {
 
         <section className="panel" id="transport">
           <div className="panel__head">
-            <h2>全程交通时刻表</h2>
+            <h2>{t('trip.transport.title')}</h2>
           </div>
           <p className="panel__lede">{book.transportNote}</p>
           <div className="table-wrap">
             <table className="data-table">
               <thead>
                 <tr>
-                  <th>日期</th>
-                  <th>类型</th>
-                  <th>班次</th>
-                  <th>路线</th>
-                  <th>时间</th>
-                  <th>时长</th>
-                  <th>票价/人</th>
+                  <th>{t('trip.transport.th.date')}</th>
+                  <th>{t('trip.transport.th.type')}</th>
+                  <th>{t('trip.transport.th.code')}</th>
+                  <th>{t('trip.transport.th.route')}</th>
+                  <th>{t('trip.transport.th.time')}</th>
+                  <th>{t('trip.transport.th.duration')}</th>
+                  <th>{t('trip.transport.th.price')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -279,7 +281,7 @@ export default function Trip() {
         <section className="split-panels">
           <div className="panel">
             <div className="panel__head">
-              <h2>费用估算</h2>
+              <h2>{t('trip.costs.title')}</h2>
             </div>
             <div className="table-wrap">
               <table className="data-table">
@@ -292,8 +294,8 @@ export default function Trip() {
                     </tr>
                   ))}
                   <tr className="data-table__total">
-                    <td>合计</td>
-                    <td>3人总费用</td>
+                    <td>{t('trip.costs.totalRow')}</td>
+                    <td>{t('trip.costs.totalDetail')}</td>
                     <td>{book.costTotal}</td>
                   </tr>
                 </tbody>
@@ -303,7 +305,7 @@ export default function Trip() {
 
           <div className="panel">
             <div className="panel__head">
-              <h2>实用提示</h2>
+              <h2>{t('trip.tips.title')}</h2>
             </div>
             <ul className="tip-list">
               {book.tips.map((tip) => (
@@ -315,18 +317,18 @@ export default function Trip() {
 
         <section className="panel panel--replan">
           <div>
-            <p className="eyebrow">信任之后，是分享</p>
-            <h2>走完这趟，把快乐留给后来者。</h2>
+            <p className="eyebrow">{t('trip.replan.eyebrow')}</p>
+            <h2>{t('trip.replan.title')}</h2>
             <p>
-              实况可核对、行程可改版、闹钟已就位。走完之后，把雨中灯火与当晚到家的安心，分享给下一个出发的人。
+              {t('trip.replan.text')}
             </p>
           </div>
           <div className="hero-live__actions">
             <Link className="btn btn--primary" to="/community">
-              分享这段快乐
+              {t('trip.replan.share')}
             </Link>
             <Link className="btn btn--ghost-dark" to="/plan">
-              再生成一版
+              {t('trip.replan.again')}
             </Link>
           </div>
         </section>

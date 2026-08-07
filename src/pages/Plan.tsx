@@ -3,12 +3,21 @@ import type { FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SiteChrome from '../components/SiteChrome'
 import { api, apiConfigured } from '../services/api'
+import { useLang } from '../i18n'
 
-const interests = ['博物馆', '自然风光', '美食', '亲子友好', '少走路', '夜景'] as const
+const interestKeys = [
+  'plan.interests.museum',
+  'plan.interests.nature',
+  'plan.interests.food',
+  'plan.interests.family',
+  'plan.interests.easy',
+  'plan.interests.night',
+] as const
 
 export default function Plan() {
+  const { t } = useLang()
   const navigate = useNavigate()
-  const [selected, setSelected] = useState<string[]>(['博物馆', '亲子友好', '美食'])
+  const [selected, setSelected] = useState<string[]>([interestKeys[0], interestKeys[3], interestKeys[2]])
   const [submitting, setSubmitting] = useState(false)
 
   function toggleInterest(item: string) {
@@ -46,60 +55,57 @@ export default function Plan() {
 
   return (
     <div className="page page--plain">
-      <SiteChrome cta={{ to: '/trip/xian', label: '先看示例' }} />
+      <SiteChrome cta={{ to: '/trip/xian', label: 'nav.preview' }} />
 
       <main className="plan">
         <div className="plan__intro">
-          <p className="eyebrow">新建行程</p>
-          <h1>告诉我们约束，剩下的交给实况与 AI。</h1>
-          <p>
-            先收集出发地、日期和同行人。演示阶段会生成「深圳 → 西安家庭游」完整路书，并展示天气 /
-            交通如何影响建议。
-          </p>
+          <p className="eyebrow">{t('plan.eyebrow')}</p>
+          <h1>{t('plan.title')}</h1>
+          <p>{t('plan.subtitle')}</p>
         </div>
 
         <form className="plan-form" onSubmit={onSubmit}>
           <label className="field">
-            <span>出发地</span>
+            <span>{t('plan.origin')}</span>
             <input name="origin" defaultValue="深圳" required />
           </label>
           <label className="field">
-            <span>目的地</span>
+            <span>{t('plan.destination')}</span>
             <input name="destination" defaultValue="西安" required />
           </label>
           <div className="field-row">
             <label className="field">
-              <span>出发日期</span>
+              <span>{t('plan.startDate')}</span>
               <input name="start" type="date" defaultValue="2026-08-11" required />
             </label>
             <label className="field">
-              <span>返回日期</span>
+              <span>{t('plan.endDate')}</span>
               <input name="end" type="date" defaultValue="2026-08-15" required />
             </label>
           </div>
           <label className="field">
-            <span>同行人</span>
+            <span>{t('plan.party')}</span>
             <input name="party" defaultValue="两大一小（12岁）" required />
           </label>
           <label className="field">
-            <span>返程落脚点（可选）</span>
+            <span>{t('plan.homeStop')}</span>
             <input name="home" defaultValue="宿松东 / 当晚到家" />
           </label>
 
           <fieldset className="field">
-            <legend>偏好</legend>
+            <legend>{t('plan.interests')}</legend>
             <div className="chip-row">
-              {interests.map((item) => {
-                const active = selected.includes(item)
+              {interestKeys.map((key) => {
+                const active = selected.includes(key)
                 return (
                   <button
-                    key={item}
+                    key={key}
                     type="button"
                     className={`chip${active ? ' is-active' : ''}`}
-                    onClick={() => toggleInterest(item)}
+                    onClick={() => toggleInterest(key)}
                     aria-pressed={active}
                   >
-                    {item}
+                    {t(key)}
                   </button>
                 )
               })}
@@ -107,7 +113,7 @@ export default function Plan() {
           </fieldset>
 
           <button className="btn btn--primary btn--block" type="submit" disabled={submitting}>
-            {submitting ? '正在结合天气与交通生成…' : '生成动态行程'}
+            {submitting ? t('plan.submitting') : t('plan.submit')}
           </button>
         </form>
       </main>

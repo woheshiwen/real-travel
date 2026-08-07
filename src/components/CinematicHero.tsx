@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useLang } from '../i18n'
 
 type Scene = {
   id: string
   placeZh: string
   placeEn: string
   image: string
-  /** Ken Burns direction for variety */
   drift: 'in-tl' | 'in-tr' | 'in-bl' | 'in-br'
 }
 
@@ -45,18 +45,13 @@ const scenes: Scene[] = [
   },
 ]
 
-const loaderSteps = [
-  { zh: '读取出发地交通与约束', en: 'Read origin transport & constraints' },
-  { zh: '对照目的地实况天气', en: 'Compare live destination weather' },
-  { zh: '走进旅行案例的标志景点', en: 'Walk into case-study landmarks' },
-  { zh: '按实况生成可改版路书', en: 'Build a revisable itinerary from truth' },
-  { zh: '一键导入日历与提醒', en: 'Export to calendar with reminders' },
-]
+const loaderKeys = ['loader.1', 'loader.2', 'loader.3', 'loader.4', 'loader.5'] as const
 
 /** Bloom-like dwell: slow enough to feel cinematic */
 const SCENE_MS = 6500
 
 export default function CinematicHero() {
+  const { t, lang } = useLang()
   const [sceneIndex, setSceneIndex] = useState(0)
   const [loaderStep, setLoaderStep] = useState(0)
   const [reduced, setReduced] = useState(false)
@@ -82,11 +77,11 @@ export default function CinematicHero() {
 
   useEffect(() => {
     if (reduced) {
-      setLoaderStep(loaderSteps.length - 1)
+      setLoaderStep(loaderKeys.length - 1)
       return
     }
     const id = window.setInterval(() => {
-      setLoaderStep((s) => (s + 1) % loaderSteps.length)
+      setLoaderStep((s) => (s + 1) % loaderKeys.length)
     }, 3400)
     return () => window.clearInterval(id)
   }, [reduced])
@@ -127,7 +122,7 @@ export default function CinematicHero() {
   const scene = scenes[sceneIndex]
 
   return (
-    <section className="cine-hero" aria-label="真程 Real Travel">
+    <section className="cine-hero" aria-label={`${t('brand.zh')} ${t('brand.en')}`}>
       <div className="cine-stage" ref={stageRef} aria-hidden="true">
         <div className="cine-gallery">
           {scenes.map((item, i) => (
@@ -148,8 +143,7 @@ export default function CinematicHero() {
         </div>
 
         <div className="cine-place-chip">
-          <span className="cine-place-chip__zh">{scene.placeZh}</span>
-          <span className="cine-place-chip__en">{scene.placeEn}</span>
+          <span className="cine-place-chip__zh">{lang === 'zh' ? scene.placeZh : scene.placeEn}</span>
         </div>
 
         <div className="cine-grain" />
@@ -158,36 +152,23 @@ export default function CinematicHero() {
 
       <div className="cine-hero__ui">
         <p className="cine-hero__brand">
-          真程 <span className="cine-hero__brand-en">Real Travel</span>
+          {t('brand.zh')} <span className="cine-hero__brand-en">{t('brand.en')}</span>
         </p>
-        <h1 className="cine-hero__title">
-          <span className="cine-hero__title-zh">值得信任的出行，值得分享的风景。</span>
-          <span className="cine-hero__title-en">
-            Travel you can trust — places you can feel.
-          </span>
-        </h1>
-        <p className="cine-hero__lede">
-          <span className="cine-hero__lede-zh">
-            结合出发地交通与目的地实况天气，生成可改版的路书；定好后一键导入日历。
-          </span>
-          <span className="cine-hero__lede-en">
-            Live weather and departure transport shape an itinerary you can revise — then drop into
-            your calendar.
-          </span>
-        </p>
+        <h1 className="cine-hero__title">{t('hero.title.zh')}</h1>
+        <p className="cine-hero__lede">{t('hero.lede.zh')}</p>
         <div className="cine-hero__actions">
           <Link className="btn btn--primary btn--cine" to="/plan">
-            生成我的行程 · Plan
+            {t('hero.cta.plan')}
           </Link>
           <Link className="btn btn--ghost-cine" to="/trip/xian">
-            西安示例 · Xi’an
+            {t('hero.cta.xian')}
           </Link>
         </div>
 
         <ol className="cine-loader" aria-live="polite">
-          {loaderSteps.map((text, i) => (
+          {loaderKeys.map((key, i) => (
             <li
-              key={text.en}
+              key={key}
               className={`cine-loader__item${i === loaderStep ? ' is-current' : ''}${
                 i < loaderStep ? ' is-done' : ''
               }`}
@@ -195,10 +176,7 @@ export default function CinematicHero() {
               <span className="cine-loader__mark" aria-hidden="true">
                 {i < loaderStep ? '✓' : i === loaderStep ? '●' : '○'}
               </span>
-              <span className="cine-loader__text">
-                <span className="cine-loader__zh">{text.zh}</span>
-                <span className="cine-loader__en">{text.en}</span>
-              </span>
+              <span className="cine-loader__text">{t(key)}</span>
             </li>
           ))}
         </ol>
