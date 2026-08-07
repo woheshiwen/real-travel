@@ -56,7 +56,7 @@
 - **类型**: `feat` / `style`
 - **描述**: 将确认的祈年殿+框+真程+路+飞机 Logo 去底做成透明镂空 PNG；深色站用浅色描边版本；接入顶栏与 favicon。
 - **文件**: `public/brand/*`, `public/favicon.ico`, `src/components/SiteChrome.tsx`, `src/App.css`, `index.html`
-- **Commit**: （本条随此次 commit）
+- **Commit**: `76700a6` — transparent hollow brand logo
 - **详情**:
   - 主文件：`public/brand/real-travel-logo.png`（透明）、`logo-nav.png`（顶栏）、`favicon-*.png` / `favicon.ico`
   - 浅色底备用：`real-travel-logo-on-light.png`
