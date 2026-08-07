@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import type { CSSProperties, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import SiteChrome from '../components/SiteChrome'
-import { moments as seedMoments, type Moment } from '../data/community'
+import { moments as seedMomentsZh, type Moment } from '../data/community'
+import { momentsForLocale } from '../data/momentsLocalized'
 import { useI18n } from '../i18n'
 import { api, apiConfigured, type ApiMoment } from '../services/api'
 import { useReveal } from '../hooks/useReveal'
@@ -29,12 +30,17 @@ function fromApi(row: ApiMoment): Moment {
 }
 
 export default function Community() {
-  const { t } = useI18n()
-  const [items, setItems] = useState(seedMoments)
+  const { t, locale } = useI18n()
+  const [items, setItems] = useState(() => momentsForLocale(locale, seedMomentsZh))
   const [source, setSource] = useState<'demo' | 'api'>('demo')
   const rootRef = useReveal([items.length])
   const [liked, setLiked] = useState<Record<string, boolean>>({})
   const [composerOpen, setComposerOpen] = useState(false)
+
+  useEffect(() => {
+    if (source === 'api') return
+    setItems(momentsForLocale(locale, seedMomentsZh))
+  }, [locale, source])
 
   const totalJoy = useMemo(
     () => items.reduce((sum, item) => sum + item.likes, 0),

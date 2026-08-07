@@ -1,18 +1,19 @@
 export type Locale = 'zh-CN' | 'en' | 'fr' | 'ja' | 'ko'
 
+/** English-first locale list for the language switcher */
 export const LOCALES: { id: Locale; label: string; short: string }[] = [
-  { id: 'zh-CN', label: '简体中文', short: '中文' },
   { id: 'en', label: 'English', short: 'EN' },
+  { id: 'zh-CN', label: '简体中文', short: '中文' },
   { id: 'fr', label: 'Français', short: 'FR' },
-  { id: 'ja', label: '日本語', short: '日本語' },
-  { id: 'ko', label: '한국어', short: '한국어' },
+  { id: 'ja', label: '日本語', short: 'JA' },
+  { id: 'ko', label: '한국어', short: 'KO' },
 ]
 
-export const DEFAULT_LOCALE: Locale = 'zh-CN'
+export const DEFAULT_LOCALE: Locale = 'en'
 
 export type Messages = {
-  brandMark: string
-  brandEn: string
+  /** Single brand string for the active locale — never mix scripts */
+  brand: string
   navHome: string
   navTrip: string
   navCommunity: string
@@ -23,21 +24,23 @@ export type Messages = {
   heroLede: string
   heroCtaPlan: string
   heroCtaSample: string
-  placePagoda: string
-  placeWall: string
-  placePeak: string
-  placeNight: string
-  step1: string
-  step2: string
-  step3: string
-  step4: string
-  step5: string
+  placeCoast: string
+  placeTropic: string
+  placeCape: string
   truthEyebrow: string
   truthTitle: string
   truthText: string
   trustEyebrow: string
   trustTitle: string
   trustText: string
+  trust1Title: string
+  trust1Body: string
+  trust2Title: string
+  trust2Body: string
+  trust3Title: string
+  trust3Body: string
+  trust4Title: string
+  trust4Body: string
   howEyebrow: string
   howTitle: string
   how1: string
@@ -51,11 +54,25 @@ export type Messages = {
   demoTrip: string
   demoCommunity: string
   footerTag: string
+  marqueeLabel: string
   planEyebrow: string
   planTitle: string
   planText: string
+  planOrigin: string
+  planDest: string
+  planStart: string
+  planEnd: string
+  planParty: string
+  planHome: string
+  planPrefs: string
   planSubmit: string
   planSubmitting: string
+  interestMuseum: string
+  interestNature: string
+  interestFood: string
+  interestFamily: string
+  interestWalk: string
+  interestNight: string
   communityEyebrow: string
   communityTitle: string
   communityText: string

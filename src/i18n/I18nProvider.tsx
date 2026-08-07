@@ -12,8 +12,8 @@ import {
 } from './types'
 
 const catalogs: Record<Locale, Messages> = {
-  'zh-CN': zhCN,
   en,
+  'zh-CN': zhCN,
   fr,
   ja,
   ko,
@@ -42,7 +42,6 @@ function readStoredLocale(): Locale {
   if (nav.startsWith('ja')) return 'ja'
   if (nav.startsWith('ko')) return 'ko'
   if (nav.startsWith('fr')) return 'fr'
-  if (nav.startsWith('en')) return 'en'
   return DEFAULT_LOCALE
 }
 
@@ -61,7 +60,8 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    document.documentElement.lang = locale
+    document.documentElement.lang = locale === 'zh-CN' ? 'zh-CN' : locale
+    document.title = catalogs[locale].brand
   }, [locale])
 
   const value = useMemo<I18nValue>(

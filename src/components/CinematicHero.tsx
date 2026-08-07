@@ -4,7 +4,7 @@ import { useI18n } from '../i18n'
 
 type Scene = {
   id: string
-  placeKey: 'placePagoda' | 'placeWall' | 'placePeak'
+  placeKey: 'placeCoast' | 'placeTropic' | 'placeCape'
   src: string
   poster: string
 }
@@ -14,26 +14,26 @@ const asset = (file: string) => `${import.meta.env.BASE_URL}hero/${file}`
 const scenes: Scene[] = [
   {
     id: 'coast',
-    placeKey: 'placePagoda',
+    placeKey: 'placeCoast',
     src: asset('hero-1.mp4'),
     poster: asset('hero-1.jpg'),
   },
   {
     id: 'tropic',
-    placeKey: 'placeWall',
+    placeKey: 'placeTropic',
     src: asset('hero-2.mp4'),
     poster: asset('hero-2.jpg'),
   },
   {
     id: 'cape',
-    placeKey: 'placePeak',
+    placeKey: 'placeCape',
     src: asset('hero-3.mp4'),
     poster: asset('hero-3.jpg'),
   },
 ]
 
-/** Bloom-like: dwell long enough for the loop to breathe */
-const SCENE_MS = 11000
+/** Short enough that slide changes are obvious */
+const SCENE_MS = 6500
 
 export default function CinematicHero() {
   const { t } = useI18n()
@@ -41,6 +41,7 @@ export default function CinematicHero() {
   const [reduced, setReduced] = useState(false)
   const heroRef = useRef<HTMLElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
   const parallaxRef = useRef({ x: 0, y: 0 })
   const rafRef = useRef(0)
 
@@ -60,7 +61,32 @@ export default function CinematicHero() {
     return () => window.clearInterval(id)
   }, [reduced])
 
-  /* Bloom-style inverse mouse parallax — listen on hero (UI is pointer-events:none) */
+  /* Keep every clip playing so crossfades never land on a frozen poster */
+  useEffect(() => {
+    if (reduced) return
+    const vids = videoRefs.current.filter(Boolean) as HTMLVideoElement[]
+
+    const kick = (video: HTMLVideoElement) => {
+      video.muted = true
+      video.defaultMuted = true
+      video.playsInline = true
+      const attempt = video.play()
+      if (attempt && typeof attempt.catch === 'function') {
+        attempt.catch(() => {
+          /* autoplay blocked — poster + CSS drift still move */
+        })
+      }
+    }
+
+    vids.forEach(kick)
+
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') vids.forEach(kick)
+    }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
+  }, [reduced, sceneIndex])
+
   useEffect(() => {
     if (reduced) return
     const hero = heroRef.current
@@ -74,13 +100,13 @@ export default function CinematicHero() {
       const rect = hero.getBoundingClientRect()
       const nx = (event.clientX - rect.left) / rect.width - 0.5
       const ny = (event.clientY - rect.top) / rect.height - 0.5
-      targetX = nx * -7.5
-      targetY = ny * -5.5
+      targetX = nx * -8.5
+      targetY = ny * -6
     }
 
     const tick = () => {
-      parallaxRef.current.x += (targetX - parallaxRef.current.x) * 0.07
-      parallaxRef.current.y += (targetY - parallaxRef.current.y) * 0.07
+      parallaxRef.current.x += (targetX - parallaxRef.current.x) * 0.08
+      parallaxRef.current.y += (targetY - parallaxRef.current.y) * 0.08
       stage.style.setProperty('--px', `${parallaxRef.current.x.toFixed(3)}%`)
       stage.style.setProperty('--py', `${parallaxRef.current.y.toFixed(3)}%`)
       rafRef.current = requestAnimationFrame(tick)
@@ -97,7 +123,7 @@ export default function CinematicHero() {
   const scene = scenes[sceneIndex]
 
   return (
-    <section className="cine-hero" aria-label={`${t.brandMark} ${t.brandEn}`} ref={heroRef}>
+    <section className="cine-hero" aria-label={t.brand} ref={heroRef}>
       <div className="cine-stage" ref={stageRef} aria-hidden="true">
         <div className="cine-gallery">
           {scenes.map((item, i) => {
@@ -106,16 +132,19 @@ export default function CinematicHero() {
             return (
               <figure
                 key={item.id}
-                className={`cine-plate${active ? ' is-active' : ''}${prev ? ' is-prev' : ''}`}
+                className={`cine-plate cine-plate--${item.id}${active ? ' is-active' : ''}${
+                  prev ? ' is-prev' : ''
+                }`}
               >
                 <div className="cine-plate__parallax">
                   <div className="cine-plate__media">
                     {reduced ? (
                       <img src={item.poster} alt="" draggable={false} />
-                    ) : active ? (
-                      /* remount on slide change so playback + drift always restart */
+                    ) : (
                       <video
-                        key={`${item.id}-${sceneIndex}`}
+                        ref={(el) => {
+                          videoRefs.current[i] = el
+                        }}
                         className="cine-plate__video"
                         src={item.src}
                         poster={item.poster}
@@ -125,8 +154,6 @@ export default function CinematicHero() {
                         playsInline
                         preload="auto"
                       />
-                    ) : (
-                      <img src={item.poster} alt="" draggable={false} />
                     )}
                   </div>
                 </div>
@@ -141,9 +168,7 @@ export default function CinematicHero() {
 
       <div className="cine-hero__ui">
         <p className="cine-hero__eyebrow">{t.heroEyebrow}</p>
-        <p className="cine-hero__brand">
-          {t.brandMark} <span className="cine-hero__brand-en">{t.brandEn}</span>
-        </p>
+        <p className="cine-hero__brand">{t.brand}</p>
         <h1 className="cine-hero__title">{t.heroTitle}</h1>
         <p className="cine-hero__lede">{t.heroLede}</p>
         <div className="cine-hero__actions">
@@ -158,9 +183,14 @@ export default function CinematicHero() {
 
       <div className="cine-place-chip" aria-live="polite">
         <span className="cine-place-chip__label">{t[scene.placeKey]}</span>
-        <span className="cine-place-chip__index">
-          {String(sceneIndex + 1).padStart(2, '0')} / {String(scenes.length).padStart(2, '0')}
-        </span>
+        <div className="cine-place-chip__dots" aria-hidden="true">
+          {scenes.map((item, i) => (
+            <span
+              key={item.id}
+              className={`cine-place-chip__dot${i === sceneIndex ? ' is-on' : ''}`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   )

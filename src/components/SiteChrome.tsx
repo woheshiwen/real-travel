@@ -14,8 +14,7 @@ export default function SiteChrome({ variant = 'solid', cta }: Props) {
   return (
     <header className={`topnav topnav--${variant === 'overlay' ? 'cine' : 'solid'}`}>
       <Link to="/" className="brand">
-        <span className="brand__mark">{t.brandMark}</span>
-        <span className="brand__en">{t.brandEn}</span>
+        <span className="brand__mark">{t.brand}</span>
       </Link>
       <div className="topnav__end">
         <nav className="topnav__links">

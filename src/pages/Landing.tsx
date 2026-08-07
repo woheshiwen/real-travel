@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom'
 import CinematicHero from '../components/CinematicHero'
 import DestinationMarquee from '../components/DestinationMarquee'
 import SiteChrome from '../components/SiteChrome'
-import { moments, trustPillars } from '../data/community'
+import { moments as seedMomentsZh } from '../data/community'
+import { momentsForLocale } from '../data/momentsLocalized'
 import { useI18n } from '../i18n'
 import { api, apiConfigured, type ConditionsCompare } from '../services/api'
 import { useReveal } from '../hooks/useReveal'
 import { useSpotlight } from '../hooks/useSpotlight'
 
-const fallbackCompare: ConditionsCompare = {
+const fallbackCompareZh: ConditionsCompare = {
   place: '西安',
   dateRange: '8/11–8/15',
   updatedAt: '',
@@ -33,14 +34,52 @@ const fallbackCompare: ConditionsCompare = {
   },
 }
 
+const fallbackCompareEn: ConditionsCompare = {
+  place: 'Xi’an',
+  dateRange: '8/11–8/15',
+  updatedAt: '',
+  social: {
+    source: 'Social buzz',
+    headline: 'Don’t go — storms',
+    summary: 'Many “cancel for heavy rain” clips on short video',
+    sentiment: 'alarm',
+  },
+  forecast: {
+    source: 'Live forecast',
+    headline: 'Light rain → cloudy → clear',
+    summary: 'Aug 11 light rain then clearing; 5–8°C cooler than Shenzhen',
+    sentiment: 'positive',
+    dataSource: 'demo',
+  },
+  recommendation: {
+    title: 'AI advice',
+    summary: 'Keep the trip. Day 1 indoors at the history museum; night views still on. No cancel.',
+    verdict: 'keep',
+  },
+}
+
 export default function Landing() {
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
   const rootRef = useReveal()
   const spotlight = useSpotlight()
+  const moments = momentsForLocale(locale, seedMomentsZh)
   const preview = moments.slice(0, 3)
-  const [compare, setCompare] = useState(fallbackCompare)
+  const [compare, setCompare] = useState(
+    locale === 'zh-CN' ? fallbackCompareZh : fallbackCompareEn,
+  )
   const [liveSource, setLiveSource] = useState<'demo' | 'api'>('demo')
   const howSteps = [t.how1, t.how2, t.how3]
+  const trustCards = [
+    { title: t.trust1Title, body: t.trust1Body },
+    { title: t.trust2Title, body: t.trust2Body },
+    { title: t.trust3Title, body: t.trust3Body },
+    { title: t.trust4Title, body: t.trust4Body },
+  ]
+
+  useEffect(() => {
+    setCompare(locale === 'zh-CN' ? fallbackCompareZh : fallbackCompareEn)
+    setLiveSource('demo')
+  }, [locale])
 
   useEffect(() => {
     if (!apiConfigured) return
@@ -103,7 +142,7 @@ export default function Landing() {
           <p className="section__text">{t.trustText}</p>
         </div>
         <div className="reason-grid">
-          {trustPillars.map((item, index) => (
+          {trustCards.map((item, index) => (
             <article
               className="reason spot reveal"
               key={item.title}
@@ -179,9 +218,7 @@ export default function Landing() {
 
       <footer className="site-footer">
         <div>
-          <strong>
-            {t.brandMark} {t.brandEn}
-          </strong>
+          <strong>{t.brand}</strong>
           <span>{t.footerTag}</span>
         </div>
         <p>© {new Date().getFullYear()}</p>
