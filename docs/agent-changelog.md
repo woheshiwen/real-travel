@@ -43,7 +43,7 @@
 - **类型**: `docs` / `merge`
 - **描述**: 采纳 WorkBuddy 的 `docs/agent-changelog.md` 协同约定；合并 `1fd7645` 的 kenburns keyframes，同时保留当前视频 Hero 使用的 `bloom-drift*`。
 - **文件**: `docs/agent-changelog.md`, `src/App.css`
-- **Commit**: （本条随此次 commit）
+- **Commit**: `92db2f6` — merge main + agent-changelog Cursor entries
 - **详情**:
   - 确认后续每次改动必须在本文件追加记录
   - CSS：当前 Hero 用 `bloom-drift`；WorkBuddy 的 `bloom-kenburns*` 保留备用
