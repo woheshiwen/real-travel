@@ -74,8 +74,8 @@ export default function CinematicHero() {
       const rect = hero.getBoundingClientRect()
       const nx = (event.clientX - rect.left) / rect.width - 0.5
       const ny = (event.clientY - rect.top) / rect.height - 0.5
-      targetX = nx * -4.5
-      targetY = ny * -3.2
+      targetX = nx * -7.5
+      targetY = ny * -5.5
     }
 
     const tick = () => {
