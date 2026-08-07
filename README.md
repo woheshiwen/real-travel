@@ -46,11 +46,18 @@ cp .env.example .env
 
 ### 在线访问（GitHub Pages）
 
-合并到 `main` 后，Actions 会自动构建并发布：
+站点：https://woheshiwen.github.io/real-travel/
 
-https://woheshiwen.github.io/real-travel/
+**若页面仍是旧版「假手」**：Actions 官方 Pages 部署可能卡在队列。仓库已同时发布到 `gh-pages` 分支，请把发布源切过去：
 
-（首次需在仓库 Settings → Pages 选择 **GitHub Actions** 作为源；本仓库已附带 workflow。）
+1. 打开 [Settings → Pages](https://github.com/woheshiwen/real-travel/settings/pages)
+2. **Build and deployment → Source** 选 **Deploy from a branch**
+3. Branch 选 **`gh-pages`** / **`/` (root)** → Save
+4. 等 1–2 分钟后强制刷新（Ctrl+Shift+R）
+
+之后每次合并到 `main` 会自动更新 `gh-pages`。
+
+### 在线访问（GitHub Pages）— 旧说明
 
 ## 仓库拆分
 
