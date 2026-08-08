@@ -179,6 +179,52 @@ const t: Record<string, Record<Lang, string>> = {
   'calendar.done.day':    { en: 'Day calendar downloaded', zh: '已下载当日日历', fr: 'Calendrier du jour téléchargé', ja: '当日カレンダーをダウンロードしました', ko: '당일 캘린더 다운로드 완료' },
   'calendar.done.note':   { en: 'Open the file on your phone to import into your system calendar (iOS Calendar / Google Calendar / Huawei·Xiaomi Calendar all supported).', zh: '在手机上打开文件即可导入系统日历（iOS 日历 / Google 日历 / 华为·小米日历均支持）。', fr: 'Ouvrez le fichier sur votre téléphone pour l\'importer dans votre calendrier système (iOS / Google / Huawei·Xiaomi pris en charge).', ja: 'スマホでファイルを開いてシステムカレンダーにインポートできます（iOSカレンダー/Googleカレンダー/Huawei·Xiaomiカレンダー対応）。', ko: '휴대폰에서 파일을 열어 시스템 캘린더로 가져오세요 (iOS 캘린더 / Google 캘린더 / 화웨이·샤오미 캘린더 모두 지원).' },
 
+  // ── Amap one-tap nav (Xi’an self-drive test) ──
+  'amap.title': { en: 'Open in Amap', zh: '一键打开高德导航', fr: 'Ouvrir dans Amap', ja: '高徳マップで開く', ko: '가오더 지도에서 열기' },
+  'amap.pill':  { en: 'Gaode', zh: '高德', fr: 'Gaode', ja: '高徳', ko: '가오더' },
+  'amap.lede':  {
+    en: 'Self-drive segments for the Xi’an sample. Tap to plan the route in Amap (opens the app on phone if installed). Place names stay in Chinese so Amap can match them.',
+    zh: '西安示例里的自驾路段。点一下用高德规划路线（手机上若已安装会尝试调起 App）。地点名用中文，方便高德匹配。',
+    fr: 'Segments en voiture de l’exemple Xi’an. Appuyez pour ouvrir l’itinéraire dans Amap (lance l’app sur mobile si installée). Les noms restent en chinois pour le matching.',
+    ja: '西安サンプルの自家用車区間。タップで高徳マップにルートを開きます（端末にアプリがあれば起動を試みます）。地名はマッチングのため中国語のままです。',
+    ko: '시안 샘플의 자가운전 구간입니다. 탭하면 가오더에서 경로를 엽니다(앱이 있으면 실행 시도). 매칭을 위해 지명은 중국어를 유지합니다.',
+  },
+  'amap.scope':     { en: 'Show', zh: '显示范围', fr: 'Afficher', ja: '表示', ko: '표시' },
+  'amap.scope.day': { en: 'Selected day', zh: '当天路段', fr: 'Jour sélectionné', ja: '選択中の日', ko: '선택한 날' },
+  'amap.scope.all': { en: 'All drive legs', zh: '全部自驾', fr: 'Tous les trajets', ja: '全ドライブ', ko: '전체 운전' },
+  'amap.open':      { en: 'Open in Amap', zh: '打开高德', fr: 'Ouvrir Amap', ja: '高徳で開く', ko: '가오더 열기' },
+  'amap.done':      {
+    en: 'Amap opened in a new tab. On mobile, confirm if prompted to switch to the app.',
+    zh: '已在新标签打开高德。手机上如提示跳转 App，确认即可。',
+    fr: 'Amap s’est ouvert dans un nouvel onglet. Sur mobile, confirmez le passage à l’app si demandé.',
+    ja: '新しいタブで高徳が開きました。モバイルではアプリへ切り替える確認が出たら許可してください。',
+    ko: '새 탭에서 가오더가 열렸습니다. 모바일에서 앱 전환 확인이 뜨면 허용하세요.',
+  },
+  'amap.leg.day1.airport': { en: 'Day 1 · Airport → hotel', zh: 'Day1 · 机场 → 酒店', fr: 'Jour 1 · Aéroport → hôtel', ja: 'Day1 · 空港→ホテル', ko: 'Day1 · 공항 → 호텔' },
+  'amap.leg.day1.airport.note': {
+    en: 'Optional transfer if you rent a car or book a driver at Xianyang T3.',
+    zh: '若在咸阳 T3 租车或约司机，用这条导航回钟楼酒店。',
+    fr: 'Transfert optionnel si vous louez une voiture ou un chauffeur à Xianyang T3.',
+    ja: '咸陽T3でレンタカー／運転手を使う場合の送迎ルート。',
+    ko: '셴양 T3에서 렌터카나 기사를 쓸 때의 선택 이동 구간.',
+  },
+  'amap.leg.day2.morning': { en: 'Day 2 · Hotel → Terracotta', zh: 'Day2 · 酒店 → 兵马俑', fr: 'Jour 2 · Hôtel → Terracotta', ja: 'Day2 · ホテル→兵馬俑', ko: 'Day2 · 호텔 → 병마용' },
+  'amap.leg.day2.morning.note': {
+    en: 'Leave luggage at the Xi’an hotel. Aim for opening time to skip tour groups.',
+    zh: '行李留西安酒店。尽量赶开门，躲开旅行团。',
+    fr: 'Laissez les bagages à l’hôtel. Visez l’ouverture pour éviter les groupes.',
+    ja: '荷物は西安のホテルへ。開館に合わせて団体を避ける。',
+    ko: '짐은 시안 호텔에. 개장 시간에 맞춰 단체 관광을 피하세요.',
+  },
+  'amap.leg.day2.afternoon': { en: 'Day 2 · Terracotta → Huaqing → Muslim Quarter', zh: 'Day2 · 兵马俑 → 华清宫 → 回民街', fr: 'Jour 2 · Terracotta → Huaqing → Quartier musulman', ja: 'Day2 · 兵馬俑→華清宮→回民街', ko: 'Day2 · 병마용 → 화청궁 → 회민가' },
+  'amap.leg.day2.afternoon.note': {
+    en: 'One via point (Huaqing Palace), then back into the city for dinner.',
+    zh: '华清宫作途经点（高德仅支持一个途经点），再回城吃晚饭。',
+    fr: 'Un point de passage (Huaqing), puis retour en ville pour le dîner.',
+    ja: '華清宮を経由（高徳は経由1点まで）、その後市内で夕食。',
+    ko: '화청궁을 경유(가오더는 경유 1곳)한 뒤 시내로 돌아와 저녁.',
+  },
+
   // ── Loader Steps (CinematicHero) ──
   'loader.1': { en: 'Read origin transport & constraints', zh: '读取出发地交通与约束', fr: 'Lire le transport d\'origine et les contraintes', ja: '出発地の交通と制約を読み取り', ko: '출발지 교통 및 제약 조건 읽기' },
   'loader.2': { en: 'Compare live destination weather',       zh: '对照目的地实况天气',            fr: 'Comparer la météo en direct de la destination', ja: '目的地の実況天気を对照',       ko: '목적지 실황 날씨 대조' },
