@@ -6,6 +6,20 @@
 
 ---
 
+## 2026-08-08 — 西安示例：高德一键自驾导航（测试）
+
+- **Agent**: Cursor
+- **类型**: `feat`
+- **描述**: 在西安样例行程页加入高德 URI 一键导航，先覆盖 Day2 兵马俑自驾与 Day1 机场接驳，验证「混合行程里的自驾段 → 打开高德」工具链。
+- **文件**: `src/services/amap.ts`, `src/data/xianDriveLegs.ts`, `src/components/AmapNav.tsx`, `src/pages/Trip.tsx`, `src/i18n/translations.ts`, `src/App.css`
+- **Commit**: `485f7f8` — Xi'an Amap one-tap nav
+- **详情**:
+  - `buildAmapNavigationUrl`：`uri.amap.com/navigation` + GCJ-02 + `callnative=1`，途经点最多 1 个
+  - Day2：酒店→兵马俑；兵马俑→华清宫(via)→回民街；Day1：咸阳 T3→钟楼酒店
+  - Trip 页日历导出下方挂载 `AmapNav`，可按当天 / 全部自驾段筛选
+
+---
+
 ## 2026-08-07 — 补全 Bloom Ken Burns Hero 动画 keyframes
 
 - **Agent**: WorkBuddy
