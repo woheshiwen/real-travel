@@ -6,6 +6,16 @@
 
 ---
 
+## 2026-08-09 — 钉选「第一版固定版」Baseline v1
+
+- **Agent**: Cursor
+- **类型**: `docs`
+- **描述**: 用户指定当前线上 UI 为第一版固定版。Git tag `v1-fixed` → `a9a8d1b`（Bloom 海岸视频 hero + 导航 Logo，无 Paper Relic 背景）。此后改首屏/品牌须先确认；口令「恢复到第一版」即回此 tag。
+- **文件**: `AGENTS.md`, `docs/baseline-v1.md`, `docs/agent-changelog.md`
+- **Tag**: `v1-fixed` @ `a9a8d1b`
+
+---
+
 ## 2026-08-08 — 西安示例：高德一键自驾导航（测试）
 
 - **Agent**: Cursor
