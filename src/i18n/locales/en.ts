@@ -68,6 +68,21 @@ const en: Messages = {
   communityText: 'Decide with live conditions. Share what you lived.',
   communityShare: 'Share my joy',
   tripCalendar: 'Add to calendar',
+  amapTitle: 'Open in Amap',
+  amapPill: 'Gaode',
+  amapLede:
+    'Self-drive segments for the Xi’an sample. Tap to plan the route in Amap (opens the app on phone if installed). Place names stay in Chinese so Amap can match them.',
+  amapScope: 'Show',
+  amapScopeDay: 'Selected day',
+  amapScopeAll: 'All drive legs',
+  amapOpen: 'Open in Amap',
+  amapDone: 'Amap opened in a new tab. On mobile, confirm if prompted to switch to the app.',
+  amapLegDay1Airport: 'Day 1 · Airport → hotel',
+  amapLegDay1AirportNote: 'Optional transfer if you rent a car or book a driver at Xianyang T3.',
+  amapLegDay2Morning: 'Day 2 · Hotel → Terracotta',
+  amapLegDay2MorningNote: 'Leave luggage at the Xi’an hotel. Aim for opening time to skip tour groups.',
+  amapLegDay2Afternoon: 'Day 2 · Terracotta → Huaqing → Muslim Quarter',
+  amapLegDay2AfternoonNote: 'One via point (Huaqing Palace), then back into the city for dinner.',
 }
 
 export default en

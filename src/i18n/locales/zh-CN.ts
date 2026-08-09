@@ -68,6 +68,20 @@ const zhCN: Messages = {
   communityText: '用实况做决策，用亲历分享传递安心与喜悦。',
   communityShare: '写下我的快乐',
   tripCalendar: '加入日历',
+  amapTitle: '一键打开高德导航',
+  amapPill: '高德',
+  amapLede: '西安示例里的自驾路段。点一下用高德规划路线（手机上若已安装会尝试调起 App）。地点名用中文，方便高德匹配。',
+  amapScope: '显示范围',
+  amapScopeDay: '当天路段',
+  amapScopeAll: '全部自驾',
+  amapOpen: '打开高德',
+  amapDone: '已在新标签打开高德。手机上如提示跳转 App，确认即可。',
+  amapLegDay1Airport: 'Day1 · 机场 → 酒店',
+  amapLegDay1AirportNote: '若在咸阳 T3 租车或约司机，用这条导航回钟楼酒店。',
+  amapLegDay2Morning: 'Day2 · 酒店 → 兵马俑',
+  amapLegDay2MorningNote: '行李留西安酒店。尽量赶开门，躲开旅行团。',
+  amapLegDay2Afternoon: 'Day2 · 兵马俑 → 华清宫 → 回民街',
+  amapLegDay2AfternoonNote: '华清宫作途经点（高德仅支持一个途经点），再回城吃晚饭。',
 }
 
 export default zhCN

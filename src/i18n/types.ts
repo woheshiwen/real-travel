@@ -78,4 +78,18 @@ export type Messages = {
   communityText: string
   communityShare: string
   tripCalendar: string
+  amapTitle: string
+  amapPill: string
+  amapLede: string
+  amapScope: string
+  amapScopeDay: string
+  amapScopeAll: string
+  amapOpen: string
+  amapDone: string
+  amapLegDay1Airport: string
+  amapLegDay1AirportNote: string
+  amapLegDay2Morning: string
+  amapLegDay2MorningNote: string
+  amapLegDay2Afternoon: string
+  amapLegDay2AfternoonNote: string
 }

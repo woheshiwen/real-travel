@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import AmapNav from '../components/AmapNav'
 import CalendarExport from '../components/CalendarExport'
 import SiteChrome from '../components/SiteChrome'
 import WeatherIcon from '../components/WeatherIcon'
@@ -277,6 +278,8 @@ export default function Trip() {
         </section>
 
         <CalendarExport book={book} activeDayId={activeDay} />
+
+        <AmapNav activeDayId={activeDay} />
 
         <section className="split-panels">
           <div className="panel">

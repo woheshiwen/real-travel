@@ -67,6 +67,21 @@ const ja: Messages = {
   communityText: '実況で決め、体験を共有する。',
   communityShare: '喜びを書く',
   tripCalendar: 'カレンダーに追加',
+  amapTitle: '高徳マップで開く',
+  amapPill: '高徳',
+  amapLede:
+    '西安サンプルの自家用車区間。タップで高徳マップにルートを開きます（端末にアプリがあれば起動を試みます）。地名はマッチングのため中国語のままです。',
+  amapScope: '表示',
+  amapScopeDay: '選択中の日',
+  amapScopeAll: '全ドライブ',
+  amapOpen: '高徳で開く',
+  amapDone: '新しいタブで高徳が開きました。モバイルではアプリへ切り替える確認が出たら許可してください。',
+  amapLegDay1Airport: 'Day1 · 空港→ホテル',
+  amapLegDay1AirportNote: '咸陽T3でレンタカー／運転手を使う場合の送迎ルート。',
+  amapLegDay2Morning: 'Day2 · ホテル→兵馬俑',
+  amapLegDay2MorningNote: '荷物は西安のホテルへ。開館に合わせて団体を避ける。',
+  amapLegDay2Afternoon: 'Day2 · 兵馬俑→華清宮→回民街',
+  amapLegDay2AfternoonNote: '華清宮を経由（高徳は経由1点まで）、その後市内で夕食。',
 }
 
 export default ja

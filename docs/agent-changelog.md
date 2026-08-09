@@ -6,6 +6,19 @@
 
 ---
 
+## 2026-08-09 — 合并高德导航到带最新 Logo 的 Bloom 站
+
+- **Agent**: Cursor
+- **类型**: `feat` / `deploy`
+- **描述**: 此前为恢复高德把 Pages 部署成了 `main`（有高德、无最新 Logo）。现把西安高德一键导航并入带篆体「真程」Logo 的 Bloom 分支并重新部署。
+- **文件**: `src/services/amap.ts`, `src/data/xianDriveLegs.ts`, `src/components/AmapNav.tsx`, `src/pages/Trip.tsx`, `src/i18n/**`, `src/App.css`
+- **Commit**: `610b36b` — Amap + latest logo deploy
+- **详情**:
+  - 保留 `public/brand/logo-nav-lg.png` + 篆体「真程」Hero
+  - Trip 页日历下挂载 `AmapNav`（Day1 机场 / Day2 兵马俑环线）
+
+---
+
 ## 2026-08-07 — 补全 Bloom Ken Burns Hero 动画 keyframes
 
 - **Agent**: WorkBuddy

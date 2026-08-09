@@ -67,6 +67,21 @@ const ko: Messages = {
   communityText: '실황으로 결정하고, 겪은 것을 나누세요.',
   communityShare: '기쁨 남기기',
   tripCalendar: '캘린더에 추가',
+  amapTitle: '가오더 지도에서 열기',
+  amapPill: '가오더',
+  amapLede:
+    '시안 샘플의 자가운전 구간입니다. 탭하면 가오더에서 경로를 엽니다(앱이 있으면 실행 시도). 매칭을 위해 지명은 중국어를 유지합니다.',
+  amapScope: '표시',
+  amapScopeDay: '선택한 날',
+  amapScopeAll: '전체 운전',
+  amapOpen: '가오더 열기',
+  amapDone: '새 탭에서 가오더가 열렸습니다. 모바일에서 앱 전환 확인이 뜨면 허용하세요.',
+  amapLegDay1Airport: 'Day1 · 공항 → 호텔',
+  amapLegDay1AirportNote: '셴양 T3에서 렌터카나 기사를 쓸 때의 선택 이동 구간.',
+  amapLegDay2Morning: 'Day2 · 호텔 → 병마용',
+  amapLegDay2MorningNote: '짐은 시안 호텔에. 개장 시간에 맞춰 단체 관광을 피하세요.',
+  amapLegDay2Afternoon: 'Day2 · 병마용 → 화청궁 → 회민가',
+  amapLegDay2AfternoonNote: '화청궁을 경유(가오더는 경유 1곳)한 뒤 시내로 돌아와 저녁.',
 }
 
 export default ko
