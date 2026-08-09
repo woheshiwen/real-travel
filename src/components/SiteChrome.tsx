@@ -1,6 +1,8 @@
 import { Link, NavLink } from 'react-router-dom'
 import { useLang, langs, langNames, type Lang } from '../i18n'
 
+const logoSrc = `${import.meta.env.BASE_URL}brand/logo-nav-lg.png`
+
 type Props = {
   variant?: 'overlay' | 'solid'
   cta?: { to: string; label: LangKey } | { href: string; label: LangKey }
@@ -16,9 +18,18 @@ export default function SiteChrome({
 
   return (
     <header className={`topnav topnav--${variant === 'overlay' ? 'cine' : 'solid'}`}>
-      <Link to="/" className="brand">
-        <span className="brand__mark">{t('brand.zh')}</span>
-        <span className="brand__en">{t('brand.en')}</span>
+      <Link to="/" className="brand" aria-label={`${t('brand.zh')} ${t('brand.en')}`}>
+        <img
+          className="brand__logo"
+          src={logoSrc}
+          alt=""
+          width={101}
+          height={120}
+          decoding="async"
+        />
+        <span className="visually-hidden">
+          {t('brand.zh')} {t('brand.en')}
+        </span>
       </Link>
       <nav className="topnav__links">
         <NavLink to="/" end>
