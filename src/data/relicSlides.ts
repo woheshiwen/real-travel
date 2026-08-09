@@ -6,23 +6,26 @@ export type RelicSlide = {
   titleEn: string
 }
 
+/** Respect Vite `base` so GitHub Pages (`/real-travel/`) resolves assets. */
+const asset = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`
+
 /** Paper Relic stills for below-fold ambient sections (Photo Relic Editorial / 纸上北京). */
 export const truthRelicSlides: RelicSlide[] = [
   {
-    src: '/relic/temple-of-heaven.webp',
-    markSrc: '/relic/temple-of-heaven-mark.webp',
+    src: asset('relic/temple-of-heaven.webp'),
+    markSrc: asset('relic/temple-of-heaven-mark.webp'),
     titleZh: '天光有序',
     titleEn: 'Ordered Sky Light',
   },
   {
-    src: '/relic/corner-tower-water.webp',
-    markSrc: '/relic/corner-tower-water-mark.webp',
+    src: asset('relic/corner-tower-water.webp'),
+    markSrc: asset('relic/corner-tower-water-mark.webp'),
     titleZh: '水照宫墙',
     titleEn: 'Palace Wall in Water',
   },
   {
-    src: '/relic/great-wall-ridge.webp',
-    markSrc: '/relic/great-wall-ridge-mark.webp',
+    src: asset('relic/great-wall-ridge.webp'),
+    markSrc: asset('relic/great-wall-ridge-mark.webp'),
     titleZh: '山脊有路',
     titleEn: 'A Road Along the Ridge',
   },
@@ -30,20 +33,20 @@ export const truthRelicSlides: RelicSlide[] = [
 
 export const trustRelicSlides: RelicSlide[] = [
   {
-    src: '/relic/bird-nest-reflection.webp',
-    markSrc: '/relic/bird-nest-reflection-mark.webp',
+    src: asset('relic/bird-nest-reflection.webp'),
+    markSrc: asset('relic/bird-nest-reflection-mark.webp'),
     titleZh: '巢光入水',
     titleEn: 'Nest Light Enters Water',
   },
   {
-    src: '/relic/china-zun.webp',
-    markSrc: '/relic/china-zun-mark.webp',
+    src: asset('relic/china-zun.webp'),
+    markSrc: asset('relic/china-zun-mark.webp'),
     titleZh: '暮色立住',
     titleEn: 'Dusk Stands Still',
   },
   {
-    src: '/relic/geese-procession.webp',
-    markSrc: '/relic/geese-procession-mark.webp',
+    src: asset('relic/geese-procession.webp'),
+    markSrc: asset('relic/geese-procession-mark.webp'),
     titleZh: '碎石成队',
     titleEn: 'Gravel Falls Into Line',
   },
