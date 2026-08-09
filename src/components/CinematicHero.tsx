@@ -3,51 +3,42 @@ import { Link } from 'react-router-dom'
 import { useLang } from '../i18n'
 
 type Scene = {
-  id: string
+  id: 'coast' | 'tropic' | 'cape'
   placeZh: string
   placeEn: string
-  image: string
-  drift: 'in-tl' | 'in-tr' | 'in-bl' | 'in-br'
+  src: string
+  poster: string
 }
+
+const asset = (file: string) => `${import.meta.env.BASE_URL}hero/${file}`
 
 const scenes: Scene[] = [
   {
-    id: 'pagoda',
-    placeZh: '西安 · 大雁塔',
-    placeEn: 'Xi’an · Giant Wild Goose Pagoda',
-    image:
-      'https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?auto=format&fit=crop&w=2400&q=80',
-    drift: 'in-tr',
+    id: 'coast',
+    placeZh: '远岸 · 浪线',
+    placeEn: 'Coast · Wave Line',
+    src: asset('hero-1.mp4'),
+    poster: asset('hero-1.jpg'),
   },
   {
-    id: 'wall',
-    placeZh: '西安 · 古城墙',
-    placeEn: 'Xi’an · City Wall',
-    image:
-      'https://images.unsplash.com/photo-1528164344705-47542687000d?auto=format&fit=crop&w=2400&q=80',
-    drift: 'in-bl',
+    id: 'tropic',
+    placeZh: '热带 · 岸线',
+    placeEn: 'Tropic · Shoreline',
+    src: asset('hero-2.mp4'),
+    poster: asset('hero-2.jpg'),
   },
   {
-    id: 'peak',
-    placeZh: '华山 · 西峰',
-    placeEn: 'Mount Hua · West Peak',
-    image:
-      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2400&q=80',
-    drift: 'in-tl',
-  },
-  {
-    id: 'night',
-    placeZh: '西安 · 大唐不夜城',
-    placeEn: 'Xi’an · Great Tang Everbright City',
-    image:
-      'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&w=2400&q=80',
-    drift: 'in-br',
+    id: 'cape',
+    placeZh: '岩岬 · 潮汐',
+    placeEn: 'Cape · Tide',
+    src: asset('hero-3.mp4'),
+    poster: asset('hero-3.jpg'),
   },
 ]
 
 const loaderKeys = ['loader.1', 'loader.2', 'loader.3', 'loader.4', 'loader.5'] as const
 
-/** Bloom-like dwell: slow enough to feel cinematic */
+/** Bloom-like dwell between coastal clips */
 const SCENE_MS = 6500
 
 export default function CinematicHero() {
@@ -55,7 +46,9 @@ export default function CinematicHero() {
   const [sceneIndex, setSceneIndex] = useState(0)
   const [loaderStep, setLoaderStep] = useState(0)
   const [reduced, setReduced] = useState(false)
+  const heroRef = useRef<HTMLElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
   const parallaxRef = useRef({ x: 0, y: 0 })
   const rafRef = useRef(0)
 
@@ -86,21 +79,48 @@ export default function CinematicHero() {
     return () => window.clearInterval(id)
   }, [reduced])
 
-  /* Bloom-style inverse mouse parallax on the active plate */
+  /* Keep every clip playing so crossfades never land on a frozen poster */
   useEffect(() => {
     if (reduced) return
+    const vids = videoRefs.current.filter(Boolean) as HTMLVideoElement[]
+
+    const kick = (video: HTMLVideoElement) => {
+      video.muted = true
+      video.defaultMuted = true
+      video.playsInline = true
+      const attempt = video.play()
+      if (attempt && typeof attempt.catch === 'function') {
+        attempt.catch(() => {
+          /* autoplay blocked — poster + CSS drift still move */
+        })
+      }
+    }
+
+    vids.forEach(kick)
+
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') vids.forEach(kick)
+    }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
+  }, [reduced, sceneIndex])
+
+  /* Bloom-style inverse mouse parallax */
+  useEffect(() => {
+    if (reduced) return
+    const hero = heroRef.current
     const stage = stageRef.current
-    if (!stage) return
+    if (!hero || !stage) return
 
     let targetX = 0
     let targetY = 0
 
     const onMove = (event: PointerEvent) => {
-      const rect = stage.getBoundingClientRect()
+      const rect = hero.getBoundingClientRect()
       const nx = (event.clientX - rect.left) / rect.width - 0.5
       const ny = (event.clientY - rect.top) / rect.height - 0.5
-      targetX = nx * -3.2
-      targetY = ny * -2.4
+      targetX = nx * -8.5
+      targetY = ny * -6
     }
 
     const tick = () => {
@@ -111,10 +131,10 @@ export default function CinematicHero() {
       rafRef.current = requestAnimationFrame(tick)
     }
 
-    stage.addEventListener('pointermove', onMove)
+    hero.addEventListener('pointermove', onMove)
     rafRef.current = requestAnimationFrame(tick)
     return () => {
-      stage.removeEventListener('pointermove', onMove)
+      hero.removeEventListener('pointermove', onMove)
       cancelAnimationFrame(rafRef.current)
     }
   }, [reduced])
@@ -122,28 +142,62 @@ export default function CinematicHero() {
   const scene = scenes[sceneIndex]
 
   return (
-    <section className="cine-hero" aria-label={`${t('brand.zh')} ${t('brand.en')}`}>
+    <section
+      className="cine-hero"
+      aria-label={`${t('brand.zh')} ${t('brand.en')}`}
+      ref={heroRef}
+    >
       <div className="cine-stage" ref={stageRef} aria-hidden="true">
         <div className="cine-gallery">
-          {scenes.map((item, i) => (
-            <figure
-              key={item.id}
-              className={`cine-plate cine-plate--${item.drift}${
-                i === sceneIndex ? ' is-active' : ''
-              }${i === (sceneIndex + scenes.length - 1) % scenes.length ? ' is-prev' : ''}`}
-            >
-              <div className="cine-plate__parallax">
-                <div className="cine-plate__media">
-                  <img src={item.image} alt="" draggable={false} />
+          {scenes.map((item, i) => {
+            const active = i === sceneIndex
+            const prev = i === (sceneIndex + scenes.length - 1) % scenes.length
+            return (
+              <figure
+                key={item.id}
+                className={`cine-plate cine-plate--${item.id}${active ? ' is-active' : ''}${
+                  prev ? ' is-prev' : ''
+                }`}
+              >
+                <div className="cine-plate__parallax">
+                  <div className="cine-plate__media">
+                    {reduced ? (
+                      <img src={item.poster} alt="" draggable={false} />
+                    ) : (
+                      <video
+                        ref={(el) => {
+                          videoRefs.current[i] = el
+                        }}
+                        className="cine-plate__video"
+                        src={item.src}
+                        poster={item.poster}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="auto"
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            </figure>
-          ))}
+              </figure>
+            )
+          })}
           <div className="cine-gallery__veil" />
         </div>
 
         <div className="cine-place-chip">
-          <span className="cine-place-chip__zh">{lang === 'zh' ? scene.placeZh : scene.placeEn}</span>
+          <span className="cine-place-chip__zh">
+            {lang === 'zh' ? scene.placeZh : scene.placeEn}
+          </span>
+          <div className="cine-place-chip__dots" aria-hidden="true">
+            {scenes.map((item, i) => (
+              <span
+                key={item.id}
+                className={`cine-place-chip__dot${i === sceneIndex ? ' is-on' : ''}`}
+              />
+            ))}
+          </div>
         </div>
 
         <div className="cine-grain" />
