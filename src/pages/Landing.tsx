@@ -2,10 +2,8 @@ import { useEffect, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import CinematicHero from '../components/CinematicHero'
 import DestinationMarquee from '../components/DestinationMarquee'
-import RelicBackdrop from '../components/RelicBackdrop'
 import SiteChrome from '../components/SiteChrome'
 import { moments, trustPillars } from '../data/community'
-import { truthRelicSlides, trustRelicSlides } from '../data/relicSlides'
 import { api, apiConfigured, type ConditionsCompare } from '../services/api'
 import { useReveal } from '../hooks/useReveal'
 import { useSpotlight } from '../hooks/useSpotlight'
@@ -69,71 +67,56 @@ export default function Landing() {
 
       <CinematicHero />
 
-      <section className="relic-section" id="truth" aria-label={t('landing.truth.eyebrow')}>
-        <RelicBackdrop
-          slides={truthRelicSlides}
-          motion="light-fade"
-          label="Paper Relic — truth"
-        />
-        <div className="section section--truth">
-          <div className="section__intro reveal">
-            <p className="eyebrow">{t('landing.truth.eyebrow')}</p>
-            <h2 className="section__title">{t('landing.truth.title')}</h2>
-            <p className="section__text">{t('landing.truth.text')}</p>
-          </div>
-          <aside className="truth-board truth-board--solo reveal" aria-label={t('landing.truth.eyebrow')}>
-            <div className="truth-board__head">
-              <span>
-                {compare.place} · {compare.dateRange}
-              </span>
-              <span className="pill pill--live">
-                {liveSource === 'api' ? t('landing.truth.api') : t('landing.truth.live')}
-              </span>
-            </div>
-            <div className="truth-board__row truth-board__row--alert">
-              <strong>{compare.social.source}</strong>
-              <p>{compare.social.summary || compare.social.headline}</p>
-            </div>
-            <div className="truth-board__row truth-board__row--ok">
-              <strong>{compare.forecast.source}</strong>
-              <p>{compare.forecast.summary}</p>
-            </div>
-            <div className="truth-board__row">
-              <strong>{compare.recommendation.title}</strong>
-              <p>{compare.recommendation.summary}</p>
-            </div>
-          </aside>
+      <section className="section section--truth" id="truth">
+        <div className="section__intro reveal">
+          <p className="eyebrow">{t('landing.truth.eyebrow')}</p>
+          <h2 className="section__title">{t('landing.truth.title')}</h2>
+          <p className="section__text">{t('landing.truth.text')}</p>
         </div>
+        <aside className="truth-board truth-board--solo reveal" aria-label={t('landing.truth.eyebrow')}>
+          <div className="truth-board__head">
+            <span>
+              {compare.place} · {compare.dateRange}
+            </span>
+            <span className="pill pill--live">
+              {liveSource === 'api' ? t('landing.truth.api') : t('landing.truth.live')}
+            </span>
+          </div>
+          <div className="truth-board__row truth-board__row--alert">
+            <strong>{compare.social.source}</strong>
+            <p>{compare.social.summary || compare.social.headline}</p>
+          </div>
+          <div className="truth-board__row truth-board__row--ok">
+            <strong>{compare.forecast.source}</strong>
+            <p>{compare.forecast.summary}</p>
+          </div>
+          <div className="truth-board__row">
+            <strong>{compare.recommendation.title}</strong>
+            <p>{compare.recommendation.summary}</p>
+          </div>
+        </aside>
       </section>
 
       <DestinationMarquee />
 
-      <section className="relic-section relic-section--trust" id="trust" aria-label={t('landing.principles.eyebrow')}>
-        <RelicBackdrop
-          slides={trustRelicSlides}
-          motion="ink-assembly"
-          intervalMs={8000}
-          label="Paper Relic — principles"
-        />
-        <div className="section">
-          <div className="section__intro reveal">
-            <p className="eyebrow">{t('landing.principles.eyebrow')}</p>
-            <h2 className="section__title">{t('landing.principles.title')}</h2>
-            <p className="section__text">{t('landing.principles.text')}</p>
-          </div>
-          <div className="reason-grid">
-            {trustPillars.map((item, index) => (
-              <article
-                className="reason spot reveal"
-                key={item.title}
-                style={{ '--i': index } as CSSProperties}
-                {...spotlight}
-              >
-                <h3>{item.title}</h3>
-                <p>{item.body}</p>
-              </article>
-            ))}
-          </div>
+      <section className="section" id="trust">
+        <div className="section__intro reveal">
+          <p className="eyebrow">{t('landing.principles.eyebrow')}</p>
+          <h2 className="section__title">{t('landing.principles.title')}</h2>
+          <p className="section__text">{t('landing.principles.text')}</p>
+        </div>
+        <div className="reason-grid">
+          {trustPillars.map((item, index) => (
+            <article
+              className="reason spot reveal"
+              key={item.title}
+              style={{ '--i': index } as CSSProperties}
+              {...spotlight}
+            >
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
         </div>
       </section>
 
