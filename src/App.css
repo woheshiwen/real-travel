@@ -332,12 +332,13 @@
   will-change: transform;
 }
 
-.cine-plate img {
+.cine-plate img,
+.cine-plate__video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  filter: saturate(1.06) contrast(1.05);
+  filter: saturate(1.08) contrast(1.04);
   user-select: none;
 }
 
@@ -378,6 +379,28 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: rgba(255, 236, 210, 0.72);
+}
+
+.cine-place-chip__dots {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  margin-top: 0.3rem;
+}
+
+.cine-place-chip__dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: rgba(255, 236, 210, 0.28);
+  transition:
+    background 280ms ease,
+    transform 280ms ease;
+}
+
+.cine-place-chip__dot.is-on {
+  background: #f0d2a0;
+  transform: scale(1.25);
 }
 
 .cine-vignette {
@@ -1842,21 +1865,19 @@
     animation: rise 900ms var(--ease) both;
   }
 
-  .cine-plate.is-active .cine-plate__media {
-    animation: bloom-kenburns 6.5s ease-out forwards;
+  /* Continuous Bloom-like drift — coastal video plates always move */
+  .cine-plate .cine-plate__media {
+    animation: bloom-drift 12s ease-in-out infinite alternate;
   }
 
-  .cine-plate--in-tl.is-active .cine-plate__media {
-    animation-name: bloom-kenburns-tl;
+  .cine-plate--tropic .cine-plate__media {
+    animation-name: bloom-drift-alt;
+    animation-duration: 14s;
   }
-  .cine-plate--in-tr.is-active .cine-plate__media {
-    animation-name: bloom-kenburns-tr;
-  }
-  .cine-plate--in-bl.is-active .cine-plate__media {
-    animation-name: bloom-kenburns-bl;
-  }
-  .cine-plate--in-br.is-active .cine-plate__media {
-    animation-name: bloom-kenburns-br;
+
+  .cine-plate--cape .cine-plate__media {
+    animation-name: bloom-drift-cape;
+    animation-duration: 11s;
   }
 
   /* Keep the outgoing plate drifting while it fades, instead of
@@ -1972,52 +1993,34 @@
   }
 }
 
-/* ---------- Bloom Ken Burns (hero plates) ---------- */
-/* Slow push-in toward the named corner; 6.5s matches SCENE_MS.
-   Offsets stay well inside the plate's -4% inset bleed + scale margin,
-   so the mouse parallax (max ±3.2%/±2.4%) can never expose an edge. */
-@keyframes bloom-kenburns {
-  from {
-    transform: scale(1.1) translate3d(0, 0.8%, 0);
+/* ---------- Bloom coastal drift (looping video plates) ---------- */
+@keyframes bloom-drift {
+  0% {
+    transform: scale(1.12) translate3d(-2.8%, -1.6%, 0);
   }
-  to {
-    transform: scale(1.22) translate3d(0, -1%, 0);
+  50% {
+    transform: scale(1.22) translate3d(2.4%, 1.8%, 0);
   }
-}
-
-@keyframes bloom-kenburns-tl {
-  from {
-    transform: scale(1.1) translate3d(2%, 1.8%, 0);
-  }
-  to {
-    transform: scale(1.22) translate3d(-2%, -1.8%, 0);
+  100% {
+    transform: scale(1.16) translate3d(-1.2%, 2.2%, 0);
   }
 }
 
-@keyframes bloom-kenburns-tr {
-  from {
-    transform: scale(1.1) translate3d(-2%, 1.8%, 0);
+@keyframes bloom-drift-alt {
+  0% {
+    transform: scale(1.14) translate3d(2.2%, -1.4%, 0);
   }
-  to {
-    transform: scale(1.22) translate3d(2%, -1.8%, 0);
-  }
-}
-
-@keyframes bloom-kenburns-bl {
-  from {
-    transform: scale(1.1) translate3d(2%, -1.8%, 0);
-  }
-  to {
-    transform: scale(1.22) translate3d(-2%, 1.8%, 0);
+  100% {
+    transform: scale(1.24) translate3d(-2.6%, 2%, 0);
   }
 }
 
-@keyframes bloom-kenburns-br {
-  from {
-    transform: scale(1.1) translate3d(-2%, -1.8%, 0);
+@keyframes bloom-drift-cape {
+  0% {
+    transform: scale(1.1) translate3d(-1.8%, 2%, 0);
   }
-  to {
-    transform: scale(1.22) translate3d(2%, 1.8%, 0);
+  100% {
+    transform: scale(1.2) translate3d(2.8%, -1.8%, 0);
   }
 }
 
