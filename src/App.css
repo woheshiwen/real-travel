@@ -532,6 +532,7 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  background: #0a0c0e;
   border-block: 1px solid rgba(201, 163, 106, 0.1);
 }
 
@@ -550,7 +551,7 @@
 
 .relic-backdrop__stage {
   position: absolute;
-  inset: -4% -8%;
+  inset: 0;
 }
 
 .relic-backdrop__plate {
@@ -558,7 +559,7 @@
   inset: 0;
   margin: 0;
   opacity: 0;
-  transition: opacity 1.6s var(--ease);
+  transition: opacity 1.55s var(--ease);
 }
 
 .relic-backdrop__plate.is-active {
@@ -572,12 +573,36 @@
 }
 
 .relic-backdrop__media {
+  position: absolute;
+  inset: 0 0 28% 0;
   width: 100%;
-  height: 100%;
+  height: 72%;
   object-fit: cover;
-  object-position: center 42%;
-  filter: saturate(0.78) contrast(1.05) brightness(0.62);
+  object-position: center 45%;
+  filter: saturate(0.84) contrast(1.08) brightness(0.58);
   transform: scale(1.04);
+}
+
+.relic-backdrop__mark {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 38%;
+  object-fit: cover;
+  object-position: center 55%;
+  opacity: 0;
+  transform: translateY(10%);
+  mask-image: linear-gradient(180deg, transparent, #000 22%, #000 100%);
+}
+
+.relic-backdrop--ink-assembly .relic-backdrop__plate.is-active .relic-backdrop__mark {
+  opacity: 0.9;
+}
+
+.relic-backdrop--light-fade .relic-backdrop__plate.is-active .relic-backdrop__mark {
+  opacity: 0.72;
 }
 
 .relic-backdrop__caption {
@@ -586,7 +611,7 @@
   bottom: 1.1rem;
   display: grid;
   gap: 0.1rem;
-  color: rgba(235, 230, 220, 0.42);
+  color: rgba(235, 230, 220, 0.38);
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -603,47 +628,28 @@
   font-size: 0.92rem;
   letter-spacing: 0.28em;
   text-transform: none;
-  color: rgba(235, 230, 220, 0.55);
+  color: rgba(235, 230, 220, 0.5);
 }
 
 .relic-backdrop__paper {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(7, 8, 9, 0.55) 0%, rgba(12, 14, 16, 0.28) 38%, rgba(7, 8, 9, 0.72) 100%),
-    radial-gradient(58% 48% at 78% 62%, rgba(201, 163, 106, 0.12), transparent 70%);
-  mix-blend-mode: multiply;
-}
-
-.relic-backdrop__ink {
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 42%;
-  background:
-    linear-gradient(180deg, transparent, rgba(10, 12, 14, 0.55) 35%, rgba(7, 8, 9, 0.82)),
-    repeating-linear-gradient(
-      -12deg,
-      transparent 0 18px,
-      rgba(201, 163, 106, 0.03) 18px 19px
-    );
-  opacity: 0.85;
+    linear-gradient(180deg, rgba(7, 8, 9, 0.42) 0%, rgba(7, 8, 9, 0.18) 40%, rgba(7, 8, 9, 0.78) 100%),
+    radial-gradient(55% 45% at 80% 70%, rgba(201, 163, 106, 0.1), transparent 68%);
 }
 
 .relic-backdrop__veil {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(70% 60% at 18% 30%, rgba(7, 8, 9, 0.15), transparent 60%),
-    linear-gradient(90deg, rgba(7, 8, 9, 0.55) 0%, rgba(7, 8, 9, 0.18) 48%, rgba(7, 8, 9, 0.62) 100%);
+    linear-gradient(90deg, rgba(7, 8, 9, 0.72) 0%, rgba(7, 8, 9, 0.28) 42%, rgba(7, 8, 9, 0.55) 100%),
+    linear-gradient(180deg, rgba(7, 8, 9, 0.2), transparent 30%, rgba(7, 8, 9, 0.55) 100%);
 }
 
 .relic-section--trust .relic-backdrop__media {
-  object-position: center 55%;
-  filter: saturate(0.7) contrast(1.08) brightness(0.55);
-}
-
-.relic-section--trust .relic-backdrop__ink {
-  height: 48%;
+  object-position: center 48%;
+  filter: saturate(0.76) contrast(1.1) brightness(0.5);
 }
 
 .section--truth .truth-board--solo {
@@ -1972,8 +1978,12 @@
     animation: relic-ink-drift 8s var(--ease) both;
   }
 
-  .relic-backdrop--ink-assembly.is-live .relic-backdrop__ink {
-    animation: relic-ink-rise 8s var(--ease) both;
+  .relic-backdrop--ink-assembly.is-live .relic-backdrop__plate.is-active .relic-backdrop__mark {
+    animation: relic-mark-rise 8s var(--ease) both;
+  }
+
+  .relic-backdrop--light-fade.is-live .relic-backdrop__plate.is-active .relic-backdrop__mark {
+    animation: relic-mark-soft 7.2s var(--ease) both;
   }
 
   .relic-backdrop--light-fade.is-live .relic-backdrop__paper {
@@ -2105,18 +2115,33 @@
   }
 }
 
-@keyframes relic-ink-rise {
+@keyframes relic-mark-rise {
   0% {
-    opacity: 0.35;
-    transform: translateY(8%);
+    opacity: 0;
+    transform: translateY(16%);
   }
-  40% {
-    opacity: 0.9;
+  38% {
+    opacity: 0.92;
     transform: translateY(0);
   }
   100% {
-    opacity: 0.78;
+    opacity: 0.84;
     transform: translateY(-2%);
+  }
+}
+
+@keyframes relic-mark-soft {
+  0% {
+    opacity: 0;
+    transform: translateY(8%);
+  }
+  40% {
+    opacity: 0.76;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0.66;
+    transform: translateY(-1%);
   }
 }
 
@@ -2229,7 +2254,7 @@
   }
 
   .relic-backdrop__media,
-  .relic-backdrop__ink,
+  .relic-backdrop__mark,
   .relic-backdrop__paper {
     animation: none !important;
   }
@@ -2241,12 +2266,30 @@
   .relic-backdrop__plate:not(.is-active) {
     display: none;
   }
+
+  .relic-backdrop__plate.is-active .relic-backdrop__mark {
+    opacity: 0.78;
+    transform: none;
+  }
 }
 
 /* ---------- Small screens ---------- */
 @media (max-width: 760px) {
   .topnav__links a:not(.btn) {
     display: none;
+  }
+
+  .relic-backdrop__media {
+    inset: 0 0 34% 0;
+    height: 66%;
+  }
+
+  .relic-backdrop__mark {
+    height: 42%;
+  }
+
+  .relic-backdrop__caption {
+    font-size: 0.66rem;
   }
 
   .cine-hero {

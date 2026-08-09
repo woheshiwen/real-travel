@@ -3,7 +3,7 @@ import type { RelicSlide } from '../data/relicSlides'
 
 type RelicBackdropProps = {
   slides: RelicSlide[]
-  /** light-fade = soft dissolve; ink-assembly = ken-burns + mark stagger */
+  /** light-fade = soft dissolve; ink-assembly = photo + rising paper mark */
   motion?: 'light-fade' | 'ink-assembly'
   intervalMs?: number
   label: string
@@ -60,17 +60,25 @@ export default function RelicBackdrop({
       <div className="relic-backdrop__stage">
         {slides.map((slide, index) => {
           const state =
-            index === active ? 'is-active' : index === (active - 1 + slides.length) % slides.length ? 'is-prev' : ''
+            index === active
+              ? 'is-active'
+              : index === (active - 1 + slides.length) % slides.length
+                ? 'is-prev'
+                : ''
           return (
-            <figure
-              key={slide.src}
-              className={`relic-backdrop__plate ${state}`.trim()}
-            >
+            <figure key={slide.src} className={`relic-backdrop__plate ${state}`.trim()}>
               <img
                 className="relic-backdrop__media"
                 src={slide.src}
                 alt=""
                 loading={index === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+              <img
+                className="relic-backdrop__mark"
+                src={slide.markSrc}
+                alt=""
+                loading="lazy"
                 decoding="async"
               />
               <figcaption className="relic-backdrop__caption">
@@ -82,7 +90,6 @@ export default function RelicBackdrop({
         })}
       </div>
       <div className="relic-backdrop__paper" />
-      <div className="relic-backdrop__ink" />
       <div className="relic-backdrop__veil" />
     </div>
   )
