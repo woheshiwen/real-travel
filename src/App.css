@@ -527,6 +527,125 @@
   opacity: 0.7;
 }
 
+/* ---------- Paper Relic ambient sections (2nd / 3rd screens) ---------- */
+.relic-section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-block: 1px solid rgba(201, 163, 106, 0.1);
+}
+
+.relic-section > .section {
+  position: relative;
+  z-index: 1;
+}
+
+.relic-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.relic-backdrop__stage {
+  position: absolute;
+  inset: -4% -8%;
+}
+
+.relic-backdrop__plate {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  transition: opacity 1.6s var(--ease);
+}
+
+.relic-backdrop__plate.is-active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.relic-backdrop__plate.is-prev {
+  opacity: 0;
+  z-index: 0;
+}
+
+.relic-backdrop__media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 42%;
+  filter: saturate(0.78) contrast(1.05) brightness(0.62);
+  transform: scale(1.04);
+}
+
+.relic-backdrop__caption {
+  position: absolute;
+  left: max(1rem, calc((100% - var(--max)) / 2));
+  bottom: 1.1rem;
+  display: grid;
+  gap: 0.1rem;
+  color: rgba(235, 230, 220, 0.42);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 900ms var(--ease) 200ms;
+}
+
+.relic-backdrop__plate.is-active .relic-backdrop__caption {
+  opacity: 1;
+}
+
+.relic-backdrop__caption span[lang='zh'] {
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  letter-spacing: 0.28em;
+  text-transform: none;
+  color: rgba(235, 230, 220, 0.55);
+}
+
+.relic-backdrop__paper {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(7, 8, 9, 0.55) 0%, rgba(12, 14, 16, 0.28) 38%, rgba(7, 8, 9, 0.72) 100%),
+    radial-gradient(58% 48% at 78% 62%, rgba(201, 163, 106, 0.12), transparent 70%);
+  mix-blend-mode: multiply;
+}
+
+.relic-backdrop__ink {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 42%;
+  background:
+    linear-gradient(180deg, transparent, rgba(10, 12, 14, 0.55) 35%, rgba(7, 8, 9, 0.82)),
+    repeating-linear-gradient(
+      -12deg,
+      transparent 0 18px,
+      rgba(201, 163, 106, 0.03) 18px 19px
+    );
+  opacity: 0.85;
+}
+
+.relic-backdrop__veil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(70% 60% at 18% 30%, rgba(7, 8, 9, 0.15), transparent 60%),
+    linear-gradient(90deg, rgba(7, 8, 9, 0.55) 0%, rgba(7, 8, 9, 0.18) 48%, rgba(7, 8, 9, 0.62) 100%);
+}
+
+.relic-section--trust .relic-backdrop__media {
+  object-position: center 55%;
+  filter: saturate(0.7) contrast(1.08) brightness(0.55);
+}
+
+.relic-section--trust .relic-backdrop__ink {
+  height: 48%;
+}
+
 .section--truth .truth-board--solo {
   max-width: 36rem;
   margin: 0;
@@ -541,6 +660,7 @@
   box-shadow: var(--shadow-lg);
   color: var(--ink);
   border: 1px solid var(--line);
+  backdrop-filter: blur(12px);
 }
 
 .truth-board__head {
@@ -672,8 +792,10 @@
 .reason {
   padding: 1.35rem 1.25rem;
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.62);
-  border: 1px solid var(--line);
+  background: rgba(19, 23, 28, 0.82);
+  border: 1px solid rgba(201, 163, 106, 0.14);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
 }
 
 .reason h3 {
@@ -717,8 +839,9 @@
   gap: 0.6rem;
   padding: 1.3rem;
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid var(--line);
+  background: rgba(19, 23, 28, 0.78);
+  border: 1px solid rgba(201, 163, 106, 0.12);
+  backdrop-filter: blur(10px);
 }
 
 .steps__num {
@@ -739,8 +862,8 @@
   width: 100%;
   overflow: hidden;
   padding: 1rem 0;
-  border-block: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.4);
+  border-block: 1px solid rgba(201, 163, 106, 0.12);
+  background: linear-gradient(180deg, rgba(10, 12, 14, 0.96), rgba(12, 14, 16, 0.9));
   mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
 
@@ -755,7 +878,7 @@
   font-family: var(--font-display);
   font-size: clamp(1.1rem, 2.2vw, 1.5rem);
   font-weight: 600;
-  color: rgba(69, 89, 79, 0.55);
+  color: rgba(154, 149, 140, 0.72);
   white-space: nowrap;
 }
 
@@ -1840,6 +1963,23 @@
     transition: transform 1.35s ease-out;
   }
 
+  /* Photo Relic motion seeds: light-fade / ink-assembly */
+  .relic-backdrop--light-fade.is-live .relic-backdrop__plate.is-active .relic-backdrop__media {
+    animation: relic-light-fade 7.2s var(--ease) both;
+  }
+
+  .relic-backdrop--ink-assembly.is-live .relic-backdrop__plate.is-active .relic-backdrop__media {
+    animation: relic-ink-drift 8s var(--ease) both;
+  }
+
+  .relic-backdrop--ink-assembly.is-live .relic-backdrop__ink {
+    animation: relic-ink-rise 8s var(--ease) both;
+  }
+
+  .relic-backdrop--light-fade.is-live .relic-backdrop__paper {
+    animation: relic-paper-breathe 7.2s var(--ease) both;
+  }
+
   .topnav__links a:not(.btn)::after {
     transition: transform 240ms var(--ease);
   }
@@ -1934,6 +2074,59 @@
   }
   to {
     transform: translateX(-50%);
+  }
+}
+
+@keyframes relic-light-fade {
+  0% {
+    transform: scale(1.06);
+    filter: saturate(0.65) contrast(1.02) brightness(0.48);
+  }
+  35% {
+    filter: saturate(0.8) contrast(1.06) brightness(0.64);
+  }
+  100% {
+    transform: scale(1.12);
+    filter: saturate(0.72) contrast(1.04) brightness(0.58);
+  }
+}
+
+@keyframes relic-ink-drift {
+  0% {
+    transform: scale(1.05) translate3d(0, 1.5%, 0);
+    filter: saturate(0.62) contrast(1.04) brightness(0.48);
+  }
+  55% {
+    filter: saturate(0.74) contrast(1.1) brightness(0.58);
+  }
+  100% {
+    transform: scale(1.12) translate3d(0, -1.2%, 0);
+    filter: saturate(0.68) contrast(1.06) brightness(0.54);
+  }
+}
+
+@keyframes relic-ink-rise {
+  0% {
+    opacity: 0.35;
+    transform: translateY(8%);
+  }
+  40% {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0.78;
+    transform: translateY(-2%);
+  }
+}
+
+@keyframes relic-paper-breathe {
+  0%,
+  100% {
+    opacity: 0.92;
+  }
+  45% {
+    opacity: 1;
   }
 }
 
@@ -2033,6 +2226,20 @@
 
   .cine-palm-model-legacy {
     opacity: 1;
+  }
+
+  .relic-backdrop__media,
+  .relic-backdrop__ink,
+  .relic-backdrop__paper {
+    animation: none !important;
+  }
+
+  .relic-backdrop__plate {
+    transition: none;
+  }
+
+  .relic-backdrop__plate:not(.is-active) {
+    display: none;
   }
 }
 
