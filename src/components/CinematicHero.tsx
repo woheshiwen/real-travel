@@ -11,6 +11,7 @@ type Scene = {
 }
 
 const asset = (file: string) => `${import.meta.env.BASE_URL}hero/${file}`
+const sealSrc = `${import.meta.env.BASE_URL}brand/zhencheng-seal.jpg`
 
 const scenes: Scene[] = [
   {
@@ -144,7 +145,7 @@ export default function CinematicHero() {
   return (
     <section
       className="cine-hero"
-      aria-label={`${t('brand.zh')} ${t('brand.en')}`}
+      aria-label="Real Travel 真程"
       ref={heroRef}
     >
       <div className="cine-stage" ref={stageRef} aria-hidden="true">
@@ -206,7 +207,8 @@ export default function CinematicHero() {
 
       <div className="cine-hero__ui">
         <p className="cine-hero__brand">
-          {t('brand.zh')} <span className="cine-hero__brand-en">{t('brand.en')}</span>
+          Real Travel
+          <span className="cine-hero__brand-zh">真程</span>
         </p>
         <h1 className="cine-hero__title">{t('hero.title.zh')}</h1>
         <p className="cine-hero__lede">{t('hero.lede.zh')}</p>

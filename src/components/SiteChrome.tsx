@@ -18,7 +18,7 @@ export default function SiteChrome({
 
   return (
     <header className={`topnav topnav--${variant === 'overlay' ? 'cine' : 'solid'}`}>
-      <Link to="/" className="brand" aria-label={`${t('brand.zh')} ${t('brand.en')}`}>
+      <Link to="/" className="brand" aria-label="Real Travel 真程">
         <img
           className="brand__logo"
           src={logoSrc}
@@ -28,7 +28,7 @@ export default function SiteChrome({
           decoding="async"
         />
         <span className="visually-hidden">
-          {t('brand.zh')} {t('brand.en')}
+          Real Travel 真程
         </span>
       </Link>
       <nav className="topnav__links">

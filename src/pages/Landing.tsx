@@ -182,7 +182,7 @@ export default function Landing() {
 
       <footer className="site-footer">
         <div>
-          <strong>{t('brand.zh')} {t('brand.en')}</strong>
+          <strong>Real Travel <span className="brand-zh-seal">真程</span></strong>
           <span>{t('landing.footer.tagline')}</span>
         </div>
         <p>© {new Date().getFullYear()}</p>
