@@ -1,3 +1,13 @@
+@font-face {
+  font-family: "ZhenCheng Seal";
+  src:
+    url("./assets/fonts/zhencheng-seal.woff2") format("woff2"),
+    url("./assets/fonts/zhencheng-seal.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* Alethia / Awwwards-leaning dusk system — dark canvas, warm metal accent */
   --void: #070809;
@@ -123,8 +133,11 @@ h4 {
   letter-spacing: -0.02em;
 }
 
-.brand__mark,
-.cine-hero__brand {
+.brand__mark {
+  letter-spacing: -0.03em;
+}
+
+.cine-hero__brand-en {
   letter-spacing: -0.03em;
 }
 

@@ -6,6 +6,15 @@
 
 ---
 
+## 2026-08-10 — 补全第一版 hero 篆体「真程」
+
+- **Agent**: Cursor
+- **类型**: `fix`
+- **描述**: 第一版固定版缺篆体「真程」。恢复 ZhenCheng Seal 字体与 hero 品牌排版（Real Travel + 真程），并补 eyebrow；更新 `v1-fixed` 指向完整基线。
+- **文件**: `src/components/CinematicHero.tsx`, `src/App.css`, `src/index.css`, `src/i18n/translations.ts`, `src/assets/fonts/*`, `public/fonts/*`, `docs/baseline-v1.md`, `AGENTS.md`
+
+---
+
 ## 2026-08-09 — 钉选「第一版固定版」Baseline v1
 
 - **Agent**: Cursor
