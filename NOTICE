@@ -4,3 +4,11 @@ Copyright 2026 Ben He
 This product includes software developed for the 真程 (Real Travel) project.
 
 Licensed under the Apache License, Version 2.0.
+
+------------------------------------------------------------------------
+
+Third-party materials
+
+ZhenCheng Seal font subset (src/assets/fonts/zhencheng-seal.woff2 / .woff)
+is derived from JFZSK 九章篆书 under the SIL Open Font License 1.1.
+License text: public/fonts/OFL-JFZSKSealScript.txt

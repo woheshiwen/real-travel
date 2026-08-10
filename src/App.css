@@ -2000,15 +2000,6 @@
   }
 }
 
-@keyframes cine-dolly {
-  from {
-    transform: scale(1.22);
-  }
-  to {
-    transform: scale(1.05);
-  }
-}
-
 /* ---------- Bloom coastal drift (looping video plates) ---------- */
 @keyframes bloom-drift {
   0% {
@@ -2040,44 +2031,9 @@
   }
 }
 
-@keyframes cine-rush {
-  0%,
-  100% {
-    opacity: 0.75;
-    transform: scaleY(1);
-  }
-  50% {
-    opacity: 0.95;
-    transform: scaleY(1.03);
-  }
-}
-
-@keyframes cine-float {
-  0%,
-  100% {
-    transform: translate(-50%, -30%);
-  }
-  50% {
-    transform: translate(-50%, -38%);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-  }
-
-  .cine-world--exit-legacy {
-    transform: translate3d(4%, 12%, 0) scale(0.28);
-  }
-
-  .cine-palm-legacy-removed {
-    opacity: 1;
-    transform: translate(-50%, 0) scale(1);
-  }
-
-  .cine-palm-model-legacy {
-    opacity: 1;
   }
 }
 
@@ -2100,27 +2056,9 @@
     max-width: none;
   }
 
-  .cine-palm-legacy-removed {
-    width: 140vw;
-    height: 90vw;
-    bottom: -8%;
-  }
-
   .calendar-export__stats {
     grid-template-columns: 1fr;
   }
-}
-
-
-@media (prefers-reduced-motion: no-preference) {
-  .pagoda3d {
-    animation: pagoda-spin 8s linear infinite;
-  }
-}
-
-@keyframes pagoda-spin {
-  from { transform: rotateX(18deg) rotateY(-28deg); }
-  to { transform: rotateX(18deg) rotateY(332deg); }
 }
 
 /* dark surface cards used sitewide */

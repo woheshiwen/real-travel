@@ -9,5 +9,6 @@
 ## 第一版固定版（Baseline v1）— 冻结
 
 - **口令**：用户说「恢复到第一版」→ 恢复到 Git tag **`v1-fixed`**。细节见 [`docs/baseline-v1.md`](./docs/baseline-v1.md)。
-- **内容**：Bloom 海岸循环视频 hero；hero 品牌为 **Real Travel + 篆体「真程」**（ZhenCheng Seal）；导航镂空 Logo；**无** Paper Relic 分区背景。
-- **纪律**：未获用户明确确认前，**禁止**擅自改动首屏 hero、导航品牌/Logo、favicon、篆体「真程」，或再加首页氛围背景。有改动提案先说明再等确认。
+- **内容**：Bloom 海岸循环视频 hero；**Real Travel + 篆体「真程」**；导航镂空 Logo；**无** Paper Relic。
+- **纪律**：以后改动都以第一版为起点。未获用户明确确认前，**禁止**擅自改动首屏 hero、导航品牌/Logo、favicon、篆体「真程」，或再加首页氛围背景。
+- **资产**：勿提交未引用的 `public/` 素材；篆体运行时字体仅保留在 `src/assets/fonts/`。
