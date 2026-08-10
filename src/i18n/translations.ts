@@ -23,6 +23,7 @@ const t: Record<string, Record<Lang, string>> = {
   'brand.en':     { en: 'Real Travel', zh: 'Real Travel', fr: 'Real Travel',  ja: 'Real Travel',   ko: 'Real Travel' },
 
   // ── CinematicHero ──
+  'hero.eyebrow':    { en: 'Itineraries driven by live conditions', zh: '实况驱动的行程系统', fr: 'Des voyages guidés par le réel', ja: '実況データで動く旅程', ko: '실황으로 움직이는 일정' },
   'hero.title.zh':   { en: 'Travel you can trust — places you can feel.', zh: '值得信任的出行，值得分享的风景。', fr: 'Des voyages de confiance — des lieux à ressentir.', ja: '信頼できる旅、感じられる風景。', ko: '신뢰할 수 있는 여행, 느낄 수 있는 풍경.' },
   'hero.title.en':   { en: 'Travel you can trust — places you can feel.', zh: 'Travel you can trust — places you can feel.', fr: 'Travel you can trust — places you can feel.', ja: 'Travel you can trust — places you can feel.', ko: 'Travel you can trust — places you can feel.' },
   'hero.lede.zh':    { en: 'Live weather and departure transport shape an itinerary you can revise — then drop into your calendar.', zh: '结合出发地交通与目的地实况天气，生成可改版的路书；定好后一键导入日历。', fr: 'Météo en direct et transports de départ façonnent un itinéraire révisable — puis dans votre calendrier.', ja: '出発地の交通と目的地の実況天気から、改版可能な旅程を生成。確定後はカレンダーにワンタップでインポート。', ko: '출발지 교통과 목적지 실황 날씨로 수정 가능한 여정을 만들고, 확정 후 캘린더에 원터치로 가져오세요.' },

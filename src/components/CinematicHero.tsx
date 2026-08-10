@@ -205,8 +205,12 @@ export default function CinematicHero() {
       </div>
 
       <div className="cine-hero__ui">
+        <p className="cine-hero__eyebrow">{t('hero.eyebrow')}</p>
         <p className="cine-hero__brand">
-          {t('brand.zh')} <span className="cine-hero__brand-en">{t('brand.en')}</span>
+          <span className="cine-hero__brand-en">Real Travel</span>
+          <span className="cine-hero__brand-zh" lang="zh-Hans">
+            真程
+          </span>
         </p>
         <h1 className="cine-hero__title">{t('hero.title.zh')}</h1>
         <p className="cine-hero__lede">{t('hero.lede.zh')}</p>
