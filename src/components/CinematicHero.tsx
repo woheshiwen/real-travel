@@ -6,7 +6,6 @@ type Scene = {
   id: 'coast' | 'tropic' | 'cape'
   placeZh: string
   placeEn: string
-  src: string
   poster: string
 }
 
@@ -17,28 +16,25 @@ const scenes: Scene[] = [
     id: 'coast',
     placeZh: '远岸 · 浪线',
     placeEn: 'Coast · Wave Line',
-    src: asset('hero-1.mp4'),
     poster: asset('hero-1.jpg'),
   },
   {
     id: 'tropic',
     placeZh: '热带 · 岸线',
     placeEn: 'Tropic · Shoreline',
-    src: asset('hero-2.mp4'),
     poster: asset('hero-2.jpg'),
   },
   {
     id: 'cape',
     placeZh: '岩岬 · 潮汐',
     placeEn: 'Cape · Tide',
-    src: asset('hero-3.mp4'),
     poster: asset('hero-3.jpg'),
   },
 ]
 
 const loaderKeys = ['loader.1', 'loader.2', 'loader.3', 'loader.4', 'loader.5'] as const
 
-/** Bloom-like dwell between coastal clips */
+/** Bloom-like dwell between scenes */
 const SCENE_MS = 6500
 
 export default function CinematicHero() {
@@ -48,7 +44,6 @@ export default function CinematicHero() {
   const [reduced, setReduced] = useState(false)
   const heroRef = useRef<HTMLElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
-  const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
   const parallaxRef = useRef({ x: 0, y: 0 })
   const rafRef = useRef(0)
 
@@ -60,13 +55,13 @@ export default function CinematicHero() {
     return () => mq.removeEventListener('change', sync)
   }, [])
 
+  // Scene rotation keeps running in both modes; reduced just slows the Ken Burns drift via CSS.
   useEffect(() => {
-    if (reduced) return
     const id = window.setInterval(() => {
       setSceneIndex((i) => (i + 1) % scenes.length)
     }, SCENE_MS)
     return () => window.clearInterval(id)
-  }, [reduced])
+  }, [])
 
   useEffect(() => {
     if (reduced) {
@@ -79,33 +74,7 @@ export default function CinematicHero() {
     return () => window.clearInterval(id)
   }, [reduced])
 
-  /* Keep every clip playing so crossfades never land on a frozen poster */
-  useEffect(() => {
-    if (reduced) return
-    const vids = videoRefs.current.filter(Boolean) as HTMLVideoElement[]
-
-    const kick = (video: HTMLVideoElement) => {
-      video.muted = true
-      video.defaultMuted = true
-      video.playsInline = true
-      const attempt = video.play()
-      if (attempt && typeof attempt.catch === 'function') {
-        attempt.catch(() => {
-          /* autoplay blocked — poster + CSS drift still move */
-        })
-      }
-    }
-
-    vids.forEach(kick)
-
-    const onVisible = () => {
-      if (document.visibilityState === 'visible') vids.forEach(kick)
-    }
-    document.addEventListener('visibilitychange', onVisible)
-    return () => document.removeEventListener('visibilitychange', onVisible)
-  }, [reduced, sceneIndex])
-
-  /* Bloom-style inverse mouse parallax */
+  /* Bloom-style inverse mouse parallax — kept gentle in reduced mode */
   useEffect(() => {
     if (reduced) return
     const hero = heroRef.current
@@ -143,7 +112,7 @@ export default function CinematicHero() {
 
   return (
     <section
-      className="cine-hero"
+      className={`cine-hero${reduced ? ' is-reduced' : ''}`}
       aria-label={`${t('brand.zh')} ${t('brand.en')}`}
       ref={heroRef}
     >
@@ -161,23 +130,7 @@ export default function CinematicHero() {
               >
                 <div className="cine-plate__parallax">
                   <div className="cine-plate__media">
-                    {reduced ? (
-                      <img src={item.poster} alt="" draggable={false} />
-                    ) : (
-                      <video
-                        ref={(el) => {
-                          videoRefs.current[i] = el
-                        }}
-                        className="cine-plate__video"
-                        src={item.src}
-                        poster={item.poster}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="auto"
-                      />
-                    )}
+                    <img src={item.poster} alt="" draggable={false} />
                   </div>
                 </div>
               </figure>
@@ -225,7 +178,7 @@ export default function CinematicHero() {
               key={key}
               className={`cine-loader__item${i === loaderStep ? ' is-current' : ''}${
                 i < loaderStep ? ' is-done' : ''
-              }`}
+              }`
             >
               <span className="cine-loader__mark" aria-hidden="true">
                 {i < loaderStep ? '✓' : i === loaderStep ? '●' : '○'}
