@@ -327,13 +327,47 @@
 .cine-plate__media {
   width: 100%;
   height: 100%;
-  transform: scale(1.08);
   transform-origin: center center;
   will-change: transform;
 }
 
-.cine-plate img,
-.cine-plate__video {
+/* Ken Burns drift — normal mode: 18s slow zoom + pan */
+@keyframes ken-burns {
+  0% {
+    transform: scale(1.06) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.14) translate3d(-2.4%, -1.6%, 0);
+  }
+  100% {
+    transform: scale(1.06) translate3d(0, 0, 0);
+  }
+}
+
+/* Ken Burns drift — reduced mode: 32s gentle breathing, small amplitude.
+   Not gated by prefers-reduced-motion media query; driven by .is-reduced class
+   so the hero keeps a hint of life even when the OS asks to reduce motion. */
+@keyframes ken-burns-reduced {
+  0% {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.07) translate3d(-0.8%, -0.5%, 0);
+  }
+  100% {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+}
+
+.cine-plate.is-active .cine-plate__media {
+  animation: ken-burns 18s ease-in-out infinite;
+}
+
+.cine-hero.is-reduced .cine-plate.is-active .cine-plate__media {
+  animation: ken-burns-reduced 32s ease-in-out infinite;
+}
+
+.cine-plate img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1865,28 +1899,6 @@
     animation: rise 900ms var(--ease) both;
   }
 
-  /* Continuous Bloom-like drift — coastal video plates always move */
-  .cine-plate .cine-plate__media {
-    animation: bloom-drift 12s ease-in-out infinite alternate;
-  }
-
-  .cine-plate--tropic .cine-plate__media {
-    animation-name: bloom-drift-alt;
-    animation-duration: 14s;
-  }
-
-  .cine-plate--cape .cine-plate__media {
-    animation-name: bloom-drift-cape;
-    animation-duration: 11s;
-  }
-
-  /* Keep the outgoing plate drifting while it fades, instead of
-     snapping back to the base scale when .is-active is removed */
-  .cine-plate.is-prev .cine-plate__media {
-    transform: scale(1.19);
-    transition: transform 1.35s ease-out;
-  }
-
   .topnav__links a:not(.btn)::after {
     transition: transform 240ms var(--ease);
   }
@@ -1990,37 +2002,6 @@
   }
   to {
     transform: scale(1.05);
-  }
-}
-
-/* ---------- Bloom coastal drift (looping video plates) ---------- */
-@keyframes bloom-drift {
-  0% {
-    transform: scale(1.12) translate3d(-2.8%, -1.6%, 0);
-  }
-  50% {
-    transform: scale(1.22) translate3d(2.4%, 1.8%, 0);
-  }
-  100% {
-    transform: scale(1.16) translate3d(-1.2%, 2.2%, 0);
-  }
-}
-
-@keyframes bloom-drift-alt {
-  0% {
-    transform: scale(1.14) translate3d(2.2%, -1.4%, 0);
-  }
-  100% {
-    transform: scale(1.24) translate3d(-2.6%, 2%, 0);
-  }
-}
-
-@keyframes bloom-drift-cape {
-  0% {
-    transform: scale(1.1) translate3d(-1.8%, 2%, 0);
-  }
-  100% {
-    transform: scale(1.2) translate3d(2.8%, -1.8%, 0);
   }
 }
 
