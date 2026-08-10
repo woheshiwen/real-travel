@@ -1862,6 +1862,30 @@
   opacity: 1;
 }
 
+/* Continuous Bloom-like drift — coastal video plates always move.
+   Deliberately OUTSIDE prefers-reduced-motion so the hero stays alive
+   even when the OS has "Reduce Motion" enabled on desktop. */
+.cine-plate .cine-plate__media {
+  animation: bloom-drift 12s ease-in-out infinite alternate;
+}
+
+.cine-plate--tropic .cine-plate__media {
+  animation-name: bloom-drift-alt;
+  animation-duration: 14s;
+}
+
+.cine-plate--cape .cine-plate__media {
+  animation-name: bloom-drift-cape;
+  animation-duration: 11s;
+}
+
+/* Keep the outgoing plate drifting while it fades, instead of
+   snapping back to the base scale when .is-active is removed */
+.cine-plate.is-prev .cine-plate__media {
+  transform: scale(1.19);
+  transition: transform 1.35s ease-out;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .reveal {
     opacity: 0;
@@ -1879,28 +1903,6 @@
 
   .cine-hero__ui {
     animation: rise 900ms var(--ease) both;
-  }
-
-  /* Continuous Bloom-like drift — coastal video plates always move */
-  .cine-plate .cine-plate__media {
-    animation: bloom-drift 12s ease-in-out infinite alternate;
-  }
-
-  .cine-plate--tropic .cine-plate__media {
-    animation-name: bloom-drift-alt;
-    animation-duration: 14s;
-  }
-
-  .cine-plate--cape .cine-plate__media {
-    animation-name: bloom-drift-cape;
-    animation-duration: 11s;
-  }
-
-  /* Keep the outgoing plate drifting while it fades, instead of
-     snapping back to the base scale when .is-active is removed */
-  .cine-plate.is-prev .cine-plate__media {
-    transform: scale(1.19);
-    transition: transform 1.35s ease-out;
   }
 
   .topnav__links a:not(.btn)::after {

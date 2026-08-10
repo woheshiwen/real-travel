@@ -60,13 +60,14 @@ export default function CinematicHero() {
     return () => mq.removeEventListener('change', sync)
   }, [])
 
+  /* Scene switching always runs — the hero should feel alive regardless
+     of prefers-reduced-motion (only UI chrome respects that setting). */
   useEffect(() => {
-    if (reduced) return
     const id = window.setInterval(() => {
       setSceneIndex((i) => (i + 1) % scenes.length)
     }, SCENE_MS)
     return () => window.clearInterval(id)
-  }, [reduced])
+  }, [])
 
   useEffect(() => {
     if (reduced) {
@@ -79,9 +80,9 @@ export default function CinematicHero() {
     return () => window.clearInterval(id)
   }, [reduced])
 
-  /* Keep every clip playing so crossfades never land on a frozen poster */
+  /* Keep every clip playing so crossfades never land on a frozen poster.
+     Always kick videos regardless of prefers-reduced-motion. */
   useEffect(() => {
-    if (reduced) return
     const vids = videoRefs.current.filter(Boolean) as HTMLVideoElement[]
 
     const kick = (video: HTMLVideoElement) => {
@@ -103,7 +104,7 @@ export default function CinematicHero() {
     }
     document.addEventListener('visibilitychange', onVisible)
     return () => document.removeEventListener('visibilitychange', onVisible)
-  }, [reduced, sceneIndex])
+  }, [sceneIndex])
 
   /* Bloom-style inverse mouse parallax */
   useEffect(() => {
@@ -161,23 +162,19 @@ export default function CinematicHero() {
               >
                 <div className="cine-plate__parallax">
                   <div className="cine-plate__media">
-                    {reduced ? (
-                      <img src={item.poster} alt="" draggable={false} />
-                    ) : (
-                      <video
-                        ref={(el) => {
-                          videoRefs.current[i] = el
-                        }}
-                        className="cine-plate__video"
-                        src={item.src}
-                        poster={item.poster}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="auto"
-                      />
-                    )}
+                    <video
+                      ref={(el) => {
+                        videoRefs.current[i] = el
+                      }}
+                      className="cine-plate__video"
+                      src={item.src}
+                      poster={item.poster}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="auto"
+                    />
                   </div>
                 </div>
               </figure>
