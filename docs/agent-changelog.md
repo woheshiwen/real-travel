@@ -6,6 +6,16 @@
 
 ---
 
+## 2026-08-10 — 清理第一版仓库多余资产并重钉 v1-fixed
+
+- **Agent**: Cursor
+- **类型**: `chore`
+- **描述**: 删除未引用的 palm/多余 brand 尺寸/重复 public 字体等；去掉遗留 palm/pagoda CSS；NOTICE 补 OFL；重钉 `v1-fixed`。以后改动以第一版为起点。
+- **删除**: `public/palm-hand.webp`, unused `public/brand/*` variants, duplicate `public/fonts/zhencheng-seal.*`, `public/favicon.svg`
+- **保留**: hero 视频、logo-nav-lg、favicon 套件、`src/assets/fonts`、OFL 文本
+
+---
+
 ## 2026-08-10 — 补全第一版 hero 篆体「真程」
 
 - **Agent**: Cursor
