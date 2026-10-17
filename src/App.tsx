@@ -51,7 +51,8 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/plan" element={<Plan />} />
-            <Route path="/trip/xian" element={<Trip />} />
+            <Route path="/trip/xian" element={<Trip tripId="xian" />} />
+            <Route path="/trip/chengdu" element={<Trip tripId="chengdu" />} />
             <Route path="/community" element={<Community />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
