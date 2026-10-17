@@ -173,6 +173,9 @@ export default function Landing() {
             <Link className="btn btn--primary" to="/trip/xian">
               {t('landing.cta.open')}
             </Link>
+            <Link className="btn btn--primary" to="/trip/chengdu">
+              {t('landing.cta.chengdu')}
+            </Link>
             <Link className="btn btn--ghost-dark" to="/community">
               {t('landing.cta.community')}
             </Link>
