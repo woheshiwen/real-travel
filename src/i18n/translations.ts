@@ -52,6 +52,7 @@ const t: Record<string, Record<Lang, string>> = {
   'landing.cta.title':  { en: 'From sample itinerary to real community.', zh: '从示例行程，走到真实社区。', fr: "De l'itinéraire exemple à la vraie communauté.", ja: 'サンプル旅程から、本当のコミュニティへ。', ko: '샘플 여정에서 진짜 커뮤니티로.' },
   'landing.cta.text':   { en: 'Open the Xi\'an family trip first, then visit Footprint Square to see how fellow travelers made decisions and captured joy.', zh: '先打开西安家庭游路书，再去足迹广场看看同行人怎么做决定、怎么把快乐留下来。', fr: "Ouvrez d'abord le voyage familial à Xi'an, puis visitez la Place des empreintes pour voir comment les autres voyageurs ont pris leurs décisions et capturé leur joie.", ja: 'まず西安家族旅行の旅程を開き、それから足跡広場で仲間の旅行者がどう判断し、喜びを残したかを見てみましょう。', ko: '먼저 시안 가족 여행 여정을 열고, 발자국 광장에서 동료 여행자들이 어떻게 결정을 내리고 기쁨을 남겼는지 확인하세요.' },
   'landing.cta.open':   { en: 'Open Sample Trip', zh: '打开示例行程', fr: "Ouvrir l'exemple", ja: 'サンプル旅程を開く', ko: '샘플 여정 열기' },
+  'landing.cta.chengdu': { en: 'Chengdu Trip', zh: '成都行程', fr: 'Voyage Chengdu', ja: '成都の旅程', ko: '청두 여행' },
   'landing.cta.community': { en: 'Visit Footprint Square', zh: '进入足迹广场', fr: 'Visiter la Place', ja: '足跡広場へ', ko: '발자국 광장 방문' },
 
   'landing.footer.tagline': { en: 'Travel by truth — leave joy for those who follow.', zh: '按实况出行，把快乐留给后来者。', fr: 'Voyagez selon la vérité — laissez la joie à ceux qui suivent.', ja: '実況に従って旅をし、後に続く人に喜びを残そう。', ko: '실황에 따라 여행하고, 뒤따르는 이들에게 기쁨을 남기세요.' },
