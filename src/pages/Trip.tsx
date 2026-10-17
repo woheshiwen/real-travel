@@ -5,7 +5,7 @@ import AmapNav from '../components/AmapNav'
 import CalendarExport from '../components/CalendarExport'
 import SiteChrome from '../components/SiteChrome'
 import WeatherIcon from '../components/WeatherIcon'
-import { staticXianBook } from '../data/staticTripBook'
+import { staticChengduBook, staticXianBook } from '../data/staticTripBook'
 import type { SituationUpdate } from '../data/xianTrip'
 import { api, apiConfigured, type TripBook } from '../services/api'
 import { useSpotlight } from '../hooks/useSpotlight'
@@ -18,11 +18,13 @@ const kindKeys: Record<SituationUpdate['kind'], string> = {
   social: 'kind.social',
 }
 
-export default function Trip() {
+export default function Trip({ tripId = 'xian' }: { tripId?: string }) {
   const { t } = useLang()
   const location = useLocation()
   const fromPlan = Boolean((location.state as { fromPlan?: boolean } | null)?.fromPlan)
-  const [book, setBook] = useState<TripBook>(() => staticXianBook())
+  const [book, setBook] = useState<TripBook>(() =>
+    tripId === 'chengdu' ? staticChengduBook() : staticXianBook(),
+  )
   const [source, setSource] = useState<'demo' | 'api'>('demo')
   const [activeDay, setActiveDay] = useState(book.days[0]?.id ?? 'day1')
   const [showReplan, setShowReplan] = useState(fromPlan)
@@ -33,7 +35,7 @@ export default function Trip() {
     let cancelled = false
 
     api
-      .getTrip('xian')
+      .getTrip(tripId)
       .then((trip) => {
         if (cancelled) return
         setBook(trip)
@@ -45,7 +47,7 @@ export default function Trip() {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [tripId])
 
   const day = useMemo(
     () => book.days.find((d) => d.id === activeDay) ?? book.days[0],
